@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ironjetpacks",
+  "name": "Iron Jetpacks",
+  "description": "A fully customizable Forge Energy (FE) based standalone jetpacks mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/iron-jetpacks",
+  "updateUrl": "",
+  "authorList": ["BlakeBr0"],
+  "credits": "Simply Jetpacks, as I learnt a lot of how to make a jetpack from it.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

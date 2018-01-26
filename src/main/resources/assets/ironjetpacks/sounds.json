@@ -1,0 +1,8 @@
+{
+  "jetpack": {
+    "category": "player",
+    "sounds": [
+      "ironjetpacks:jetpack_test"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent":"item/generated",
+  "textures": {
+	"layer0":"ironjetpacks:items/jetpack_strap",
+    "layer1":"ironjetpacks:items/jetpack"
+  }
+}

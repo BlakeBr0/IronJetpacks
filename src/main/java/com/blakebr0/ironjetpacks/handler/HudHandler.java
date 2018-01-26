@@ -1,0 +1,60 @@
+package com.blakebr0.ironjetpacks.handler;
+
+import com.blakebr0.cucumber.helper.RenderHelper;
+import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.client.util.HudHelper;
+import com.blakebr0.ironjetpacks.client.util.HudHelper.HudPos;
+import com.blakebr0.ironjetpacks.config.ModConfig;
+import com.blakebr0.ironjetpacks.item.ItemJetpack;
+import com.blakebr0.ironjetpacks.lib.Tooltips;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+
+@EventBusSubscriber(modid = IronJetpacks.MOD_ID, value = Side.CLIENT)
+public class HudHandler {
+
+	public static final ResourceLocation HUD_TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/gui/hud.png");
+	
+	@SubscribeEvent
+	public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		if (mc.player != null) {
+			if (ModConfig.confEnableHud && (mc.currentScreen == null || ModConfig.confShowHudOnChat && mc.currentScreen instanceof GuiChat) && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo) {
+				ItemStack chest = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+				if (!chest.isEmpty() && chest.getItem() instanceof ItemJetpack) {
+					ItemJetpack jetpack = (ItemJetpack) chest.getItem();
+					HudPos pos = HudHelper.getHudPos();
+					int yPos = (int) (pos.y / 0.33) - 78;
+					
+					mc.entityRenderer.setupOverlayRendering();
+					mc.renderEngine.bindTexture(HUD_TEXTURE);
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.scale(0.33, 0.33, 1.0);
+					RenderHelper.drawTexturedModelRect(pos.x, yPos, 0, 0, 28, 156);
+					int i2 = HudHelper.getEnergyBarScaled(jetpack, chest);
+					RenderHelper.drawTexturedModelRect(pos.x, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
+					GlStateManager.popMatrix();
+					
+					mc.fontRenderer.drawStringWithShadow(HudHelper.getFuel(jetpack, chest), 15, pos.y - 20, 16383998);
+					mc.fontRenderer.drawStringWithShadow("E: " + HudHelper.getOn(jetpack.isEngineOn(chest)), 15, pos.y + 4, 16383998);
+					mc.fontRenderer.drawStringWithShadow("H: " + HudHelper.getOn(jetpack.isHovering(chest)), 15, pos.y + 14, 16383998);
+
+					mc.renderEngine.bindTexture(Gui.ICONS);
+				}
+			}
+		}
+	}
+}
