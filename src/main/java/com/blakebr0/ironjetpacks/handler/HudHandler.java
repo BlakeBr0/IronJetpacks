@@ -6,18 +6,15 @@ import com.blakebr0.ironjetpacks.client.util.HudHelper;
 import com.blakebr0.ironjetpacks.client.util.HudHelper.HudPos;
 import com.blakebr0.ironjetpacks.config.ModConfig;
 import com.blakebr0.ironjetpacks.item.ItemJetpack;
-import com.blakebr0.ironjetpacks.lib.Tooltips;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;

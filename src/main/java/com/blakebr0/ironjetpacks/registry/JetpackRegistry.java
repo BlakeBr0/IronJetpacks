@@ -1,7 +1,6 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import org.apache.commons.lang3.tuple.Pair;
 
