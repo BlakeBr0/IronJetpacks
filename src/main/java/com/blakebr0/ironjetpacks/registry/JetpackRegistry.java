@@ -1,17 +1,23 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.blakebr0.cucumber.lib.ItemPlaceholder;
 import com.blakebr0.ironjetpacks.item.ItemComponent;
 import com.blakebr0.ironjetpacks.item.ItemJetpack;
+import com.blakebr0.ironjetpacks.item.ModItems;
+
+import net.minecraft.item.Item;
 
 public class JetpackRegistry {
 
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
-	private static ArrayList<Pair<String, ItemJetpack>> jetpacks = new ArrayList<>();
+	private ArrayList<Pair<String, ItemJetpack>> jetpacks = new ArrayList<>();
+	private ArrayList<Integer> tiers = new ArrayList<>();
+	private int lowestTier = Integer.MAX_VALUE;
 	
 	public static JetpackRegistry getInstance() {
 		return INSTANCE;
@@ -30,20 +36,41 @@ public class JetpackRegistry {
 	}
 	
 	public void register(JetpackType type, JetpackEntry info) {
-		jetpacks.add(Pair.of(type.name, new ItemJetpack(type, info)));
+		this.jetpacks.add(Pair.of(type.name, new ItemJetpack(type, info)));
+		
+		if (type.tier > -1 && !tiers.contains(type.tier)) {
+			this.tiers.add(type.tier);
+			this.tiers.sort(Integer::compareTo);
+		}
+		
+		if (type.tier > -1 && type.tier < this.lowestTier) {
+			this.lowestTier = type.tier;
+		}
 	}
 	
 	public ArrayList<Pair<String, ItemJetpack>> getAllJetpacks() {
-		return jetpacks;
+		return this.jetpacks;
+	}
+	
+	public ArrayList<Integer> getAllTiers() {
+		return this.tiers;
+	}
+	
+	public Integer getLowestTier() {
+		return this.lowestTier;
 	}
 	
 	public ItemJetpack getJetpackForName(String name) {
-		for (Pair<String, ItemJetpack> j : jetpacks) {
+		for (Pair<String, ItemJetpack> j : this.jetpacks) {
 			if (j.getLeft().equals(name)) {
 				return j.getRight();
 			}
 		}
 		return null;
+	}
+	
+	public Item getCoilForTier(int tier) {
+		return this.tiers.indexOf(tier) <= this.tiers.size() / 2 ? ModItems.itemBasicCoil : ModItems.itemAdvancedCoil;
 	}
 	
 	public static class Jetpack {

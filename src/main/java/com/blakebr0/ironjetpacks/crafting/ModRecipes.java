@@ -37,13 +37,15 @@ public class ModRecipes {
 			RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemAdvancedCoil), "  R", " G ", "R  ", 'R', "dustRedstone", 'G', "ingotGold");
 		}
 		
-		for (Pair<String, ItemJetpack> jetpack : JetpackRegistry.getInstance().getAllJetpacks()) {			
+		JetpackRegistry jetpacks = JetpackRegistry.getInstance();
+		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {			
 			ItemPlaceholder mat = jetpack.getRight().getJetpackType().craftingMaterial;
 			Item thruster = jetpack.getRight().getJetpackType().thruster;
 			Item capacitor = jetpack.getRight().getJetpackType().capacitor;
 			Item cell = jetpack.getRight().getJetpackType().cell;
-			Item pack = ModItems.itemStrap;
+			Item strap = ModItems.itemStrap;
 			int tier = jetpack.getRight().getJetpackType().tier;
+			Item coil = jetpacks.getCoilForTier(tier);
 			ShapedOreRecipe jetpackRecipeBasic = null;
 			JetpackUpgradeRecipe jetpackRecipeUpgrade = null;
 			ShapedOreRecipe thrusterRecipe = null;
@@ -55,38 +57,38 @@ public class ModRecipes {
 				if (mat.getValue() instanceof String) {
 					if (!OreDictionary.getOres(mat.getOreName(), false).isEmpty() || forceRecipes) {
 						if (ModConfig.confBasicRecipes) {
-							jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getOreName(), 'T', thruster, 'E', capacitor, 'J', pack);
+							jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getOreName(), 'T', thruster, 'E', capacitor, 'J', strap);
 						}
 						
 						if (ModConfig.confUpgradeRecipes) {
-							if (tier > 0) {
+							if (tier > jetpacks.getLowestTier()) {
 								jetpackRecipeUpgrade = new JetpackUpgradeRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "upgrade"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getOreName(), 'T', thruster, 'E', capacitor, 'J', "jetpackTier" + (tier - 1));
 							} else if (!ModConfig.confBasicRecipes) {
-								jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getOreName(), 'T', thruster, 'E', capacitor, 'J', pack);
+								jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getOreName(), 'T', thruster, 'E', capacitor, 'J', strap);
 							}
 						}
 						
-						thrusterRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "thruster"), thruster, "ICI", "CEC", "IFI", 'I', mat.getOreName(), 'C', getCoil(tier), 'E', cell, 'F', Blocks.FURNACE);
+						thrusterRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "thruster"), thruster, "ICI", "CEC", "IFI", 'I', mat.getOreName(), 'C', coil, 'E', cell, 'F', Blocks.FURNACE);
 						capacitorRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "capacitor"), capacitor, "ICI", "ICI", "ICI", 'I', mat.getOreName(), 'C', cell);
-						cellRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "cell"), cell, " R ", "ICI", " R ", 'I', mat.getOreName(), 'C', getCoil(tier), 'R', "dustRedstone");
+						cellRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "cell"), cell, " R ", "ICI", " R ", 'I', mat.getOreName(), 'C', coil, 'R', "dustRedstone");
 					}
 				} else if (mat.getValue() instanceof ItemStack) {
 					if (!mat.getStack().isEmpty() || forceRecipes) {
 						if (ModConfig.confBasicRecipes) {
-							jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getStack(), 'T', thruster, 'E', capacitor, 'J', pack);
+							jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getStack(), 'T', thruster, 'E', capacitor, 'J', strap);
 						}
 						
 						if (ModConfig.confUpgradeRecipes) {
-							if (tier > 0) {
+							if (tier > jetpacks.getLowestTier()) {
 								jetpackRecipeUpgrade = new JetpackUpgradeRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "upgrade"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getStack(), 'T', thruster, 'E', capacitor, 'J', "jetpackTier" + (tier - 1));
 							} else if (!ModConfig.confBasicRecipes) {
-								jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getStack(), 'T', thruster, 'E', capacitor, 'J', pack);
+								jetpackRecipeBasic = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), jetpack.getRight(), "IEI", "IJI", "T T", 'I', mat.getStack(), 'T', thruster, 'E', capacitor, 'J', strap);
 							}
 						}
 						
-						thrusterRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "thruster"), thruster, "ICI", "CEC", "IFI", 'I', mat.getStack(), 'C', getCoil(tier), 'E', cell, 'F', Blocks.FURNACE);
+						thrusterRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "thruster"), thruster, "ICI", "CEC", "IFI", 'I', mat.getStack(), 'C', coil, 'E', cell, 'F', Blocks.FURNACE);
 						capacitorRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "capacitor"), capacitor, "ICI", "ICI", "ICI", 'I', mat.getStack(), 'C', cell);
-						cellRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "cell"), cell, " R ", "ICI", " R ", 'I', mat.getStack(), 'C', getCoil(tier), 'R', "dustRedstone");
+						cellRecipe = new ShapedOreRecipe(new ResourceLocation(IronJetpacks.MOD_ID, "cell"), cell, " R ", "ICI", " R ", 'I', mat.getStack(), 'C', coil, 'R', "dustRedstone");
 					}
 				}
 				
@@ -116,9 +118,5 @@ public class ModRecipes {
 				}
 			}
 		}
-	}
-	
-	private static Item getCoil(int tier) {
-		return tier < 3 && tier > -1 ? ModItems.itemBasicCoil : ModItems.itemAdvancedCoil;
 	}
 }
