@@ -48,7 +48,7 @@ public class HudHandler {
 					RenderHelper.drawTexturedModelRect(pos.x, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
 					GlStateManager.popMatrix();
 					
-					mc.fontRenderer.drawStringWithShadow(HudHelper.getFuel(jetpack, chest), 15, pos.y - 20, 16383998);
+					mc.fontRenderer.drawStringWithShadow(HudHelper.getFuel(jetpack, chest), 15, pos.y - 21, 16383998);
 					mc.fontRenderer.drawStringWithShadow("E: " + HudHelper.getOn(jetpack.isEngineOn(chest)), 15, pos.y + 4, 16383998);
 					mc.fontRenderer.drawStringWithShadow("H: " + HudHelper.getOn(jetpack.isHovering(chest)), 15, pos.y + 14, 16383998);
 

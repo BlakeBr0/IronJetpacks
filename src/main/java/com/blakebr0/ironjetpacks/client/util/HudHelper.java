@@ -34,7 +34,7 @@ public class HudHelper {
 		IEnergyStorage energy = jetpack.getEnergyStorage(stack);
 		int i = energy.getEnergyStored();
 		int j = energy.getMaxEnergyStored();
-		return j != 0 && i != 0 ? i * 156 / j : 0;
+		return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
 	}
 	
 	public static String getFuel(ItemJetpack jetpack, ItemStack stack) {
