@@ -207,12 +207,12 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
-		return ModConfig.confEnchantableJetpacks ? type.enchantablilty > 0 : false;
+		return ModConfig.confEnchantableJetpacks && type.enchantablilty > 0;
 	}
 	
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return ModConfig.confEnchantableJetpacks;
+		return ModConfig.confEnchantableJetpacks && type.enchantablilty > 0;
 	}
 	
 	@Override
