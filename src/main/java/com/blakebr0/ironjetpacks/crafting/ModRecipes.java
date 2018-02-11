@@ -32,7 +32,9 @@ public class ModRecipes {
 		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemStrap), " I ", "LLL", " I ", 'I', "nuggetIron", 'L', Items.LEATHER);
 		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemBasicCoil), "  R", " I ", "R  ", 'R', "dustRedstone", 'I', "ingotIron");
 		if (Loader.isModLoaded("thermalfoundation")) {
-			RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemAdvancedCoil), "R  ", " G ", "  R", 'R', "dustRedstone", 'G', "ingotGold");
+			IRecipe recipe = new ShapedOreRecipe(new ResourceLocation("", ""), new ItemStack(ModItems.itemAdvancedCoil), "R  ", " G ", "  R", 'R', "dustRedstone", 'G', "ingotGold").setMirrored(false);
+			recipe.setRegistryName(new ResourceLocation(IronJetpacks.MOD_ID, "advanced_coil"));
+			event.getRegistry().register(recipe);
 		} else {
 			RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemAdvancedCoil), "  R", " G ", "R  ", 'R', "dustRedstone", 'G', "ingotGold");
 		}
