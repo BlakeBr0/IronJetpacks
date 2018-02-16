@@ -21,6 +21,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,6 +49,28 @@ public class KeybindHandler {
 	
 	@SubscribeEvent
 	public static void onKeyInput(KeyInputEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+		
+		if (chest.getItem() instanceof ItemJetpack) {
+			ItemJetpack jetpack = (ItemJetpack) chest.getItem();
+			
+			if (keyEngine.isPressed()) {
+				boolean on = jetpack.toggleEngine(chest);
+				IronNetwork.INSTANCE.sendToServer(new MessageToggleEngine());
+				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+			}
+			
+			if (keyHover.isPressed()) {
+				boolean on = jetpack.toggleHover(chest);
+				IronNetwork.INSTANCE.sendToServer(new MessageToggleHover());
+				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onMouseInput(MouseInputEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		
