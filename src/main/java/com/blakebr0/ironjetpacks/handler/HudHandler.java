@@ -28,7 +28,7 @@ public class HudHandler {
 	public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
 		Minecraft mc = Minecraft.getMinecraft();
 		if (mc.player != null) {
-			if (ModConfig.confEnableHud && (mc.currentScreen == null || ModConfig.confShowHudOnChat && mc.currentScreen instanceof GuiChat) && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo) {
+			if (ModConfig.confEnableHud && (ModConfig.confShowHudOnChat || !ModConfig.confShowHudOnChat && !(mc.currentScreen instanceof GuiChat)) && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo) {
 				ItemStack chest = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 				if (!chest.isEmpty() && chest.getItem() instanceof ItemJetpack) {
 					ItemJetpack jetpack = (ItemJetpack) chest.getItem();
