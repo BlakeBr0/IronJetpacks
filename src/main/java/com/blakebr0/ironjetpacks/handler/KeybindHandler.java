@@ -58,13 +58,13 @@ public class KeybindHandler {
 			if (keyEngine.isPressed()) {
 				boolean on = jetpack.toggleEngine(chest);
 				IronNetwork.INSTANCE.sendToServer(new MessageToggleEngine());
-				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
 			}
 			
 			if (keyHover.isPressed()) {
 				boolean on = jetpack.toggleHover(chest);
 				IronNetwork.INSTANCE.sendToServer(new MessageToggleHover());
-				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
 			}
 		}
 	}
@@ -80,13 +80,13 @@ public class KeybindHandler {
 			if (keyEngine.isPressed()) {
 				boolean on = jetpack.toggleEngine(chest);
 				IronNetwork.INSTANCE.sendToServer(new MessageToggleEngine());
-				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
 			}
 			
 			if (keyHover.isPressed()) {
 				boolean on = jetpack.toggleHover(chest);
 				IronNetwork.INSTANCE.sendToServer(new MessageToggleHover());
-				player.sendMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))));
+				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
 			}
 		}
 	}
