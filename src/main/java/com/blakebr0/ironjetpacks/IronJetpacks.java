@@ -19,7 +19,7 @@ public class IronJetpacks {
 	public static final String NAME = "Iron Jetpacks";
 	public static final String MOD_ID = "ironjetpacks";
 	public static final String VERSION = "${version}";
-	public static final String DEPENDENCIES = "required-after:cucumber@[1.0.4,)";
+	public static final String DEPENDENCIES = "required-after:cucumber@[1.1.2,)";
 	public static final String GUI_FACTORY = "com.blakebr0.ironjetpacks.config.gui.GuiFactory";
 	
 	public static final ModRegistry REGISTRY = ModRegistry.create(MOD_ID);
