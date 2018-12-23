@@ -17,7 +17,7 @@ public class IJCreativeTab extends CreativeTabs {
 		JetpackRegistry registry = JetpackRegistry.getInstance();
 		
 		if (registry.getAllJetpacks().isEmpty()) {
-			return new ItemStack(ModItems.itemStrap);
+			return new ItemStack(ModItems.STRAP);
 		}
 		
 		return new ItemStack(registry.getAllJetpacks().get(0).getRight());

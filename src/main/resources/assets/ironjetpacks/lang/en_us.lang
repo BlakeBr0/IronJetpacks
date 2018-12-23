@@ -9,6 +9,8 @@ key.ij.hover=Toggle Hover Mode
 item.ij.strap.name=Leather Strap
 item.ij.basic_coil.name=Basic Coil
 item.ij.advanced_coil.name=Advanced Coil
+item.ij.elite_coil.name=Elite Coil
+item.ij.ultimate_coil.name=Ultimate Coil
 item.ij.duct_tape.name=Duct Tape
 
 item.ij.cell.name=Energy Cell

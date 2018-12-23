@@ -8,17 +8,21 @@ import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 
 public class ModItems {
 	
-	public static ItemBasic itemStrap = new ItemBasic("strap");
-	public static ItemBasic itemBasicCoil = new ItemBasic("basic_coil");
-	public static ItemBasic itemAdvancedCoil = new ItemBasic("advanced_coil");
+	public static final ItemBasic STRAP = new ItemBasic("strap");
+	public static final ItemBasic BASIC_COIL = new ItemBasic("basic_coil");
+	public static final ItemBasic ADVANCED_COIL = new ItemBasic("advanced_coil");
+	public static final ItemBasic ELITE_COIL = new ItemBasic("elite_coil");
+	public static final ItemBasic ULTIMATE_COIL = new ItemBasic("ultimate_coil");
 	
 	public static void register() {
 		final ModRegistry registry = IronJetpacks.REGISTRY;
 		final JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 		
-		registry.register(itemStrap, "strap");
-		registry.register(itemBasicCoil, "basic_coil");
-		registry.register(itemAdvancedCoil, "advanced_coil");
+		registry.register(STRAP, "strap");
+		registry.register(BASIC_COIL, "basic_coil");
+		registry.register(ADVANCED_COIL, "advanced_coil");
+		registry.register(ELITE_COIL, "elite_coil");
+		registry.register(ULTIMATE_COIL, "ultimate_coil");
 
 		// Energy Cells
 		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {

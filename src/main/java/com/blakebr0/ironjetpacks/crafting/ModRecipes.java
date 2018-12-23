@@ -29,14 +29,14 @@ public class ModRecipes {
 
 	@SubscribeEvent
 	public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
-		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemStrap), " I ", "LLL", " I ", 'I', "nuggetIron", 'L', Items.LEATHER);
-		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemBasicCoil), "  R", " I ", "R  ", 'R', "dustRedstone", 'I', "ingotIron");
+		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.STRAP), " I ", "LLL", " I ", 'I', "nuggetIron", 'L', Items.LEATHER);
+		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.BASIC_COIL), "  R", " I ", "R  ", 'R', "dustRedstone", 'I', "ingotIron");
 		if (Loader.isModLoaded("thermalfoundation")) {
-			IRecipe recipe = new ShapedOreRecipe(new ResourceLocation("", ""), new ItemStack(ModItems.itemAdvancedCoil), "R  ", " G ", "  R", 'R', "dustRedstone", 'G', "ingotGold").setMirrored(false);
+			IRecipe recipe = new ShapedOreRecipe(new ResourceLocation("", ""), new ItemStack(ModItems.ADVANCED_COIL), "R  ", " G ", "  R", 'R', "dustRedstone", 'G', "ingotGold").setMirrored(false);
 			recipe.setRegistryName(new ResourceLocation(IronJetpacks.MOD_ID, "advanced_coil"));
 			event.getRegistry().register(recipe);
 		} else {
-			RecipeHelper.addShapedRecipe(new ItemStack(ModItems.itemAdvancedCoil), "  R", " G ", "R  ", 'R', "dustRedstone", 'G', "ingotGold");
+			RecipeHelper.addShapedRecipe(new ItemStack(ModItems.ADVANCED_COIL), "  R", " G ", "R  ", 'R', "dustRedstone", 'G', "ingotGold");
 		}
 		
 		JetpackRegistry jetpacks = JetpackRegistry.getInstance();
@@ -45,7 +45,7 @@ public class ModRecipes {
 			Item thruster = jetpack.getRight().getJetpackType().thruster;
 			Item capacitor = jetpack.getRight().getJetpackType().capacitor;
 			Item cell = jetpack.getRight().getJetpackType().cell;
-			Item strap = ModItems.itemStrap;
+			Item strap = ModItems.STRAP;
 			int tier = jetpack.getRight().getJetpackType().tier;
 			Item coil = jetpacks.getCoilForTier(tier);
 			ShapedOreRecipe jetpackRecipeBasic = null;

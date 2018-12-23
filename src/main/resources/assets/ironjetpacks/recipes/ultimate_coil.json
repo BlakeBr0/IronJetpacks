@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "  R",
+    " E ",
+    "R  "
+  ],
+  "key": {
+	"R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+	"E": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    }
+  },
+  "result": {
+    "item": "ironjetpacks:ultimate_coil",
+	"data": 0
+  }
+}
