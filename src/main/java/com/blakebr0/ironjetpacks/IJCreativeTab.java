@@ -20,6 +20,6 @@ public class IJCreativeTab extends CreativeTabs {
 			return new ItemStack(ModItems.STRAP);
 		}
 		
-		return new ItemStack(registry.getAllJetpacks().get(0).getRight());
+		return new ItemStack(registry.getAllJetpacks().get(0).item);
 	}
 }

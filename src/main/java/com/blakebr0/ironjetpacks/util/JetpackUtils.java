@@ -15,7 +15,7 @@ public class JetpackUtils {
 			if (stack.getItem() instanceof ItemJetpack) {
 				ItemJetpack jetpack = (ItemJetpack) stack.getItem();
 				if (jetpack.isEngineOn(stack) && (jetpack.getEnergyStorage(stack).getEnergyStored() > 0 
-						|| player.capabilities.isCreativeMode || jetpack.getJetpackType().creative)) {
+						|| player.capabilities.isCreativeMode || jetpack.getJetpack().creative)) {
 					if (jetpack.isHovering(stack)) {
 						return !player.onGround;
 					} else {

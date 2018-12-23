@@ -15,8 +15,7 @@ import com.blakebr0.ironjetpacks.config.ModConfig;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.EnergyCapabilityProvider;
 import com.blakebr0.ironjetpacks.lib.Tooltips;
-import com.blakebr0.ironjetpacks.registry.JetpackRegistry.JetpackEntry;
-import com.blakebr0.ironjetpacks.registry.JetpackRegistry.JetpackType;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -40,34 +39,29 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelper, IColoredItem {
 		
-	private JetpackEntry info;
-	private JetpackType type;
+	private Jetpack jetpack;
 
-	public ItemJetpack(JetpackType type, JetpackEntry info) {
-		super(makeMaterial(type), 2, EntityEquipmentSlot.CHEST);
+	public ItemJetpack(Jetpack jetpack) {
+		super(makeMaterial(jetpack), 2, EntityEquipmentSlot.CHEST);
 		this.setUnlocalizedName("ij.jetpack");
 		this.setCreativeTab(IronJetpacks.CREATIVE_TAB);
 		this.setMaxDamage(0);
-		this.type = type;
-		this.info = info;
+		this.jetpack = jetpack;
 	}
 	
-	private static ArmorMaterial makeMaterial(JetpackType type) {
-		return EnumHelper.addArmorMaterial("IJ:" + type.name.toUpperCase(Locale.ROOT), "ironjetpacks:jetpack", 0, new int[] { 0, 0, type.armorPoints, 0 }, type.enchantablilty, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);
+	private static ArmorMaterial makeMaterial(Jetpack jetpack) {
+		return EnumHelper.addArmorMaterial("IJ:" + jetpack.name.toUpperCase(Locale.ROOT), "ironjetpacks:jetpack", 0, new int[] { 0, 0, jetpack.armorPoints, 0 }, jetpack.enchantablilty, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);
 	}
 	
-	public JetpackType getJetpackType() {
-		return type;
-	}
-	
-	public JetpackEntry getJetpackInfo() {
-		return info;
+	public Jetpack getJetpack() {
+		return this.jetpack;
 	}
 	
 	public IEnergyStorage getEnergyStorage(ItemStack stack) {
 		if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
 			return stack.getCapability(CapabilityEnergy.ENERGY, null);
 		}
+		
 		return null;
 	}
 	
@@ -123,7 +117,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		String name = StringUtils.capitalize(this.type.name.replace(" ", "_"));
+		String name = StringUtils.capitalize(this.jetpack.name.replace(" ", "_"));
 		return name + " " + Utils.localize(this.getUnlocalizedName() + ".name");
 	}
 	
@@ -143,7 +137,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 				boolean hover = jetpack.isHovering(chest);
 				
 				if (InputHandler.isHoldingUp(player) || hover && !player.onGround) {
-					JetpackEntry info = jetpack.getJetpackInfo();
+					Jetpack info = jetpack.getJetpack();
 					
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
 					double currentAccel = info.accelVert * (player.motionY < 0.3D ? 2.5D : 1.0D);
@@ -151,7 +145,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 					
 					double usage = player.isSprinting() ? info.usage * info.sprintFuel : info.usage;
 					
-					boolean creative = jetpack.getJetpackType().creative;
+					boolean creative = info.creative;
 					
 					IEnergyStorage energy = jetpack.getEnergyStorage(chest);
 					if (!player.capabilities.isCreativeMode && !creative) {
@@ -207,25 +201,27 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
-		return ModConfig.confEnchantableJetpacks && type.enchantablilty > 0;
+		return ModConfig.confEnchantableJetpacks && this.jetpack.enchantablilty > 0;
 	}
 	
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return ModConfig.confEnchantableJetpacks && type.enchantablilty > 0;
+		return ModConfig.confEnchantableJetpacks && this.jetpack.enchantablilty > 0;
 	}
 	
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
 		if (!source.isUnblockable()) {
-			int energyPerDamage = info.usage;
+			int energyPerDamage = this.jetpack.usage;
 			IEnergyStorage energy = getEnergyStorage(armor);
 			int maxAbsorbed = energyPerDamage > 0 ? 25 * (energy.getEnergyStored() / energyPerDamage) : 0;
 			if (energy.getEnergyStored() < energyPerDamage) {
-				return new ArmorProperties(0, 0.65D * (type.armorPoints / 20.0D), Integer.MAX_VALUE);
+				return new ArmorProperties(0, 0.65D * (this.jetpack.armorPoints / 20.0D), Integer.MAX_VALUE);
 			}
-			return new ArmorProperties(0, 0.85D * (type.armorPoints / 20.0D), maxAbsorbed);
+			
+			return new ArmorProperties(0, 0.85D * (this.jetpack.armorPoints / 20.0D), maxAbsorbed);
 		}
+		
 		return new ArmorProperties(0, 0, 0);
 	}
 
@@ -236,8 +232,8 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
-		if (!type.creative) {
-			getEnergyStorage(stack).extractEnergy(info.usage, false);
+		if (!this.jetpack.creative) {
+			getEnergyStorage(stack).extractEnergy(this.jetpack.usage, false);
 		}
 	}
 	
@@ -255,12 +251,12 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		return !type.creative;
+		return !this.jetpack.creative;
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
-		if (!type.creative) {
+		if (!this.jetpack.creative) {
 			IEnergyStorage energy = getEnergyStorage(stack);
 			tooltip.add(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE");
 		} else {
@@ -269,33 +265,33 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 		
 		tooltip.add(Tooltips.ENGINE.get() + (isEngineOn(stack) ? Tooltips.ON.get(10) : Tooltips.OFF.get(12)));
 		tooltip.add(Tooltips.HOVER.get() + (isHovering(stack) ? Tooltips.ON.get(10) : Tooltips.OFF.get(12)));
-		tooltip.add(Tooltips.TIER.get() + (type.creative ? Tooltips.CREATIVE.get() : type.tier));
+		tooltip.add(Tooltips.TIER.get() + (this.jetpack.creative ? Tooltips.CREATIVE.get() : this.jetpack.tier));
 		
 		if (ModConfig.confAdvancedInfo) {
 			tooltip.add("");
 			if (!Utils.isShiftKeyDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT.get());
 			} else {
-				tooltip.add(Tooltips.FUEL_USAGE.get() + info.usage + " FE/t");
-				tooltip.add(Tooltips.VERTICAL_SPEED.get() + info.speedVert);
-				tooltip.add(Tooltips.VERTICAL_ACCELERATION.get() + info.accelVert);
-				tooltip.add(Tooltips.HORIZONTAL_SPEED.get() + info.speedSide);
-				tooltip.add(Tooltips.HOVER_SPEED.get() + info.speedHoverSlow);
-				tooltip.add(Tooltips.DESCEND_SPEED.get() + info.speedHover);
-				tooltip.add(Tooltips.SPRINT_MODIFIER.get() + info.sprintSpeed);
-				tooltip.add(Tooltips.SPRINT_FUEL_MODIFIER.get() + info.sprintFuel);
+				tooltip.add(Tooltips.FUEL_USAGE.get() + this.jetpack.usage + " FE/t");
+				tooltip.add(Tooltips.VERTICAL_SPEED.get() + this.jetpack.speedVert);
+				tooltip.add(Tooltips.VERTICAL_ACCELERATION.get() + this.jetpack.accelVert);
+				tooltip.add(Tooltips.HORIZONTAL_SPEED.get() + this.jetpack.speedSide);
+				tooltip.add(Tooltips.HOVER_SPEED.get() + this.jetpack.speedHoverSlow);
+				tooltip.add(Tooltips.DESCEND_SPEED.get() + this.jetpack.speedHover);
+				tooltip.add(Tooltips.SPRINT_MODIFIER.get() + this.jetpack.sprintSpeed);
+				tooltip.add(Tooltips.SPRINT_FUEL_MODIFIER.get() + this.jetpack.sprintFuel);
 			}
 		}
 	}
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		return this.type.creative ? EnumRarity.EPIC : EnumRarity.COMMON;
+		return this.jetpack.creative ? EnumRarity.EPIC : EnumRarity.COMMON;
 	}
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new EnergyCapabilityProvider(new EnergyStorageItem(stack, info.capacity));
+		return new EnergyCapabilityProvider(new EnergyStorageItem(stack, this.jetpack.capacity));
 	}
 
 	@Override
@@ -305,6 +301,6 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 
 	@Override
 	public int color() {
-		return type.color;
+		return this.jetpack.color;
 	}
 }

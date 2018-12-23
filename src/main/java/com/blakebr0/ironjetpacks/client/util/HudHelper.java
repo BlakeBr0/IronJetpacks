@@ -26,11 +26,12 @@ public class HudHelper {
 		case 2:
 			return new HudPos(10 + xOffset, res.getScaledHeight() - 30 + yOffset);
 		}
+		
 		return null;
 	}
 	
 	public static int getEnergyBarScaled(ItemJetpack jetpack, ItemStack stack) {
-		if (jetpack.getJetpackType().creative) return 156;
+		if (jetpack.getJetpack().creative) return 156;
 		IEnergyStorage energy = jetpack.getEnergyStorage(stack);
 		int i = energy.getEnergyStored();
 		int j = energy.getMaxEnergyStored();
@@ -38,7 +39,7 @@ public class HudHelper {
 	}
 	
 	public static String getFuel(ItemJetpack jetpack, ItemStack stack) {
-		if (jetpack.getJetpackType().creative) return Tooltips.INFINITE.get() + " FE";
+		if (jetpack.getJetpack().creative) return Tooltips.INFINITE.get() + " FE";
 		int number = jetpack.getEnergyStorage(stack).getEnergyStored();
 		if (number >= 1000000000) {
 			return number / 1000000000 + "G FE";

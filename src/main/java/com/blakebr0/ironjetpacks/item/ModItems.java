@@ -1,9 +1,8 @@
 package com.blakebr0.ironjetpacks.item;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.blakebr0.cucumber.registry.ModRegistry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 
 public class ModItems {
@@ -25,33 +24,33 @@ public class ModItems {
 		registry.register(ULTIMATE_COIL, "ultimate_coil");
 
 		// Energy Cells
-		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {
-			ItemComponent item = new ItemComponent(jetpack.getLeft(), "cell");
-			item.setColor(jetpack.getRight().color());
-			jetpack.getRight().getJetpackType().setCellItem(item);
-			registry.register(item, jetpack.getLeft() + "_cell");
+		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+			ItemComponent item = new ItemComponent(jetpack.name, "cell");
+			item.setColor(jetpack.item.color());
+			jetpack.setCellItem(item);
+			registry.register(item, jetpack.name + "_cell");
 		}
 		
 		// Thrusters
-		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {
-			ItemComponent item = new ItemComponent(jetpack.getLeft(), "thruster");
-			item.setColor(jetpack.getRight().color());
-			jetpack.getRight().getJetpackType().setThrusterItem(item);
-			registry.register(item, jetpack.getLeft() + "_thruster");
+		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+			ItemComponent item = new ItemComponent(jetpack.name, "thruster");
+			item.setColor(jetpack.item.color());
+			jetpack.setThrusterItem(item);
+			registry.register(item, jetpack.name + "_thruster");
 		}
 		
 		// Capacitors
-		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {
-			ItemComponent item = new ItemComponent(jetpack.getLeft(), "capacitor");
-			item.setColor(jetpack.getRight().color());
-			jetpack.getRight().getJetpackType().setCapacitorItem(item);
-			registry.register(item, jetpack.getLeft() + "_capacitor");
+		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+			ItemComponent item = new ItemComponent(jetpack.name, "capacitor");
+			item.setColor(jetpack.item.color());
+			jetpack.setCapacitorItem(item);
+			registry.register(item, jetpack.name + "_capacitor");
 		}
 		
 		// Jetpacks
-		for (Pair<String, ItemJetpack> jetpack : jetpacks.getAllJetpacks()) {
-			registry.register(jetpack.getRight(), jetpack.getLeft() + "_jetpack");
-			registry.addOre(jetpack.getRight(), "jetpackTier" + jetpack.getRight().getJetpackType().tier);
+		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+			registry.register(jetpack.item, jetpack.name + "_jetpack");
+			registry.addOre(jetpack.item, "jetpackTier" + jetpack.tier);
 		}
 	}
 }
