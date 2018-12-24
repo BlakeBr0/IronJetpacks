@@ -48,8 +48,9 @@ public class JetpackRegistry {
 		return this.lowestTier;
 	}
 	
-	public ItemJetpack getJetpackForName(String name) {		
-		return this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null).item;
+	public ItemJetpack getJetpackForName(String name) {
+		Jetpack jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
+		return jetpack == null ? null : jetpack.item;
 	}
 	
 	public Item getCoilForTier(int tier) {
