@@ -40,9 +40,10 @@ public class JetpackClientHandler {
 							Pos3d playerPos = new Pos3d(mc.player).translate(0, 1.5, 0);
 
 							float random = (rand.nextFloat() - 0.5F) * 0.1F;
+							double[] sneakBonus = mc.player.isSneaking() ? new double[] { -0.30, -0.10 } : new double[] { 0, 0 };
 
-							Pos3d vLeft = new Pos3d(-0.18, -0.90, -0.30).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
-							Pos3d vRight = new Pos3d(0.18, -0.90, -0.30).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
+							Pos3d vLeft = new Pos3d(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
+							Pos3d vRight = new Pos3d(0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
 
 							Pos3d v = playerPos.translate(vLeft).translate(new Pos3d(mc.player.motionX, mc.player.motionY, mc.player.motionZ));
 							mc.effectRenderer.addEffect(new ParticleJetpackFlame(mc.world, v.x, v.y, v.z, random, -0.2D, random));
