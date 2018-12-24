@@ -5,7 +5,9 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.blakebr0.cucumber.energy.EnergyCapabilityProvider;
 import com.blakebr0.cucumber.energy.EnergyStorageItem;
+import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.iface.IColoredItem;
 import com.blakebr0.cucumber.iface.IModelHelper;
 import com.blakebr0.cucumber.lib.Colors;
@@ -14,7 +16,6 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.model.ModelJetpack;
 import com.blakebr0.ironjetpacks.config.ModConfig;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
-import com.blakebr0.ironjetpacks.lib.EnergyCapabilityProvider;
 import com.blakebr0.ironjetpacks.lib.Tooltips;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 
@@ -91,7 +92,9 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 			}
 			current = true;
 		}
+		
 		tag.setBoolean("Engine", !current);
+		
 		return !current;
 	}
 	
@@ -116,7 +119,9 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 			}
 			current = false;
 		}
+		
 		tag.setBoolean("Hover", !current);
+		
 		return !current;
 	}
 	
@@ -322,7 +327,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 
 	@Override
 	public void initModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(IronJetpacks.MOD_ID + ":jetpack", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(IronJetpacks.MOD_ID + ":jetpack", "inventory"));
 	}
 
 	@Override
