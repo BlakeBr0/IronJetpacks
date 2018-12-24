@@ -38,8 +38,8 @@ public enum Tooltips {
 		this.tip = Utils.localize("tooltip.ij." + tip);
 	}
 	
-	public String get() {
-		return this.tip;
+	public String get(Object... objs) {
+		return String.format(this.tip, objs);
 	}
 	
 	public String get(int color) {

@@ -283,23 +283,23 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 			tooltip.add(Tooltips.INFINITE.get() + Colors.GRAY + " FE");
 		}
 		
-		tooltip.add(Tooltips.ENGINE.get() + (isEngineOn(stack) ? Tooltips.ON.get(10) : Tooltips.OFF.get(12)));
-		tooltip.add(Tooltips.HOVER.get() + (isHovering(stack) ? Tooltips.ON.get(10) : Tooltips.OFF.get(12)));
-		tooltip.add(Tooltips.TIER.get() + (this.jetpack.creative ? Tooltips.CREATIVE.get() : this.jetpack.tier));
+		tooltip.add(Tooltips.TIER.get(this.jetpack.creative ? "C" : this.jetpack.tier) + Colors.GRAY + " - " +
+				Tooltips.ENGINE.get(isEngineOn(stack) ? 10 : 12) + Colors.GRAY + " - " +
+				Tooltips.HOVER.get(isHovering(stack) ? 10 : 12));
 		
 		if (ModConfig.confAdvancedInfo) {
 			tooltip.add("");
 			if (!Utils.isShiftKeyDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT.get());
 			} else {
-				tooltip.add(Tooltips.FUEL_USAGE.get() + this.jetpack.usage + " FE/t");
-				tooltip.add(Tooltips.VERTICAL_SPEED.get() + this.jetpack.speedVert);
-				tooltip.add(Tooltips.VERTICAL_ACCELERATION.get() + this.jetpack.accelVert);
-				tooltip.add(Tooltips.HORIZONTAL_SPEED.get() + this.jetpack.speedSide);
-				tooltip.add(Tooltips.HOVER_SPEED.get() + this.jetpack.speedHoverSlow);
-				tooltip.add(Tooltips.DESCEND_SPEED.get() + this.jetpack.speedHover);
-				tooltip.add(Tooltips.SPRINT_MODIFIER.get() + this.jetpack.sprintSpeed);
-				tooltip.add(Tooltips.SPRINT_FUEL_MODIFIER.get() + this.jetpack.sprintFuel);
+				tooltip.add(Tooltips.FUEL_USAGE.get(this.jetpack.usage + " FE/t"));
+				tooltip.add(Tooltips.VERTICAL_SPEED.get(this.jetpack.speedVert));
+				tooltip.add(Tooltips.VERTICAL_ACCELERATION.get(this.jetpack.accelVert));
+				tooltip.add(Tooltips.HORIZONTAL_SPEED.get(this.jetpack.speedSide));
+				tooltip.add(Tooltips.HOVER_SPEED.get(this.jetpack.speedHoverSlow));
+				tooltip.add(Tooltips.DESCEND_SPEED.get(this.jetpack.speedHover));
+				tooltip.add(Tooltips.SPRINT_MODIFIER.get(this.jetpack.sprintSpeed));
+				tooltip.add(Tooltips.SPRINT_FUEL_MODIFIER.get(this.jetpack.sprintFuel));
 			}
 		}
 	}
@@ -327,7 +327,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 
 	@Override
 	public void initModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(IronJetpacks.MOD_ID + ":jetpack", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(IronJetpacks.MOD_ID, "jetpack", "inventory"));
 	}
 
 	@Override
