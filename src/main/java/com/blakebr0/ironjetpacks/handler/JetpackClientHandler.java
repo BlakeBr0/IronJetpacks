@@ -41,8 +41,8 @@ public class JetpackClientHandler {
 
 							float random = (rand.nextFloat() - 0.5F) * 0.1F;
 
-							Pos3d vLeft = new Pos3d(-0.18, -0.90, -0.35).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
-							Pos3d vRight = new Pos3d(0.18, -0.90, -0.35).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
+							Pos3d vLeft = new Pos3d(-0.18, -0.90, -0.30).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
+							Pos3d vRight = new Pos3d(0.18, -0.90, -0.30).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
 
 							Pos3d v = playerPos.translate(vLeft).translate(new Pos3d(mc.player.motionX, mc.player.motionY, mc.player.motionZ));
 							mc.effectRenderer.addEffect(new ParticleJetpackFlame(mc.world, v.x, v.y, v.z, random, -0.2D, random));

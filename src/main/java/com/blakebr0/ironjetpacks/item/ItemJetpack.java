@@ -11,14 +11,17 @@ import com.blakebr0.cucumber.iface.IModelHelper;
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.client.model.ModelJetpack;
 import com.blakebr0.ironjetpacks.config.ModConfig;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.EnergyCapabilityProvider;
 import com.blakebr0.ironjetpacks.lib.Tooltips;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,6 +39,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelper, IColoredItem {
 		
@@ -238,8 +243,18 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	}
 	
 	@Override
+	public boolean hasColor(ItemStack stack) {
+		return true;
+	}
+	
+	@Override
 	public int getColor(ItemStack stack) {
 		return this.color();
+	}
+	
+	@Override
+	public boolean hasOverlay(ItemStack stack) {
+		return true;
 	}
 	
 	@Override
@@ -282,6 +297,17 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 				tooltip.add(Tooltips.SPRINT_FUEL_MODIFIER.get() + this.jetpack.sprintFuel);
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		return ModelJetpack.INSTANCE.of(this);
+	}
+	
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+		return type != "overlay" ? IronJetpacks.MOD_ID + ":textures/armor/jetpack.png" : IronJetpacks.MOD_ID + ":textures/armor/jetpack_overlay.png";
 	}
 	
 	@Override
