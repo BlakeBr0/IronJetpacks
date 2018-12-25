@@ -41,7 +41,7 @@ public class Serializers {
 			String name = obj.get("name").getAsString();
 			boolean disable = obj.get("disable").getAsBoolean();
 			int tier = obj.get("tier").getAsInt();
-			int color = obj.get("color").getAsInt();
+			int color = Integer.parseInt(obj.get("color").getAsString(), 16);
 			int armorPoints = obj.get("armorPoints").getAsInt();
 			int enchantability = obj.get("enchantability").getAsInt();
 			String craftingItem = obj.get("craftingMaterial").getAsString();
@@ -85,7 +85,7 @@ public class Serializers {
 			obj.addProperty("name", src.name);
 			obj.addProperty("disable", src.disabled);
 			obj.addProperty("tier", src.tier);
-			obj.addProperty("color", src.color);
+			obj.addProperty("color", Integer.toHexString(src.color));
 			obj.addProperty("armorPoints", src.armorPoints);
 			obj.addProperty("enchantability", src.enchantablilty);
 			String mat = src.craftingMaterial == null ? "null" 
