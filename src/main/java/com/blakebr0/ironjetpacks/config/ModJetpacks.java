@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import com.blakebr0.cucumber.lib.ItemPlaceholder;
@@ -15,8 +18,14 @@ import com.blakebr0.ironjetpacks.config.json.Serializers;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModJetpacks {
 	
@@ -78,6 +87,12 @@ public class ModJetpacks {
 			return;
 		}
 		
+		try {
+			updateOldJsons(files, dir, gson);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		List<Jetpack> jetpacks = new ArrayList<>();
 		
 		for (File file : files) {
@@ -123,5 +138,64 @@ public class ModJetpacks {
 		defaults.sort(Comparator.comparingInt(Jetpack::getTier));	
 		
 		return defaults;
+	}
+	
+	// TODO: 1.13: REMOVE
+	private static void updateOldJsons(File[] files, File dir, Gson gson) throws IOException {
+		for (File file : files) {
+			String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+			JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
+			
+			if (!obj.has("jetpack_type")) continue;
+			
+			JsonObject jetpackType = obj.get("jetpack_type").getAsJsonObject();
+			
+			String name = jetpackType.get("name").getAsString();
+			boolean disable = jetpackType.get("disable").getAsBoolean();
+			int tier = jetpackType.get("tier").getAsInt();
+			int color = jetpackType.get("color").getAsInt();
+			int armorPoints = jetpackType.get("armor_points").getAsInt();
+			int enchantability = jetpackType.get("enchantability").getAsInt();
+			String craftingItem = jetpackType.get("crafting_material").getAsString();
+			ItemPlaceholder craftingMaterial = null;
+			if (!craftingItem.equalsIgnoreCase("null")) {
+				if (craftingItem.startsWith("ore:")) {
+					craftingMaterial = ItemPlaceholder.of(craftingItem.substring(4));
+				} else {
+					String[] parts = craftingItem.split(":");
+					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
+					craftingMaterial = ItemPlaceholder.of(new ItemStack(item, 1, Integer.valueOf(parts[2])));
+				}
+			}
+			boolean forceRecipes = jetpackType.get("force_recipes").getAsBoolean();
+			boolean creative = false;
+			if (jetpackType.has("creative")) {
+				creative = jetpackType.get("creative").getAsBoolean();
+			}
+			
+			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterial).setCreative(creative);
+			JsonObject jetpackInfo = obj.get("jetpack_info").getAsJsonObject();
+			
+			int capacity = jetpackInfo.get("capacity").getAsInt();
+			int usage = jetpackInfo.get("usage").getAsInt();
+			double speedVert = jetpackInfo.get("speed_vertical").getAsDouble();
+			double accelVert = jetpackInfo.get("accel_vertical").getAsDouble();
+			double speedSide = jetpackInfo.get("speed_sideways").getAsDouble();
+			double speedHover = jetpackInfo.get("speed_hover_descend").getAsDouble();
+			double speedHoverSlow = jetpackInfo.get("speed_hover").getAsDouble();
+			double sprintSpeed = jetpackInfo.get("sprint_speed_multi").getAsDouble();
+			double sprintFuel = jetpackInfo.get("sprint_fuel_multi").getAsDouble();
+			
+			jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintFuel);
+			
+			String newJson = gson.toJson(jetpack);
+			try {
+				FileWriter writer = new FileWriter(file);
+				writer.write(newJson);
+				writer.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
