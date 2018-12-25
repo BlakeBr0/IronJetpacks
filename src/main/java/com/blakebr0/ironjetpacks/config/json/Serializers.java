@@ -2,6 +2,7 @@ package com.blakebr0.ironjetpacks.config.json;
 
 import java.lang.reflect.Type;
 
+import com.blakebr0.cucumber.json.SerializerBase;
 import com.blakebr0.cucumber.lib.ItemPlaceholder;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
@@ -41,9 +42,9 @@ public class Serializers {
 			boolean disable = obj.get("disable").getAsBoolean();
 			int tier = obj.get("tier").getAsInt();
 			int color = obj.get("color").getAsInt();
-			int armorPoints = obj.get("armor_points").getAsInt();
+			int armorPoints = obj.get("armorPoints").getAsInt();
 			int enchantability = obj.get("enchantability").getAsInt();
-			String craftingItem = obj.get("crafting_material").getAsString();
+			String craftingItem = obj.get("craftingMaterial").getAsString();
 			ItemPlaceholder craftingMaterial = null;
 			if (!craftingItem.equalsIgnoreCase("null")) {
 				if (craftingItem.startsWith("ore:")) {
@@ -54,7 +55,7 @@ public class Serializers {
 					craftingMaterial = ItemPlaceholder.of(new ItemStack(item, 1, Integer.valueOf(parts[2])));
 				}
 			}
-			boolean forceRecipes = obj.get("force_recipes").getAsBoolean();
+			boolean forceRecipes = obj.get("forceRecipes").getAsBoolean();
 			boolean creative = false;
 			if (obj.has("creative")) {
 				creative = obj.get("creative").getAsBoolean();
@@ -64,13 +65,13 @@ public class Serializers {
 			
 			int capacity = obj.get("capacity").getAsInt();
 			int usage = obj.get("usage").getAsInt();
-			double speedVert = obj.get("speed_vertical").getAsDouble();
-			double accelVert = obj.get("accel_vertical").getAsDouble();
-			double speedSide = obj.get("speed_sideways").getAsDouble();
-			double speedHover = obj.get("speed_hover_descend").getAsDouble();
-			double speedHoverSlow = obj.get("speed_hover").getAsDouble();
-			double sprintSpeed = obj.get("sprint_speed_multi").getAsDouble();
-			double sprintFuel = obj.get("sprint_fuel_multi").getAsDouble();
+			double speedVert = obj.get("speedVertical").getAsDouble();
+			double accelVert = obj.get("accelVertical").getAsDouble();
+			double speedSide = obj.get("speedSideways").getAsDouble();
+			double speedHover = obj.get("speedHoverDescend").getAsDouble();
+			double speedHoverSlow = obj.get("speedHover").getAsDouble();
+			double sprintSpeed = obj.get("sprintSpeedMulti").getAsDouble();
+			double sprintFuel = obj.get("sprintFuelMulti").getAsDouble();
 			
 			jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintFuel);
 			
@@ -85,26 +86,26 @@ public class Serializers {
 			obj.addProperty("disable", src.disabled);
 			obj.addProperty("tier", src.tier);
 			obj.addProperty("color", src.color);
-			obj.addProperty("armor_points", src.armorPoints);
+			obj.addProperty("armorPoints", src.armorPoints);
 			obj.addProperty("enchantability", src.enchantablilty);
 			String mat = src.craftingMaterial == null ? "null" 
 					: !src.craftingMaterial.getOreName().isEmpty() ? "ore:" + src.craftingMaterial.getOreName()
 					: src.craftingMaterial.getStack().getItem().getRegistryName().toString() + ":" + src.craftingMaterial.getStack().getMetadata();
-			obj.addProperty("crafting_material", mat);
-			obj.addProperty("force_recipes", false);
+			obj.addProperty("craftingMaterial", mat);
+			obj.addProperty("forceRecipes", false);
 			if (src.creative) {
 				obj.addProperty("creative", true);
 			}
 			
 			obj.addProperty("capacity", src.capacity);
 			obj.addProperty("usage", src.usage);
-			obj.addProperty("speed_vertical", src.speedVert);
-			obj.addProperty("accel_vertical", src.accelVert);
-			obj.addProperty("speed_sideways", src.speedSide);
-			obj.addProperty("speed_hover_descend", src.speedHover);
-			obj.addProperty("speed_hover", src.speedHoverSlow);
-			obj.addProperty("sprint_speed_multi", src.sprintSpeed);
-			obj.addProperty("sprint_fuel_multi", src.sprintFuel);
+			obj.addProperty("speedVertical", src.speedVert);
+			obj.addProperty("accelVertical", src.accelVert);
+			obj.addProperty("speedSideways", src.speedSide);
+			obj.addProperty("speedHoverDescend", src.speedHover);
+			obj.addProperty("speedHover", src.speedHoverSlow);
+			obj.addProperty("sprintSpeedMulti", src.sprintSpeed);
+			obj.addProperty("sprintFuelMulti", src.sprintFuel);
 			
 			return obj;
 		}
