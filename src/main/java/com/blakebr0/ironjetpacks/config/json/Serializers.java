@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -61,7 +62,12 @@ public class Serializers {
 				creative = obj.get("creative").getAsBoolean();
 			}
 			
-			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterial).setCreative(creative);
+			EnumRarity rarity = EnumRarity.COMMON;
+			if (obj.has("rarity")) {				
+				rarity = EnumRarity.values()[obj.get("rarity").getAsInt()];
+			}
+			
+			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterial).setRarity(rarity).setCreative(creative);
 			
 			int capacity = obj.get("capacity").getAsInt();
 			int usage = obj.get("usage").getAsInt();
@@ -96,6 +102,7 @@ public class Serializers {
 			if (src.creative) {
 				obj.addProperty("creative", true);
 			}
+			obj.addProperty("rarity", src.rarity.ordinal());
 			
 			obj.addProperty("capacity", src.capacity);
 			obj.addProperty("usage", src.usage);

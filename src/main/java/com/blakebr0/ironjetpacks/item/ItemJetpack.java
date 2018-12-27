@@ -20,7 +20,6 @@ import com.blakebr0.ironjetpacks.lib.Tooltips;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -283,7 +282,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 			tooltip.add(Tooltips.INFINITE.get() + Colors.GRAY + " FE");
 		}
 		
-		tooltip.add(Tooltips.TIER.get(this.jetpack.creative ? "C" : this.jetpack.tier) + Colors.GRAY + " - " +
+		tooltip.add(Tooltips.TIER.get(this.jetpack.rarity.rarityColor.toString() + (this.jetpack.creative ? "C" : this.jetpack.tier)) + Colors.GRAY + " - " +
 				Tooltips.ENGINE.get(isEngineOn(stack) ? 10 : 12) + Colors.GRAY + " - " +
 				Tooltips.HOVER.get(isHovering(stack) ? 10 : 12));
 		
@@ -317,7 +316,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		return this.jetpack.creative ? EnumRarity.EPIC : EnumRarity.COMMON;
+		return this.jetpack.rarity;
 	}
 	
 	@Override

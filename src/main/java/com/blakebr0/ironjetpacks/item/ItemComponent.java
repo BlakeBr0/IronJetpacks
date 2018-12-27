@@ -2,12 +2,12 @@ package com.blakebr0.ironjetpacks.item;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.iface.IColoredItem;
 import com.blakebr0.cucumber.iface.IModelHelper;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +18,7 @@ public class ItemComponent extends Item implements IModelHelper, IColoredItem {
 	private String name;
 	private String type;
 	private int color = 0;
+	private EnumRarity rarity = EnumRarity.COMMON;
 	
 	public ItemComponent(String name, String type) {
 		this.setUnlocalizedName("ij." + type);
@@ -31,6 +32,11 @@ public class ItemComponent extends Item implements IModelHelper, IColoredItem {
 		return this;
 	}
 	
+	public ItemComponent setRarity(EnumRarity rarity) {
+		this.rarity = rarity;
+		return this;
+	}
+	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String name = StringUtils.capitalize(this.name.replace(" ", "_"));
@@ -39,12 +45,12 @@ public class ItemComponent extends Item implements IModelHelper, IColoredItem {
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		return this.name.equalsIgnoreCase("creative") ? EnumRarity.EPIC : EnumRarity.COMMON;
+		return this.rarity;
 	}
 
 	@Override
 	public void initModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(IronJetpacks.MOD_ID + ":" + this.type, "inventory"));		
+		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(IronJetpacks.MOD_ID, this.type, "inventory"));		
 	}
 
 	@Override

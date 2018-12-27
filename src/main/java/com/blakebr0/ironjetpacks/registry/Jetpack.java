@@ -4,6 +4,8 @@ import com.blakebr0.cucumber.lib.ItemPlaceholder;
 import com.blakebr0.ironjetpacks.item.ItemComponent;
 import com.blakebr0.ironjetpacks.item.ItemJetpack;
 
+import net.minecraft.item.EnumRarity;
+
 public class Jetpack {
 	
 	public String name;
@@ -16,6 +18,7 @@ public class Jetpack {
 	public boolean creative = false;
 	public boolean disabled = false;
 	public boolean forceRecipe = false;
+	public EnumRarity rarity = EnumRarity.COMMON;
 	public ItemComponent cell;
 	public ItemComponent thruster;
 	public ItemComponent capacitor;
@@ -56,6 +59,8 @@ public class Jetpack {
 	public Jetpack setCreative() {
 		this.creative = true;
 		this.tier = -1;
+		this.rarity = EnumRarity.EPIC;
+		
 		return this;
 	}
 	
@@ -81,6 +86,11 @@ public class Jetpack {
 	
 	public Jetpack setForceRecipe(boolean set) {
 		if (set) this.setForceRecipe();
+		return this;
+	}
+	
+	public Jetpack setRarity(EnumRarity rarity) {
+		this.rarity = rarity;
 		return this;
 	}
 	

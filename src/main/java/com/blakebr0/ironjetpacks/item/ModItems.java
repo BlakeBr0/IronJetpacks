@@ -26,7 +26,7 @@ public class ModItems {
 		// Energy Cells
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
 			ItemComponent item = new ItemComponent(jetpack.name, "cell");
-			item.setColor(jetpack.item.color());
+			item.setColor(jetpack.color).setRarity(jetpack.rarity);
 			jetpack.setCellItem(item);
 			registry.register(item, jetpack.name + "_cell");
 		}
@@ -34,7 +34,7 @@ public class ModItems {
 		// Thrusters
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
 			ItemComponent item = new ItemComponent(jetpack.name, "thruster");
-			item.setColor(jetpack.item.color());
+			item.setColor(jetpack.color).setRarity(jetpack.rarity);
 			jetpack.setThrusterItem(item);
 			registry.register(item, jetpack.name + "_thruster");
 		}
@@ -42,7 +42,7 @@ public class ModItems {
 		// Capacitors
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
 			ItemComponent item = new ItemComponent(jetpack.name, "capacitor");
-			item.setColor(jetpack.item.color());
+			item.setColor(jetpack.color).setRarity(jetpack.rarity);
 			jetpack.setCapacitorItem(item);
 			registry.register(item, jetpack.name + "_capacitor");
 		}
