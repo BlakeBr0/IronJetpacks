@@ -47,9 +47,19 @@ public class HudHandler {
 					RenderHelper.drawTexturedModelRect(xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
 					GlStateManager.popMatrix();
 					
-					mc.fontRenderer.drawStringWithShadow(HudHelper.getFuel(jetpack, chest), pos.x + 6, pos.y - 21, 16383998);
-					mc.fontRenderer.drawStringWithShadow("E: " + HudHelper.getOn(jetpack.isEngineOn(chest)), pos.x + 6, pos.y + 4, 16383998);
-					mc.fontRenderer.drawStringWithShadow("H: " + HudHelper.getOn(jetpack.isHovering(chest)), pos.x + 6, pos.y + 14, 16383998);
+					String fuel = HudHelper.getFuel(jetpack, chest);
+					String engine = "E: " + HudHelper.getOn(jetpack.isEngineOn(chest));
+					String hover = "H: " + HudHelper.getOn(jetpack.isHovering(chest));
+					
+					if (pos.side == 1) {
+						mc.fontRenderer.drawStringWithShadow(fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
+						mc.fontRenderer.drawStringWithShadow(engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
+						mc.fontRenderer.drawStringWithShadow(hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
+					} else {						
+						mc.fontRenderer.drawStringWithShadow(fuel, pos.x + 6, pos.y - 21, 16383998);
+						mc.fontRenderer.drawStringWithShadow(engine, pos.x + 6, pos.y + 4, 16383998);
+						mc.fontRenderer.drawStringWithShadow(hover, pos.x + 6, pos.y + 14, 16383998);
+					}
 
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					

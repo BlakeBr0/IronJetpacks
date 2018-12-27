@@ -53,7 +53,7 @@ public class ModConfig {
 		category = "hud";
 		config.setCategoryComment(category, "HUD settings");
 		confEnableHud = config.getBoolean("hud_enabled", category, true, "Should the hud be enabled?");
-		confHudPosMode = config.getInt("hud_position", category, 1, 0, 2, "The position of the hud. 0=Top Left, 1=Middle Left, 2=Bottom Left");
+		confHudPosMode = config.getInt("hud_position", category, 1, 0, 5, "The position of the hud. 0=Top Left, 1=Middle Left, 2=Bottom Left, 3=Top Right, 4=Middle Right, 5=Bottom Right");
 		confHudOffsetX = config.getInt("hud_offset_x", category, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, "The X offset of the hud.");
 		confHudOffsetY = config.getInt("hud_offset_y", category, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, "The Y offset of the hud.");
 		confShowHudOnChat = config.getBoolean("hud_over_chat", category, false, "Should the hud render over the chat?");

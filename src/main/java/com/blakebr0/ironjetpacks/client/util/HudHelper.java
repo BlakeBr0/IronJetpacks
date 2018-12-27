@@ -20,11 +20,17 @@ public class HudHelper {
 		
 		switch (ModConfig.confHudPosMode) {
 		case 0:
-			return new HudPos(10 + xOffset, 30 + yOffset);
+			return new HudPos(10 + xOffset, 30 + yOffset, 0);
 		case 1:
-			return new HudPos(10 + xOffset, res.getScaledHeight() / 2 + yOffset);
+			return new HudPos(10 + xOffset, res.getScaledHeight() / 2 + yOffset, 0);
 		case 2:
-			return new HudPos(10 + xOffset, res.getScaledHeight() - 30 + yOffset);
+			return new HudPos(10 + xOffset, res.getScaledHeight() - 30 + yOffset, 0);
+		case 3:
+			return new HudPos(res.getScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
+		case 4:
+			return new HudPos(res.getScaledWidth() - 8 - xOffset, res.getScaledHeight() / 2 + yOffset, 1);
+		case 5:
+			return new HudPos(res.getScaledWidth() - 8 - xOffset, res.getScaledHeight() - 30 + yOffset, 1);
 		}
 		
 		return null;
@@ -60,11 +66,12 @@ public class HudHelper {
 		
 		public int x;
 		public int y;
-		int side;
+		public int side;
 		
-		public HudPos(int x, int y) {
+		public HudPos(int x, int y, int side) {
 			this.x = x;
 			this.y = y;
+			this.side = side;
 		}
 	}
 }
