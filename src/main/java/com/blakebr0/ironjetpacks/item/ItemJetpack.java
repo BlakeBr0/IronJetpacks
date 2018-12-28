@@ -283,7 +283,7 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 			tooltip.add(Tooltips.INFINITE.get() + Colors.GRAY + " FE");
 		}
 		
-		tooltip.add(Tooltips.TIER.get(this.jetpack.rarity.rarityColor.toString() + (this.jetpack.creative ? "C" : this.jetpack.tier)) + Colors.GRAY + " - " +
+		tooltip.add(this.jetpack.rarity.rarityColor.toString() + Tooltips.TIER.get(this.jetpack.creative ? "C" : this.jetpack.tier) + Colors.GRAY + " - " +
 				Tooltips.ENGINE.get(isEngineOn(stack) ? 10 : 12) + Colors.GRAY + " - " +
 				Tooltips.HOVER.get(isHovering(stack) ? 10 : 12));
 		
