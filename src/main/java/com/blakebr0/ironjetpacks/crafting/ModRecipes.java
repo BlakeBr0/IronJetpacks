@@ -1,13 +1,10 @@
 package com.blakebr0.ironjetpacks.crafting;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.lib.ItemPlaceholder;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfig;
 import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
-import com.blakebr0.ironjetpacks.item.ItemJetpack;
 import com.blakebr0.ironjetpacks.item.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;

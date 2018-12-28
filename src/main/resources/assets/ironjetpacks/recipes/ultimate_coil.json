@@ -6,17 +6,17 @@
     "R  "
   ],
   "key": {
-	"R": {
+    "R": {
       "type": "forge:ore_dict",
       "ore": "dustRedstone"
     },
-	"E": {
+    "E": {
       "type": "forge:ore_dict",
       "ore": "gemEmerald"
     }
   },
   "result": {
     "item": "ironjetpacks:ultimate_coil",
-	"data": 0
+    "data": 0
   }
 }
