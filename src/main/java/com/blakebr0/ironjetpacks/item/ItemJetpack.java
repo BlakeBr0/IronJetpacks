@@ -45,6 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelper, IColoredItem {
 		
 	private Jetpack jetpack;
+	private ModelBiped model;
 
 	public ItemJetpack(Jetpack jetpack) {
 		super(makeMaterial(jetpack), 2, EntityEquipmentSlot.CHEST);
@@ -306,7 +307,8 @@ public class ItemJetpack extends ItemArmor implements ISpecialArmor, IModelHelpe
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return ModelJetpack.INSTANCE.of(this);
+		if (this.model == null) this.model = new ModelJetpack(this);		
+		return this.model;
 	}
 	
 	@Override

@@ -3,7 +3,13 @@ package com.blakebr0.ironjetpacks.client.model;
 import com.blakebr0.ironjetpacks.item.ItemJetpack;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /*
  * This is a slightly modified version of the model from Simply Jetpacks
@@ -11,10 +17,16 @@ import net.minecraft.client.model.ModelRenderer;
  */
 public class ModelJetpack extends ModelBiped {
 	
-	public static final ModelJetpack INSTANCE = new ModelJetpack();
+	public static final ModelBox[] ENERGY_STATES_1 = new ModelBox[6];
+	public static final ModelBox[] ENERGY_STATES_2 = new ModelBox[6];
+	
+	private ItemJetpack jetpack;
+	private ModelRenderer energyBar1, energyBar2;
 
-	public ModelJetpack() {
+	public ModelJetpack(ItemJetpack jetpack) {
 		super(1.0F, 0, 64, 64);
+		
+		this.jetpack = jetpack;
 
 		this.bipedBody.showModel = true;
 		this.bipedRightArm.showModel = false;
@@ -23,6 +35,21 @@ public class ModelJetpack extends ModelBiped {
 		this.bipedHeadwear.showModel = false;
 		this.bipedRightLeg.showModel = false;
 		this.bipedLeftLeg.showModel = false;
+				
+		ENERGY_STATES_1[0] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 16, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_1[1] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 20, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_1[2] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 24, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_1[3] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 28, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_1[4] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 32, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_1[5] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 36, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		
+		ENERGY_STATES_2[0] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 16, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_2[1] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 20, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_2[2] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 24, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_2[3] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 28, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_2[4] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 32, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		ENERGY_STATES_2[5] = new ModelBox(new ModelRenderer(this).setTextureSize(64, 64), 36, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+
 
 		ModelRenderer middle = new ModelRenderer(this, 0, 54).setTextureSize(64, 64);
 		middle.addBox(-2F, 5F, 3.6F, 4, 3, 2);
@@ -89,6 +116,18 @@ public class ModelJetpack extends ModelBiped {
 		rightExhaust2.setRotationPoint(0F, 0F, 0F);
 		rightExhaust2.mirror = true;
 		this.setRotation(rightExhaust2, 0F, 0F, 0F);
+		
+		this.energyBar1 = new ModelRenderer(this, 16, 55).setTextureSize(64, 64);
+		this.energyBar1.cubeList.add(ENERGY_STATES_1[0]);
+		this.energyBar1.setRotationPoint(0F, 0F, 0F);
+		this.energyBar1.mirror = true;
+		this.setRotation(energyBar1, 0F, 0F, 0F);
+		
+		this.energyBar2 = new ModelRenderer(this, 16, 55).setTextureSize(64, 64);
+		this.energyBar2.cubeList.add(ENERGY_STATES_2[0]);
+		this.energyBar2.setRotationPoint(0F, 0F, 0F);
+		this.energyBar2.mirror = true;
+		this.setRotation(energyBar2, 0F, 0F, 0F);
 
 		this.bipedBody.addChild(middle);
 		this.bipedBody.addChild(leftCanister);
@@ -101,15 +140,53 @@ public class ModelJetpack extends ModelBiped {
 		this.bipedBody.addChild(leftExhaust2);
 		this.bipedBody.addChild(rightExhaust1);
 		this.bipedBody.addChild(rightExhaust2);
+		this.bipedBody.addChild(this.energyBar1);
+		this.bipedBody.addChild(this.energyBar2);
+	}
+	
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		if (this.jetpack != null && entity instanceof EntityLivingBase) {
+			ModelBox oldBox1 = this.energyBar1.cubeList.get(0);
+			
+			if (this.jetpack.getJetpack().creative) {
+				this.energyBar1.cubeList.set(0, ENERGY_STATES_1[5]);
+				this.energyBar2.cubeList.set(0, ENERGY_STATES_2[5]);
+			} else {
+				ItemStack chest = ((EntityLivingBase) entity).getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+				IEnergyStorage energy = this.jetpack.getEnergyStorage(chest);
+				double stored = (double) ((double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored());
+
+				int state = 0;
+				if (stored > 0.8) {
+					state = 5;
+				} else if (stored > 0.6) {
+					state = 4;
+				} else if (stored > 0.4) {
+					state = 3;
+				} else if (stored > 0.2) {
+					state = 2;
+				} else if (stored > 0) {
+					state = 1;
+				}
+				
+				if (oldBox1 != ENERGY_STATES_1[state]) {					
+					this.energyBar1.cubeList.set(0, ENERGY_STATES_1[state]);
+					this.energyBar2.cubeList.set(0, ENERGY_STATES_2[state]);
+					this.energyBar1.compiled = false;
+					this.energyBar2.compiled = false;
+				}
+			}
+			
+			super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		} else {
+			super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
-	}
-	
-	public ModelJetpack of(ItemJetpack jetpack) {
-		return this;
 	}
 }
