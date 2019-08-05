@@ -1,75 +1,87 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 
+version = '2.0.0'
+group = 'com.blakebr0.ironjetpacks'
+archivesBaseName = 'IronJetpacks-1.14.4'
 
-version = "1.1.0"
-group = "com.blakebr0.ironjetpacks" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "IronJetpacks-1.12-2"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
-
-repositories {  
+repositories {
     maven {
-        url = "http://dvs1.progwml6.com/files/maven"
+        url = "http://dvs1.progwml6.com/files/maven/"
     }
+
     maven {
-        url = "http://tehnut.info/maven"
+        url = "http://tehnut.info/maven/"
     }
+
+    mavenLocal()
+    jcenter()
 }
 
 minecraft {
-    version = "1.12.2-14.23.1.2555"
-    runDir = "run"
-    replace '${version}', project.version
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: 'snapshot', version: '20190803-1.14.3'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+
+            mods {
+                ironjetpacks {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+
+            mods {
+                ironjetpacks {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.12:4.7.0.67:api"
-    runtime "mezz.jei:jei_1.12:4.7.0.67"
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.23-B38_1.12"
-}  
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.40'
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+    compile files('../Cucumber/build/libs/Cucumber-1.14.4-2.0.1-deobf.jar')
+    compile fg.deobf('mcp.mobius.waila:Hwyla:1.10.4-B65_1.14.2')
+    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8")
 }
 
 jar {
+    from sourceSets.main.output
     manifest {
-        attributes 'FMLAT': 'ironjetpacks_at.cfg'
+        attributes([
+            "Specification-Title": "Iron Jetpacks",
+            "Specification-Vendor": "BlakeBr0",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"BlakeBr0",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
 }
