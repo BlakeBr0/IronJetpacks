@@ -1,26 +1,23 @@
 package com.blakebr0.ironjetpacks.sound;
 
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
+import net.minecraft.client.audio.TickableSound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.blakebr0.ironjetpacks.util.JetpackUtils;
-
-import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
-public class SoundJetpack extends MovingSound {
-
+@OnlyIn(Dist.CLIENT)
+public class SoundJetpack extends TickableSound {
 	private static final Map<Integer, SoundJetpack> PLAYING_FOR = Collections.synchronizedMap(new HashMap<Integer, SoundJetpack>());
+	private final PlayerEntity player;
 	
-	private final EntityPlayer player;
-	
-	public SoundJetpack(EntityPlayer player) {
-		super(ModSounds.soundJetpack, SoundCategory.PLAYERS);
+	public SoundJetpack(PlayerEntity player) {
+		super(ModSounds.JETPACK, SoundCategory.PLAYERS);
 		this.player = player;
 		this.repeat = true;
 		PLAYING_FOR.put(player.getEntityId(), this);
@@ -35,14 +32,14 @@ public class SoundJetpack extends MovingSound {
 	}
 
 	@Override
-	public void update() {
-		this.xPosF = (float) this.player.posX;
-		this.yPosF = (float) this.player.posY - 10;
-		this.zPosF = (float) this.player.posZ;
+	public void tick() {
+		this.x = (float) this.player.posX;
+		this.y = (float) this.player.posY - 10;
+		this.z = (float) this.player.posZ;
 		
-		if (!JetpackUtils.isFlying(player)) {
+		if (!JetpackUtils.isFlying(this.player)) {
 			synchronized (PLAYING_FOR) {
-				PLAYING_FOR.remove(player.getEntityId());
+				PLAYING_FOR.remove(this.player.getEntityId());
 				this.donePlaying = true;
 			}
 		}

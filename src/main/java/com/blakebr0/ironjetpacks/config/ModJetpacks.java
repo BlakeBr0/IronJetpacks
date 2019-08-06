@@ -1,49 +1,39 @@
 package com.blakebr0.ironjetpacks.config;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-
-import com.blakebr0.cucumber.lib.ItemPlaceholder;
 import com.blakebr0.ironjetpacks.config.json.Serializers;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class ModJetpacks {
-	
-	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, ItemPlaceholder.of("plankWood"));
-	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, ItemPlaceholder.of(Blocks.STONE));
-	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, ItemPlaceholder.of("ingotIron"));
-	private static final Jetpack GOLD = JetpackRegistry.createJetpack("gold", 3, 0xDEDE00, 2, 25, ItemPlaceholder.of("ingotGold"));
-	private static final Jetpack DIAMOND = JetpackRegistry.createJetpack("diamond", 4, 0x4AEDD1, 4, 10, ItemPlaceholder.of("gemDiamond"));
-	private static final Jetpack EMERALD = JetpackRegistry.createJetpack("emerald", 5, 0x41F384, 4, 15, ItemPlaceholder.of("gemEmerald"));
-	private static final Jetpack CREATIVE = JetpackRegistry.createJetpack("creative", 0, 0xCF1AE9, 8, 0, null).setCreative();
+	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, () -> Ingredient.fromTag(ItemTags.PLANKS));
+	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, () -> Ingredient.fromTag(Tags.Items.STONE));
+	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, () -> Ingredient.fromTag(Tags.Items.INGOTS_IRON));
+	private static final Jetpack GOLD = JetpackRegistry.createJetpack("gold", 3, 0xDEDE00, 2, 25, () -> Ingredient.fromTag(Tags.Items.INGOTS_GOLD));
+	private static final Jetpack DIAMOND = JetpackRegistry.createJetpack("diamond", 4, 0x4AEDD1, 4, 10, () -> Ingredient.fromTag(Tags.Items.GEMS_DIAMOND));
+	private static final Jetpack EMERALD = JetpackRegistry.createJetpack("emerald", 5, 0x41F384, 4, 15, () -> Ingredient.fromTag(Tags.Items.GEMS_EMERALD));
+	private static final Jetpack CREATIVE = JetpackRegistry.createJetpack("creative", 0, 0xCF1AE9, 8, 0, () -> Ingredient.EMPTY).setCreative();
 
-	private static final Jetpack COPPER = JetpackRegistry.createJetpack("copper", 1, 0xCE7201, 2, 12, ItemPlaceholder.of("ingotCopper"));
-	private static final Jetpack BRONZE = JetpackRegistry.createJetpack("bronze", 2, 0xEC9E3F, 3, 9, ItemPlaceholder.of("ingotBronze"));
-	private static final Jetpack SILVER = JetpackRegistry.createJetpack("silver", 2, 0x9FC4DD, 3, 12, ItemPlaceholder.of("ingotSilver"));
-	private static final Jetpack STEEL = JetpackRegistry.createJetpack("steel", 3, 0x565656, 3, 15, ItemPlaceholder.of("ingotSteel"));
-	private static final Jetpack ELECTRUM = JetpackRegistry.createJetpack("electrum", 3, 0xA79135, 2, 18, ItemPlaceholder.of("ingotElectrum"));
-	private static final Jetpack INVAR = JetpackRegistry.createJetpack("invar", 3, 0x929D97, 3, 15, ItemPlaceholder.of("ingotInvar"));
-	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, ItemPlaceholder.of("ingotPlatinum"));
+	private static final Jetpack COPPER = JetpackRegistry.createJetpack("copper", 1, 0xCE7201, 2, 12, () -> Ingredient.EMPTY);
+	private static final Jetpack BRONZE = JetpackRegistry.createJetpack("bronze", 2, 0xEC9E3F, 3, 9, () -> Ingredient.EMPTY);
+	private static final Jetpack SILVER = JetpackRegistry.createJetpack("silver", 2, 0x9FC4DD, 3, 12, () -> Ingredient.EMPTY);
+	private static final Jetpack STEEL = JetpackRegistry.createJetpack("steel", 3, 0x565656, 3, 15, () -> Ingredient.EMPTY);
+	private static final Jetpack ELECTRUM = JetpackRegistry.createJetpack("electrum", 3, 0xA79135, 2, 18, () -> Ingredient.EMPTY);
+	private static final Jetpack INVAR = JetpackRegistry.createJetpack("invar", 3, 0x929D97, 3, 15, () -> Ingredient.EMPTY);
+	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, () -> Ingredient.EMPTY);
 
 	static {		
 		WOOD.setStats(20000, 32, 0.18D, 0.10D, 0.06D, 0.16D, 0.14D, 1.0D, 1.0D);
@@ -63,8 +53,9 @@ public class ModJetpacks {
 		PLATINUM.setStats(36000000, 720, 0.92D, 0.155D, 0.193D, 0.42D, 0.005D, 1.8D, 3.8D);
 	}
 	
-	public static void init(File dir) {
+	public static void loadJsons() {
 		final JetpackRegistry registry = JetpackRegistry.getInstance();
+		File dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
 		Gson gson = Serializers.initGson();
 		
 		if (!dir.exists() && dir.mkdirs()) {		
@@ -83,15 +74,8 @@ public class ModJetpacks {
 		
 		File[] files = dir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
 		
-		if (files == null) {
+		if (files == null)
 			return;
-		}
-		
-		try {
-			updateOldJsons(files, dir, gson);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		
 		List<Jetpack> jetpacks = new ArrayList<>();
 		
@@ -105,7 +89,7 @@ public class ModJetpacks {
 				e.printStackTrace();
 			}
 			
-			if (!jetpack.disabled) {
+			if (jetpack != null && !jetpack.disabled) {
 				jetpacks.add(jetpack);
 			}
 		}
@@ -117,7 +101,7 @@ public class ModJetpacks {
 		}
 	}
 	
-	public static List<Jetpack> defaults() {
+	private static List<Jetpack> defaults() {
 		List<Jetpack> defaults = new ArrayList<>();
 		defaults.add(WOOD);
 		defaults.add(STONE);
@@ -138,64 +122,5 @@ public class ModJetpacks {
 		defaults.sort(Comparator.comparingInt(Jetpack::getTier));	
 		
 		return defaults;
-	}
-	
-	// TODO: 1.13: REMOVE
-	private static void updateOldJsons(File[] files, File dir, Gson gson) throws IOException {
-		for (File file : files) {
-			String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-			JsonObject obj = new JsonParser().parse(json).getAsJsonObject();
-			
-			if (!obj.has("jetpack_type")) continue;
-			
-			JsonObject jetpackType = obj.get("jetpack_type").getAsJsonObject();
-			
-			String name = jetpackType.get("name").getAsString();
-			boolean disable = jetpackType.get("disable").getAsBoolean();
-			int tier = jetpackType.get("tier").getAsInt();
-			int color = jetpackType.get("color").getAsInt();
-			int armorPoints = jetpackType.get("armor_points").getAsInt();
-			int enchantability = jetpackType.get("enchantability").getAsInt();
-			String craftingItem = jetpackType.get("crafting_material").getAsString();
-			ItemPlaceholder craftingMaterial = null;
-			if (!craftingItem.equalsIgnoreCase("null")) {
-				if (craftingItem.startsWith("ore:")) {
-					craftingMaterial = ItemPlaceholder.of(craftingItem.substring(4));
-				} else {
-					String[] parts = craftingItem.split(":");
-					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
-					craftingMaterial = ItemPlaceholder.of(new ItemStack(item, 1, Integer.valueOf(parts[2])));
-				}
-			}
-			boolean forceRecipes = jetpackType.get("force_recipes").getAsBoolean();
-			boolean creative = false;
-			if (jetpackType.has("creative")) {
-				creative = jetpackType.get("creative").getAsBoolean();
-			}
-			
-			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterial).setCreative(creative);
-			JsonObject jetpackInfo = obj.get("jetpack_info").getAsJsonObject();
-			
-			int capacity = jetpackInfo.get("capacity").getAsInt();
-			int usage = jetpackInfo.get("usage").getAsInt();
-			double speedVert = jetpackInfo.get("speed_vertical").getAsDouble();
-			double accelVert = jetpackInfo.get("accel_vertical").getAsDouble();
-			double speedSide = jetpackInfo.get("speed_sideways").getAsDouble();
-			double speedHover = jetpackInfo.get("speed_hover_descend").getAsDouble();
-			double speedHoverSlow = jetpackInfo.get("speed_hover").getAsDouble();
-			double sprintSpeed = jetpackInfo.get("sprint_speed_multi").getAsDouble();
-			double sprintFuel = jetpackInfo.get("sprint_fuel_multi").getAsDouble();
-			
-			jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintFuel);
-			
-			String newJson = gson.toJson(jetpack);
-			try {
-				FileWriter writer = new FileWriter(file);
-				writer.write(newJson);
-				writer.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

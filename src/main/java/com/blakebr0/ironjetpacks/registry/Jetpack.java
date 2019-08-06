@@ -1,27 +1,29 @@
 package com.blakebr0.ironjetpacks.registry;
 
-import com.blakebr0.cucumber.lib.ItemPlaceholder;
-import com.blakebr0.ironjetpacks.item.ItemComponent;
-import com.blakebr0.ironjetpacks.item.ItemJetpack;
+import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.item.ComponentItem;
+import com.blakebr0.ironjetpacks.item.JetpackItem;
+import net.minecraft.item.Rarity;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.LazyLoadBase;
 
-import net.minecraft.item.EnumRarity;
+import java.util.function.Supplier;
 
 public class Jetpack {
-	
 	public String name;
 	public int tier;
 	public int color;
 	public int armorPoints;
 	public int enchantablilty;
-	public ItemPlaceholder craftingMaterial;
-	public ItemJetpack item;
+	public LazyLoadBase<Ingredient> craftingMaterial;
+	public JetpackItem item;
 	public boolean creative = false;
 	public boolean disabled = false;
 	public boolean forceRecipe = false;
-	public EnumRarity rarity = EnumRarity.COMMON;
-	public ItemComponent cell;
-	public ItemComponent thruster;
-	public ItemComponent capacitor;
+	public Rarity rarity = Rarity.COMMON;
+	public ComponentItem cell;
+	public ComponentItem thruster;
+	public ComponentItem capacitor;
 	public int capacity;
 	public int usage;
 	public double speedVert;
@@ -32,14 +34,14 @@ public class Jetpack {
 	public double sprintSpeed;
 	public double sprintFuel;
 	
-	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, ItemPlaceholder craftingMaterial) {
+	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, Supplier<Ingredient> craftingMaterial) {
 		this.name = name;
 		this.tier = tier;
 		this.color = color;
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
-		this.craftingMaterial = craftingMaterial;
-		this.item = new ItemJetpack(this);
+		this.craftingMaterial = new LazyLoadBase<>(craftingMaterial);
+		this.item = new JetpackItem(this, p -> p.group(IronJetpacks.ITEM_GROUP));
 	}
 	
 	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintFuel) {
@@ -59,7 +61,7 @@ public class Jetpack {
 	public Jetpack setCreative() {
 		this.creative = true;
 		this.tier = -1;
-		this.rarity = EnumRarity.EPIC;
+		this.rarity = Rarity.EPIC;
 		
 		return this;
 	}
@@ -89,27 +91,31 @@ public class Jetpack {
 		return this;
 	}
 	
-	public Jetpack setRarity(EnumRarity rarity) {
+	public Jetpack setRarity(Rarity rarity) {
 		this.rarity = rarity;
 		return this;
 	}
 	
-	public Jetpack setCellItem(ItemComponent item) {
+	public Jetpack setCellItem(ComponentItem item) {
 		this.cell = item;
 		return this;
 	}
 	
-	public Jetpack setThrusterItem(ItemComponent item) {
+	public Jetpack setThrusterItem(ComponentItem item) {
 		this.thruster = item;
 		return this;
 	}
 	
-	public Jetpack setCapacitorItem(ItemComponent item) {
+	public Jetpack setCapacitorItem(ComponentItem item) {
 		this.capacitor = item;
 		return this;
 	}
 	
 	public int getTier() {
 		return this.tier;
+	}
+
+	public Ingredient getCraftingMaterial() {
+		return this.craftingMaterial.getValue();
 	}
 }

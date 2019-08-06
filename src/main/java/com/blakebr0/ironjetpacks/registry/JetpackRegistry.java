@@ -1,15 +1,14 @@
 package com.blakebr0.ironjetpacks.registry;
 
-import java.util.ArrayList;
-
-import com.blakebr0.cucumber.lib.ItemPlaceholder;
-import com.blakebr0.ironjetpacks.item.ItemJetpack;
+import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.item.ModItems;
-
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.Ingredient;
+
+import java.util.ArrayList;
+import java.util.function.Supplier;
 
 public class JetpackRegistry {
-
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
 	private ArrayList<Jetpack> jetpacks = new ArrayList<>();
 	private ArrayList<Integer> tiers = new ArrayList<>();
@@ -19,7 +18,7 @@ public class JetpackRegistry {
 		return INSTANCE;
 	}
 	
-	public static Jetpack createJetpack(String name, int tier, int color, int armorPoints, int enchantability, ItemPlaceholder craftingMaterial) {
+	public static Jetpack createJetpack(String name, int tier, int color, int armorPoints, int enchantability, Supplier<Ingredient> craftingMaterial) {
 		return new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterial);
 	}
 	
@@ -48,7 +47,7 @@ public class JetpackRegistry {
 		return this.lowestTier;
 	}
 	
-	public ItemJetpack getJetpackForName(String name) {
+	public JetpackItem getJetpackForName(String name) {
 		Jetpack jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
 		return jetpack == null ? null : jetpack.item;
 	}

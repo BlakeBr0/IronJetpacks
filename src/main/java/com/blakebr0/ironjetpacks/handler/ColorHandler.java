@@ -1,28 +1,23 @@
 package com.blakebr0.ironjetpacks.handler;
 
+import com.blakebr0.cucumber.iface.IColored;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
+import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.blakebr0.cucumber.iface.IColoredItem;
-import com.blakebr0.ironjetpacks.item.ItemJetpack;
-import com.blakebr0.ironjetpacks.registry.Jetpack;
-import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.Item;
-
 public class ColorHandler {
-	
-	public static final List<IColoredItem> COLORED_ITEMS = new ArrayList<>();
-	
-	public static void register() {
-		BlockColors blockColors = Minecraft.getMinecraft().getBlockColors();
-		ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
-		
+	private static final List<Item> COLORED_ITEMS = new ArrayList<>();
+
+	@SubscribeEvent
+	public void onItemColors(ColorHandlerEvent.Item event) {
+		ItemColors colors = event.getItemColors();
+
 		for (Jetpack jetpack : JetpackRegistry.getInstance().getAllJetpacks()) {
 			COLORED_ITEMS.add(jetpack.item);
 			COLORED_ITEMS.add(jetpack.cell);
@@ -30,9 +25,9 @@ public class ColorHandler {
 			COLORED_ITEMS.add(jetpack.capacitor);
 		}
 		
-		itemColors.registerItemColorHandler((stack, tint) -> {
-			IColoredItem item = (IColoredItem) stack.getItem();
-			return stack.getItem() instanceof ItemJetpack ? tint == 1 ? item.color() : -1 : item.color();
+		colors.register((stack, tint) -> {
+			IColored item = (IColored) stack.getItem();
+			return item.getColor(tint);
 		},  COLORED_ITEMS.toArray(new Item[0]));
 	}
 }

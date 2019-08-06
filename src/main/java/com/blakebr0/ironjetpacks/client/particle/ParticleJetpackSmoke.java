@@ -1,33 +1,21 @@
 package com.blakebr0.ironjetpacks.client.particle;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.particle.ParticleSmokeNormal;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.SmokeParticle;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class ParticleJetpackSmoke extends ParticleSmokeNormal {
-
-	private static Minecraft mc = FMLClientHandler.instance().getClient();
-	
-	public ParticleJetpackSmoke(World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed) {
-		super(world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, 1.0F);
+@OnlyIn(Dist.CLIENT)
+public class ParticleJetpackSmoke extends SmokeParticle {
+	public ParticleJetpackSmoke(World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprite) {
+		super(world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, 1.0F, sprite);
 	}
 
 	@Override
 	public int getBrightnessForRender(float f) {
-		return 190 + (int) (20.0F * (1.0F - mc.gameSettings.gammaSetting));
-	}
-
-	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		if (this.particleAge > 0) {
-			super.renderParticle(buffer, entity, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-		}
+		Minecraft mc = Minecraft.getInstance();
+		return 190 + (int) (20.0F * (1.0F - mc.gameSettings.gamma));
 	}
 }

@@ -1,92 +1,98 @@
 package com.blakebr0.ironjetpacks.handler;
 
-import org.lwjgl.input.Keyboard;
-
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.item.ItemJetpack;
-import com.blakebr0.ironjetpacks.lib.Tooltips;
-import com.blakebr0.ironjetpacks.network.IronNetwork;
-import com.blakebr0.ironjetpacks.network.message.MessageToggleEngine;
-import com.blakebr0.ironjetpacks.network.message.MessageToggleHover;
-import com.blakebr0.ironjetpacks.network.message.MessageUpdateInput;
-
+import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.lib.ModTooltips;
+import com.blakebr0.ironjetpacks.network.NetworkHandler;
+import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
+import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
+import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = IronJetpacks.MOD_ID, value = Side.CLIENT)
 public class KeybindHandler {
-
-	public static KeyBinding keyEngine;
-	public static KeyBinding keyHover;
+	private static KeyBinding keyEngine;
+	private static KeyBinding keyHover;
 	
-	public static boolean up = false;
-	public static boolean down = false;
-	public static boolean forwards = false;
-	public static boolean backwards = false;
-	public static boolean left = false;
-	public static boolean right = false;
+	private static boolean up = false;
+	private static boolean down = false;
+	private static boolean forwards = false;
+	private static boolean backwards = false;
+	private static boolean left = false;
+	private static boolean right = false;
 	
-	public static void register() {
-		keyEngine = new KeyBinding("key.ij.engine", Keyboard.KEY_V, IronJetpacks.NAME);
-		keyHover = new KeyBinding("key.ij.hover", Keyboard.KEY_G, IronJetpacks.NAME);
+	public static void onClientSetup() {
+		keyEngine = new KeyBinding("key.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
+		keyHover = new KeyBinding("key.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
 		
 		ClientRegistry.registerKeyBinding(keyEngine);
 		ClientRegistry.registerKeyBinding(keyHover);
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(KeyInputEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
+		PlayerEntity player = Minecraft.getInstance().player;
+		if (player == null)
+			return;
+
+		ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		Item item = chest.getItem();
 		
-		if (chest.getItem() instanceof ItemJetpack) {
-			ItemJetpack jetpack = (ItemJetpack) chest.getItem();
+		if (item instanceof JetpackItem) {
+			JetpackItem jetpack = (JetpackItem) item;
 			
 			if (keyEngine.isPressed()) {
 				boolean on = jetpack.toggleEngine(chest);
-				IronNetwork.INSTANCE.sendToServer(new MessageToggleEngine());
-				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
+				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
+				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 			}
 			
 			if (keyHover.isPressed()) {
 				boolean on = jetpack.toggleHover(chest);
-				IronNetwork.INSTANCE.sendToServer(new MessageToggleHover());
-				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
+				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
+				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 			}
 		}
 	}
 	
 	@SubscribeEvent
-	public static void onMouseInput(MouseInputEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		
-		if (chest.getItem() instanceof ItemJetpack) {
-			ItemJetpack jetpack = (ItemJetpack) chest.getItem();
+	public void onMouseInput(InputEvent.MouseInputEvent event) {
+		PlayerEntity player = Minecraft.getInstance().player;
+		if (player == null)
+			return;
+
+		ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		Item item = chest.getItem();
+
+		if (item instanceof JetpackItem) {
+			JetpackItem jetpack = (JetpackItem) item;
 			
 			if (keyEngine.isPressed()) {
 				boolean on = jetpack.toggleEngine(chest);
-				IronNetwork.INSTANCE.sendToServer(new MessageToggleEngine());
-				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_ENGINE.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
+				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
+				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
 			}
 			
 			if (keyHover.isPressed()) {
 				boolean on = jetpack.toggleHover(chest);
-				IronNetwork.INSTANCE.sendToServer(new MessageToggleHover());
-				player.sendStatusMessage(new TextComponentString(Tooltips.TOGGLED_HOVER.get() + (on ? Tooltips.ON.get(10) : Tooltips.OFF.get(12))), true);
+				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
+				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
 			}
 		}
 	}
@@ -96,9 +102,10 @@ public class KeybindHandler {
 	 * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/client/handler/KeyTracker.java
 	 */
 	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent event) {
-		if (event.phase == Phase.START) {
-			GameSettings settings = Minecraft.getMinecraft().gameSettings;
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) {
+			Minecraft mc = Minecraft.getInstance();
+			GameSettings settings = mc.gameSettings;
 			
 			boolean upNow = settings.keyBindJump.isKeyDown();
 			boolean downNow = settings.keyBindSneak.isKeyDown();
@@ -115,8 +122,8 @@ public class KeybindHandler {
 				left = leftNow;
 				right = rightNow;
 				
-				IronNetwork.INSTANCE.sendToServer(new MessageUpdateInput(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow));
-				InputHandler.update(Minecraft.getMinecraft().player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow);
+				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow));
+				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow);
 			}
 		}
 	}
