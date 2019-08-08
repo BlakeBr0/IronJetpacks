@@ -4,9 +4,6 @@ import com.blakebr0.ironjetpacks.config.json.Serializers;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.gson.Gson;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
@@ -19,21 +16,21 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ModJetpacks {
-	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, () -> Ingredient.fromTag(ItemTags.PLANKS));
-	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, () -> Ingredient.fromTag(Tags.Items.STONE));
-	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, () -> Ingredient.fromTag(Tags.Items.INGOTS_IRON));
-	private static final Jetpack GOLD = JetpackRegistry.createJetpack("gold", 3, 0xDEDE00, 2, 25, () -> Ingredient.fromTag(Tags.Items.INGOTS_GOLD));
-	private static final Jetpack DIAMOND = JetpackRegistry.createJetpack("diamond", 4, 0x4AEDD1, 4, 10, () -> Ingredient.fromTag(Tags.Items.GEMS_DIAMOND));
-	private static final Jetpack EMERALD = JetpackRegistry.createJetpack("emerald", 5, 0x41F384, 4, 15, () -> Ingredient.fromTag(Tags.Items.GEMS_EMERALD));
-	private static final Jetpack CREATIVE = JetpackRegistry.createJetpack("creative", 0, 0xCF1AE9, 8, 0, () -> Ingredient.EMPTY).setCreative();
+	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks");
+	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone");
+	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, "tag:forge:ingots/iron");
+	private static final Jetpack GOLD = JetpackRegistry.createJetpack("gold", 3, 0xDEDE00, 2, 25, "tag:forge:ingots/gold");
+	private static final Jetpack DIAMOND = JetpackRegistry.createJetpack("diamond", 4, 0x4AEDD1, 4, 10, "tag:forge:gems/diamond");
+	private static final Jetpack EMERALD = JetpackRegistry.createJetpack("emerald", 5, 0x41F384, 4, 15, "tag:forge:gems/emerald");
+	private static final Jetpack CREATIVE = JetpackRegistry.createJetpack("creative", 0, 0xCF1AE9, 8, 0, "null").setCreative();
 
-	private static final Jetpack COPPER = JetpackRegistry.createJetpack("copper", 1, 0xCE7201, 2, 12, () -> Ingredient.EMPTY);
-	private static final Jetpack BRONZE = JetpackRegistry.createJetpack("bronze", 2, 0xEC9E3F, 3, 9, () -> Ingredient.EMPTY);
-	private static final Jetpack SILVER = JetpackRegistry.createJetpack("silver", 2, 0x9FC4DD, 3, 12, () -> Ingredient.EMPTY);
-	private static final Jetpack STEEL = JetpackRegistry.createJetpack("steel", 3, 0x565656, 3, 15, () -> Ingredient.EMPTY);
-	private static final Jetpack ELECTRUM = JetpackRegistry.createJetpack("electrum", 3, 0xA79135, 2, 18, () -> Ingredient.EMPTY);
-	private static final Jetpack INVAR = JetpackRegistry.createJetpack("invar", 3, 0x929D97, 3, 15, () -> Ingredient.EMPTY);
-	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, () -> Ingredient.EMPTY);
+	private static final Jetpack COPPER = JetpackRegistry.createJetpack("copper", 1, 0xCE7201, 2, 12, "tag:forge:ingots/copper");
+	private static final Jetpack BRONZE = JetpackRegistry.createJetpack("bronze", 2, 0xEC9E3F, 3, 9, "tag:forge:ingots/bronze");
+	private static final Jetpack SILVER = JetpackRegistry.createJetpack("silver", 2, 0x9FC4DD, 3, 12, "tag:forge:ingots/silver");
+	private static final Jetpack STEEL = JetpackRegistry.createJetpack("steel", 3, 0x565656, 3, 15, "tag:forge:ingots/steel");
+	private static final Jetpack ELECTRUM = JetpackRegistry.createJetpack("electrum", 3, 0xA79135, 2, 18, "tag:forge:ingots/electrum");
+	private static final Jetpack INVAR = JetpackRegistry.createJetpack("invar", 3, 0x929D97, 3, 15, "tag:forge:ingots/invar");
+	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, "tag:forge:ingots/platinum");
 
 	static {		
 		WOOD.setStats(20000, 32, 0.18D, 0.10D, 0.06D, 0.16D, 0.14D, 1.0D, 1.0D);

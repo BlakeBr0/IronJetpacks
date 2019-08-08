@@ -11,7 +11,7 @@ public class ModSounds {
 	public static final SoundEvent JETPACK = new SoundEvent(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"));
 	
 	@SubscribeEvent
-	public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+	public void onRegisterSounds(RegistryEvent.Register<SoundEvent> event) {
 		IForgeRegistry<SoundEvent> registry = event.getRegistry();
 
 		registry.register(JETPACK.setRegistryName("jetpack"));

@@ -1,8 +1,6 @@
 {
   "jetpack": {
-    "category": "player",
-    "sounds": [
-      "ironjetpacks:jetpack_test"
-    ]
+    "sounds": ["ironjetpacks:jetpack"],
+    "subtitle": "subtitle.ironjetpacks.jetpack"
   }
 }

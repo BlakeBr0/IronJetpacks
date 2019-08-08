@@ -9,7 +9,7 @@ import com.blakebr0.cucumber.lib.Localizable;
 import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.client.model.ModelJetpack;
+import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
@@ -23,6 +23,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IDyeableArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,7 +35,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.function.Function;
 
-public class JetpackItem extends BaseArmorItem implements IColored {
+public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 	private Jetpack jetpack;
 
@@ -79,6 +79,11 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 		NBTHelper.flipBoolean(stack, "Hover");
 		return !current;
 	}
+
+	private void fly(PlayerEntity player, double y) {
+		Vec3d motion = player.getMotion();
+		player.setMotion(motion.getX(), y, motion.getZ());
+	}
 	
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
@@ -103,7 +108,7 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 					Jetpack info = jetpack.getJetpack();
 					
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
-					double currentAccel = info.accelVert * (player.getMotion().y < 0.3D ? 2.5D : 1.0D);
+					double currentAccel = info.accelVert * (player.getMotion().getY() < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = info.speedVert * (player.isInWater() ? 0.4D : 1.0D);
 					
 					double usage = player.isSprinting() ? info.usage * info.sprintFuel : info.usage;
@@ -119,35 +124,35 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 						double motionY = player.getMotion().getY();
 						if (InputHandler.isHoldingUp(player)) {
 							if (!hover) {
-								player.setMotion(0, Math.min(motionY + currentAccel, currentSpeedVertical), 0);
+								this.fly(player, Math.min(motionY + currentAccel, currentSpeedVertical));
 							} else {
 								if (InputHandler.isHoldingDown(player)) {
-									player.setMotion(0, Math.min(motionY + currentAccel, -info.speedHoverSlow), 0);
+									this.fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow));
 								} else {
-									player.setMotion(0, Math.min(motionY + currentAccel, info.speedHover), 0);
+									this.fly(player, Math.min(motionY + currentAccel, info.speedHover));
 								}
-							}					
+							}
 						} else {
-							player.setMotion(0, Math.min(motionY + currentAccel, -hoverSpeed), 0);
+							this.fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
 						}
 						
 						float speedSideways = (float) (player.isSneaking() ? info.speedSide * 0.5F : info.speedSide);
 						float speedForward = (float) (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways);
 						
 						if (InputHandler.isHoldingForwards(player)) {
-							player.moveRelative(0, new Vec3d(0, speedForward, speedForward));
+							player.moveRelative(1, new Vec3d(0, 0, speedForward));
 						}
 						
 						if (InputHandler.isHoldingBackwards(player)) {
-							player.moveRelative(0, new Vec3d(0, -speedSideways, speedSideways * 0.8F));
+							player.moveRelative(1, new Vec3d(0, 0, -speedSideways * 0.8F));
 						}
 						
 						if (InputHandler.isHoldingLeft(player)) {
-							player.moveRelative(speedSideways, new Vec3d(0, 0, speedSideways));
+							player.moveRelative(1, new Vec3d(speedSideways, 0, 0));
 						}
 						
 						if (InputHandler.isHoldingRight(player)) {
-							player.moveRelative(-speedSideways, new Vec3d(0, 0, speedSideways));
+							player.moveRelative(1, new Vec3d(-speedSideways, 0, 0));
 						}
 						
 						if (!world.isRemote) {
@@ -188,8 +193,8 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (!this.jetpack.creative) {
-			IEnergyStorage energy = getEnergyStorage(stack);
-			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE"));
+			IEnergyStorage energy = this.getEnergyStorage(stack);
+			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").applyTextStyle(TextFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().appendText(" FE"));
 		}
@@ -220,12 +225,12 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public BipedModel getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlotType slot, BipedModel _default) {
-		return new ModelJetpack(this);
+		return new JetpackModel(this);
 	}
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-		return !type.equals("overlay") ? IronJetpacks.MOD_ID + ":textures/armor/jetpack.png" : IronJetpacks.MOD_ID + ":textures/armor/jetpack_overlay.png";
+		return type == null ? IronJetpacks.MOD_ID + ":textures/armor/jetpack.png" : IronJetpacks.MOD_ID + ":textures/armor/jetpack_overlay.png";
 	}
 	
 	@Override
@@ -236,5 +241,25 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 	@Override
 	public int getColor(int i) {
 		return i == 1 ? this.jetpack.color : -1;
+	}
+
+	@Override
+	public boolean hasColor(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public int getColor(ItemStack stack) {
+		return this.getColor(1);
+	}
+
+	@Override
+	public void removeColor(ItemStack stack) {
+
+	}
+
+	@Override
+	public void setColor(ItemStack stack, int color) {
+
 	}
 }

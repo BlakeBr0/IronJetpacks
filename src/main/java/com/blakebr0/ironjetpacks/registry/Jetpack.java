@@ -3,11 +3,13 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadBase;
-
-import java.util.function.Supplier;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class Jetpack {
 	public String name;
@@ -15,11 +17,11 @@ public class Jetpack {
 	public int color;
 	public int armorPoints;
 	public int enchantablilty;
-	public LazyLoadBase<Ingredient> craftingMaterial;
+	public String craftingMaterialString;
+	private Ingredient craftingMaterial;
 	public JetpackItem item;
 	public boolean creative = false;
 	public boolean disabled = false;
-	public boolean forceRecipe = false;
 	public Rarity rarity = Rarity.COMMON;
 	public ComponentItem cell;
 	public ComponentItem thruster;
@@ -34,13 +36,13 @@ public class Jetpack {
 	public double sprintSpeed;
 	public double sprintFuel;
 	
-	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, Supplier<Ingredient> craftingMaterial) {
+	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
 		this.name = name;
 		this.tier = tier;
 		this.color = color;
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
-		this.craftingMaterial = new LazyLoadBase<>(craftingMaterial);
+		this.craftingMaterialString = craftingMaterialString;
 		this.item = new JetpackItem(this, p -> p.group(IronJetpacks.ITEM_GROUP));
 	}
 	
@@ -81,16 +83,6 @@ public class Jetpack {
 		return this;
 	}
 	
-	public Jetpack setForceRecipe() {
-		this.forceRecipe = true;
-		return this;
-	}
-	
-	public Jetpack setForceRecipe(boolean set) {
-		if (set) this.setForceRecipe();
-		return this;
-	}
-	
 	public Jetpack setRarity(Rarity rarity) {
 		this.rarity = rarity;
 		return this;
@@ -116,6 +108,23 @@ public class Jetpack {
 	}
 
 	public Ingredient getCraftingMaterial() {
-		return this.craftingMaterial.getValue();
+		if (this.craftingMaterial == null) {
+			this.craftingMaterial = Ingredient.EMPTY;
+			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
+				System.out.println(this.craftingMaterialString);
+				String[] parts = craftingMaterialString.split(":");
+				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
+					Tag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(parts[1], parts[2]));
+					if (tag != null)
+						this.craftingMaterial = Ingredient.fromTag(tag);
+				} else if (parts.length >= 2) {
+					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
+					if (item != null)
+						this.craftingMaterial = Ingredient.fromItems(item);
+				}
+			}
+		}
+
+		return this.craftingMaterial;
 	}
 }

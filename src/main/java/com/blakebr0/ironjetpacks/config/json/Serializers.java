@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.Rarity;
-import net.minecraft.item.crafting.Ingredient;
 
 import java.lang.reflect.Type;
 
@@ -38,31 +37,15 @@ public class Serializers {
 			int color = Integer.parseInt(obj.get("color").getAsString(), 16);
 			int armorPoints = obj.get("armorPoints").getAsInt();
 			int enchantability = obj.get("enchantability").getAsInt();
-//			String craftingItem = obj.get("craftingMaterial").getAsString();
-//			Ingredient craftingMaterial = Ingredient.EMPTY;
-//			if (!craftingItem.equalsIgnoreCase("null")) {
-//				if (craftingItem.startsWith("tag:")) {
-//					String[] parts = craftingItem.split(":");
-//					ItemTags.Wrapper tag = new ItemTags.Wrapper(new ResourceLocation(parts[1], parts[2]));
-//					craftingMaterial = Ingredient.fromTag(tag);
-//				} else {
-//					String[] parts = craftingItem.split(":");
-//					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
-//					craftingMaterial = Ingredient.fromItems(item);
-//				}
-//			}
-			boolean forceRecipes = obj.get("forceRecipes").getAsBoolean();
+			String craftingMaterialString = obj.get("craftingMaterial").getAsString();
 			boolean creative = false;
-			if (obj.has("creative")) {
+			if (obj.has("creative"))
 				creative = obj.get("creative").getAsBoolean();
-			}
-			
 			Rarity rarity = Rarity.COMMON;
-			if (obj.has("rarity")) {				
+			if (obj.has("rarity"))
 				rarity = Rarity.values()[obj.get("rarity").getAsInt()];
-			}
 			
-			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, () -> Ingredient.EMPTY).setRarity(rarity).setCreative(creative);
+			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString).setRarity(rarity).setCreative(creative).setDisabled(disable);
 			
 			int capacity = obj.get("capacity").getAsInt();
 			int usage = obj.get("usage").getAsInt();
@@ -89,14 +72,9 @@ public class Serializers {
 			obj.addProperty("color", Integer.toHexString(src.color));
 			obj.addProperty("armorPoints", src.armorPoints);
 			obj.addProperty("enchantability", src.enchantablilty);
-//			String mat = src.craftingMaterial == null ? "null"
-//					: !src.craftingMaterial.getOreName().isEmpty() ? "ore:" + src.craftingMaterial.getOreName()
-//					: src.craftingMaterial.getStack().getItem().getRegistryName().toString() + ":" + src.craftingMaterial.getStack().getMetadata();
-//			obj.addProperty("craftingMaterial", mat);
-			obj.addProperty("forceRecipes", false);
-			if (src.creative) {
+			obj.addProperty("craftingMaterial", src.craftingMaterialString);
+			if (src.creative)
 				obj.addProperty("creative", true);
-			}
 			obj.addProperty("rarity", src.rarity.ordinal());
 			
 			obj.addProperty("capacity", src.capacity);

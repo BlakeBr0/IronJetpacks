@@ -18,8 +18,8 @@ public class JetpackRegistry {
 		return INSTANCE;
 	}
 	
-	public static Jetpack createJetpack(String name, int tier, int color, int armorPoints, int enchantability, Supplier<Ingredient> craftingMaterial) {
-		return new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterial);
+	public static Jetpack createJetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
+		return new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString);
 	}
 	
 	public void register(Jetpack jetpack) {

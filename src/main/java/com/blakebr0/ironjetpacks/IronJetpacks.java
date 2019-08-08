@@ -1,14 +1,21 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.config.ModConfigs;
+import com.blakebr0.ironjetpacks.crafting.JetpackDynamicRecipeManager;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
+import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
+import com.blakebr0.ironjetpacks.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.handler.KeybindHandler;
+import com.blakebr0.ironjetpacks.handler.TemporarilyFixModelsHandler;
 import com.blakebr0.ironjetpacks.item.ModItems;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
+import com.blakebr0.ironjetpacks.sound.ModSounds;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -20,6 +27,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -35,9 +43,11 @@ public class IronJetpacks {
 
 		bus.register(this);
 		bus.register(new ModItems());
+		bus.register(new ModSounds());
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
+			bus.register(new TemporarilyFixModelsHandler());
 		});
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
@@ -46,6 +56,7 @@ public class IronJetpacks {
 
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
+		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 
 		DeferredWorkQueue.runLater(() -> {
@@ -66,8 +77,17 @@ public class IronJetpacks {
 	@SubscribeEvent
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new KeybindHandler());
+		MinecraftForge.EVENT_BUS.register(new HudHandler());
+		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
 
 		KeybindHandler.onClientSetup();
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onServerSetup(FMLServerAboutToStartEvent event) {
+		IReloadableResourceManager manager = event.getServer().getResourceManager();
+
+		manager.addReloadListener(new JetpackDynamicRecipeManager());
 	}
 
 	@SubscribeEvent

@@ -13,14 +13,14 @@ import net.minecraftforge.energy.IEnergyStorage;
  * This is a slightly modified version of the model from Simply Jetpacks
  * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/client/model/ModelJetpack.java
  */
-public class ModelJetpack extends BipedModel<LivingEntity> {
-	private static final ModelBox[] ENERGY_STATES_1 = new ModelBox[6];
+public class JetpackModel extends BipedModel<LivingEntity> {
 	private static final ModelBox[] ENERGY_STATES_2 = new ModelBox[6];
-	
+	private static final ModelBox[] ENERGY_STATES_1 = new ModelBox[6];
+
 	private JetpackItem jetpack;
 	private RendererModel energyBar1, energyBar2;
 
-	public ModelJetpack(JetpackItem jetpack) {
+	public JetpackModel(JetpackItem jetpack) {
 		super(1.0F, 0, 64, 64);
 		
 		this.jetpack = jetpack;
@@ -32,21 +32,22 @@ public class ModelJetpack extends BipedModel<LivingEntity> {
 		this.bipedHeadwear.showModel = false;
 		this.bipedRightLeg.showModel = false;
 		this.bipedLeftLeg.showModel = false;
-				
-		ENERGY_STATES_1[0] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 16, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_1[1] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 20, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_1[2] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 24, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_1[3] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 28, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_1[4] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 32, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_1[5] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 36, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		
-		ENERGY_STATES_2[0] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 16, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_2[1] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 20, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_2[2] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 24, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_2[3] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 28, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_2[4] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 32, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
-		ENERGY_STATES_2[5] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 36, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
 
+		if (ENERGY_STATES_1[0] == null) {
+			ENERGY_STATES_1[0] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 16, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_1[1] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 20, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_1[2] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 24, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_1[3] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 28, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_1[4] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 32, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_1[5] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 36, 55, 2F, 3F, 5.8F, 1, 5, 1, 0F, true);
+
+			ENERGY_STATES_2[0] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 16, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_2[1] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 20, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_2[2] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 24, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_2[3] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 28, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_2[4] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 32, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+			ENERGY_STATES_2[5] = new ModelBox(new RendererModel(this).setTextureSize(64, 64), 36, 55, -3F, 3F, 5.8F, 1, 5, 1, 0F, true);
+		}
 
 		RendererModel middle = new RendererModel(this, 0, 54).setTextureSize(64, 64);
 		middle.addBox(-2F, 5F, 3.6F, 4, 3, 2);
@@ -118,13 +119,13 @@ public class ModelJetpack extends BipedModel<LivingEntity> {
 		this.energyBar1.cubeList.add(ENERGY_STATES_1[0]);
 		this.energyBar1.setRotationPoint(0F, 0F, 0F);
 		this.energyBar1.mirror = true;
-		this.setRotation(energyBar1, 0F, 0F, 0F);
+		this.setRotation(this.energyBar1, 0F, 0F, 0F);
 		
 		this.energyBar2 = new RendererModel(this, 16, 55).setTextureSize(64, 64);
 		this.energyBar2.cubeList.add(ENERGY_STATES_2[0]);
 		this.energyBar2.setRotationPoint(0F, 0F, 0F);
 		this.energyBar2.mirror = true;
-		this.setRotation(energyBar2, 0F, 0F, 0F);
+		this.setRotation(this.energyBar2, 0F, 0F, 0F);
 
 		this.bipedBody.addChild(middle);
 		this.bipedBody.addChild(leftCanister);

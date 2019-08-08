@@ -1,29 +1,22 @@
-//package com.blakebr0.ironjetpacks.crafting;
-//
-//import com.blakebr0.cucumber.helper.RecipeHelper;
-//import com.blakebr0.cucumber.lib.ItemPlaceholder;
-//import com.blakebr0.ironjetpacks.IronJetpacks;
-//import com.blakebr0.ironjetpacks.config.ModConfigs;
-//import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
-//import com.blakebr0.ironjetpacks.item.ModItems;
-//import com.blakebr0.ironjetpacks.registry.Jetpack;
-//import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-//
-//import net.minecraft.init.Blocks;
-//import net.minecraft.init.Items;
-//import net.minecraft.item.Item;
-//import net.minecraft.item.ItemStack;
-//import net.minecraft.item.crafting.IRecipe;
-//import net.minecraft.util.ResourceLocation;
-//import net.minecraftforge.event.RegistryEvent;
-//import net.minecraftforge.fml.common.Loader;
-//import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-//import net.minecraftforge.oredict.OreDictionary;
-//import net.minecraftforge.oredict.ShapedOreRecipe;
-//
-//@EventBusSubscriber(modid = IronJetpacks.MOD_ID)
-//public class ModRecipes {
+package com.blakebr0.ironjetpacks.crafting;
+
+import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+
+public class ModRecipeSerializers {
+    public static final IRecipeSerializer<JetpackUpgradeRecipe> CRAFTING_JETPACK_UPGRADE = new JetpackUpgradeRecipe.Serializer();
+
+    @SubscribeEvent
+    public void onRegisterSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+
+        registry.register(CRAFTING_JETPACK_UPGRADE.setRegistryName(new ResourceLocation(IronJetpacks.MOD_ID, "crafting_jetpack_upgrade")));
+    }
 //
 //	@SubscribeEvent
 //	public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
@@ -119,4 +112,4 @@
 //			}
 //		}
 //	}
-//}
+}

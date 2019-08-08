@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.client.util;
 
+import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
@@ -42,16 +43,16 @@ public class HudHelper {
 	}
 	
 	public static String getFuel(JetpackItem jetpack, ItemStack stack) {
-		if (jetpack.getJetpack().creative) return ModTooltips.INFINITE.buildString() + " FE";
+		if (jetpack.getJetpack().creative) return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
 		int number = jetpack.getEnergyStorage(stack).getEnergyStored();
 		if (number >= 1000000000) {
-			return number / 1000000000 + "G FE";
+			return number / 1000000000 + Colors.GRAY + "G FE";
 		} else if (number >= 1000000) {
-			return number / 1000000 + "M FE";
+			return number / 1000000 + Colors.GRAY + "M FE";
 		} else if (number >= 1000) {
-			return number / 1000 + "k FE";
+			return number / 1000 + Colors.GRAY + "k FE";
 		} else {
-			return number + " FE";
+			return number + Colors.GRAY + " FE";
 		}
 	}
 	

@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class SoundJetpack extends TickableSound {
-	private static final Map<Integer, SoundJetpack> PLAYING_FOR = Collections.synchronizedMap(new HashMap<Integer, SoundJetpack>());
+public class JetpackSound extends TickableSound {
+	private static final Map<Integer, JetpackSound> PLAYING_FOR = Collections.synchronizedMap(new HashMap<>());
 	private final PlayerEntity player;
 	
-	public SoundJetpack(PlayerEntity player) {
+	public JetpackSound(PlayerEntity player) {
 		super(ModSounds.JETPACK, SoundCategory.PLAYERS);
 		this.player = player;
 		this.repeat = true;
