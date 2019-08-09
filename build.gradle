@@ -68,9 +68,9 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
 
     compile files('../Cucumber/build/libs/Cucumber-1.14.4-2.0.2-deobf.jar')
-//    compile fg.deobf('mcp.mobius.waila:Hwyla:1.10.4-B65_1.14.2')
-//    compileOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8:api")
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:6.0.0.8")
+    runtimeOnly fg.deobf('mcp.mobius.waila:Hwyla:1.10.5-B66_1.14.4')
+//    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.9:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.9")
 }
 
 jar {

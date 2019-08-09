@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.energy.EnergyCapabilityProvider;
 import com.blakebr0.cucumber.energy.ItemEnergyStorage;
 import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.iface.IColored;
+import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.item.BaseArmorItem;
 import com.blakebr0.cucumber.lib.Localizable;
 import com.blakebr0.cucumber.lib.Tooltips;
@@ -35,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.function.Function;
 
-public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem {
+public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 	private Jetpack jetpack;
 
@@ -56,8 +58,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 	
 	public IEnergyStorage getEnergyStorage(ItemStack stack) {
-//		return stack.getCapability(CapabilityEnergy.ENERGY, null).orElse(EMPTY_ENERGY_STORAGE);
-		return EMPTY_ENERGY_STORAGE;
+		if (CapabilityEnergy.ENERGY == null)
+			return EMPTY_ENERGY_STORAGE;
+
+		return stack.getCapability(CapabilityEnergy.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
 	}
 	
 	public boolean isEngineOn(ItemStack stack) {
@@ -205,7 +209,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 		
-//		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
+		if (ModConfigs.isLoaded() && ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
@@ -219,7 +223,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 				tooltip.add(ModTooltips.SPRINT_MODIFIER.args(this.jetpack.sprintSpeed).build());
 				tooltip.add(ModTooltips.SPRINT_FUEL_MODIFIER.args(this.jetpack.sprintFuel).build());
 			}
-//		}
+		}
 	}
 	
 	@OnlyIn(Dist.CLIENT)
@@ -250,7 +254,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 
 	@Override
 	public int getColor(ItemStack stack) {
-		return this.getColor(1);
+		return this.jetpack.color;
 	}
 
 	@Override
@@ -261,5 +265,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	@Override
 	public void setColor(ItemStack stack, int color) {
 
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return !this.jetpack.disabled;
 	}
 }

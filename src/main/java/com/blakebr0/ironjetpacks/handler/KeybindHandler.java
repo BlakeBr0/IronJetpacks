@@ -64,7 +64,7 @@ public class KeybindHandler {
 				boolean on = jetpack.toggleHover(chest);
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
-				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
+				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ public class KeybindHandler {
 				boolean on = jetpack.toggleEngine(chest);
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
-				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
+				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 			}
 			
 			if (keyHover.isPressed()) {

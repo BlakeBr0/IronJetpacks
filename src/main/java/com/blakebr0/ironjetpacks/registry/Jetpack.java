@@ -111,11 +111,10 @@ public class Jetpack {
 		if (this.craftingMaterial == null) {
 			this.craftingMaterial = Ingredient.EMPTY;
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
-				System.out.println(this.craftingMaterialString);
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
 					Tag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(parts[1], parts[2]));
-					if (tag != null)
+					if (tag != null && !tag.getAllElements().isEmpty())
 						this.craftingMaterial = Ingredient.fromTag(tag);
 				} else if (parts.length >= 2) {
 					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));

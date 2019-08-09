@@ -2,6 +2,7 @@ package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.JetpackDynamicRecipeManager;
+import com.blakebr0.ironjetpacks.crafting.ingredient.ModIngredients;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
@@ -44,6 +45,7 @@ public class IronJetpacks {
 		bus.register(this);
 		bus.register(new ModItems());
 		bus.register(new ModSounds());
+		bus.register(new ModConfigs());
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
@@ -52,12 +54,17 @@ public class IronJetpacks {
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfigs.COMMON);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModConfigs.SERVER);
+
+		new ModIngredients();
 	}
 
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
+
+		ModIngredients.onCommonSetup();
 
 		DeferredWorkQueue.runLater(() -> {
 			NetworkHandler.onCommonSetup();

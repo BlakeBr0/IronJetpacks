@@ -6,6 +6,7 @@ import com.blakebr0.ironjetpacks.registry.Jetpack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
@@ -15,10 +16,10 @@ public class JetpackUtils {
 	public static boolean isFlying(PlayerEntity player) {
 		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
 		if (!stack.isEmpty()) {
-			if (stack.getItem() instanceof JetpackItem) {
-				JetpackItem jetpack = (JetpackItem) stack.getItem();
-				if (jetpack.isEngineOn(stack) && (jetpack.getEnergyStorage(stack).getEnergyStored() > 0 
-						|| player.isCreative() || jetpack.getJetpack().creative)) {
+			Item item = stack.getItem();
+			if (item instanceof JetpackItem) {
+				JetpackItem jetpack = (JetpackItem) item;
+				if (jetpack.isEngineOn(stack) && (jetpack.getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.getJetpack().creative)) {
 					if (jetpack.isHovering(stack)) {
 						return !player.onGround;
 					} else {

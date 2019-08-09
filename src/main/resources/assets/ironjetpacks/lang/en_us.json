@@ -31,7 +31,7 @@
   "tooltip.ironjetpacks.descend_speed": "Descend Speed: %s",
   "tooltip.ironjetpacks.sprint_modifier": "Sprint Modifier: %s",
   "tooltip.ironjetpacks.sprint_fuel_modifier": "Sprint Fuel Modifier: %s",
-  "tooltip.ironjetpacks.toggle_engine": "Toggled Engine",
-  "tooltip.ironjetpacks.toggle_hover": "Toggled Hover",
+  "tooltip.ironjetpacks.toggle_engine": "Toggled Engine %s",
+  "tooltip.ironjetpacks.toggle_hover": "Toggled Hover %s",
   "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
 }

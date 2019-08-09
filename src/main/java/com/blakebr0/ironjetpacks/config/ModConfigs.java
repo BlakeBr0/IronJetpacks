@@ -1,10 +1,13 @@
 package com.blakebr0.ironjetpacks.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class ModConfigs {
 	public static final ForgeConfigSpec CLIENT;
 	public static final ForgeConfigSpec COMMON;
+	public static final ForgeConfigSpec SERVER;
 
 	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_SOUNDS;
 	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_PARTICLES;
@@ -15,6 +18,8 @@ public class ModConfigs {
 	public static final ForgeConfigSpec.IntValue HUD_OFFSET_X;
 	public static final ForgeConfigSpec.IntValue HUD_OFFSET_Y;
 	public static final ForgeConfigSpec.BooleanValue SHOW_HUD_OVER_CHAT;
+
+	private static boolean loaded = false;
 
 	// Client
 	static {
@@ -77,17 +82,43 @@ public class ModConfigs {
 		COMMON = common.build();
 	}
 
-//	public static boolean confBasicRecipes;
-//	public static boolean confUpgradeRecipes;
-//
-//	public static void syncConfig() {
-//		category = "recipes";
-//		config.setCategoryComment(category, "Recipe settings");
-//		confBasicRecipes = config.getBoolean("basic_recipes", category, false, "Non-nested recipes. Each jetpack requires a Leather Strap instead of a previous tier jetpack.");
-//		confUpgradeRecipes = config.getBoolean("upgrade_recipes", category, true, "Nested recipes. Each jetpack requires a previous tier jetpack.");
-//
-//		if (config.hasChanged()) {
-//			config.save();
-//		}
-//	}
+	public static final ForgeConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_CAPACITOR_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_RECIPES;
+
+	// Server
+	static {
+		final ForgeConfigSpec.Builder server = new ForgeConfigSpec.Builder();
+
+		server.comment("Dynamic recipe options.").push("Recipe");
+		ENABLE_CELL_RECIPES = server
+				.comment("Enable default recipes for Energy Cells?")
+				.translation("configGui.ironjetpacks.enable_cell_recipes")
+				.define("cells", true);
+		ENABLE_THRUSTER_RECIPES = server
+				.comment("Enable default recipes for Thrusters?")
+				.translation("configGui.ironjetpacks.enable_thruster_recipes")
+				.define("thrusters", true);
+		ENABLE_CAPACITOR_RECIPES = server
+				.comment("Enable default recipes for Capacitors?")
+				.translation("configGui.ironjetpacks.enable_capacitor_recipes")
+				.define("capacitors", true);
+		ENABLE_JETPACK_RECIPES = server
+				.comment("Enable default recipes for Jetpacks?")
+				.translation("configGui.ironjetpacks.enable_jetpack_recipes")
+				.define("jetpacks", true);
+		server.pop();
+
+		SERVER = server.build();
+	}
+
+	@SubscribeEvent
+	public void onConfigLoaded(ModConfig.Loading event) {
+		loaded = true;
+	}
+
+	public static boolean isLoaded() {
+		return loaded;
+	}
 }
