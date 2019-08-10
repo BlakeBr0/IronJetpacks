@@ -153,6 +153,9 @@ public class JetpackDynamicRecipeManager implements IResourceManagerReloadListen
     }
 
     private JetpackUpgradeRecipe makeJetpackUpgradeRecipe(Jetpack jetpack) {
+        if (!ModConfigs.ENABLE_JETPACK_RECIPES.get())
+            return null;
+
         JetpackRegistry jetpacks = JetpackRegistry.getInstance();
         if (jetpack.tier == jetpacks.getLowestTier())
             return null;
