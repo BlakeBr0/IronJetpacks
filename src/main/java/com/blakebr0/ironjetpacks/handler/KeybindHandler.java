@@ -121,7 +121,7 @@ public class KeybindHandler {
 				backwards = backwardsNow;
 				left = leftNow;
 				right = rightNow;
-				
+
 				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow));
 				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow);
 			}

@@ -69,8 +69,8 @@ dependencies {
 
     compile files('../Cucumber/build/libs/Cucumber-1.14.4-2.0.2-deobf.jar')
     runtimeOnly fg.deobf('mcp.mobius.waila:Hwyla:1.10.5-B66_1.14.4')
-//    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.9:api")
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.9")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10")
 }
 
 jar {

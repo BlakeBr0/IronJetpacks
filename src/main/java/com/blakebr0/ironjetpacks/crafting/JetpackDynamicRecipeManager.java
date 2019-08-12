@@ -7,6 +7,7 @@ import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
 import com.blakebr0.ironjetpacks.item.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -91,11 +92,12 @@ public class JetpackDynamicRecipeManager implements IResourceManagerReloadListen
             return null;
 
         Ingredient coil = Ingredient.fromItems(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient redstone = Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE);
+        Ingredient cell = Ingredient.fromItems(jetpack.cell);
+        Ingredient furnace = Ingredient.fromItems(Blocks.FURNACE);
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
-                Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
-                Ingredient.EMPTY, redstone, Ingredient.EMPTY
+                coil, cell, coil,
+                material, furnace, material
         );
 
         ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_thruster");
