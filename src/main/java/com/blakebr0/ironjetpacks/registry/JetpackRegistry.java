@@ -53,6 +53,6 @@ public class JetpackRegistry {
 	}
 	
 	public Item getCoilForTier(int tier) {
-		return this.tiers.indexOf(tier) >= this.tiers.size() / 2 ? ModItems.ADVANCED_COIL : ModItems.BASIC_COIL;
+		return this.tiers.indexOf(tier) >= this.tiers.size() / 2 ? ModItems.ADVANCED_COIL.get() : ModItems.BASIC_COIL.get();
 	}
 }

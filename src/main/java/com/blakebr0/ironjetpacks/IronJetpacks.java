@@ -3,13 +3,12 @@ package com.blakebr0.ironjetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.JetpackDynamicRecipeManager;
 import com.blakebr0.ironjetpacks.crafting.ModRecipeSerializers;
-import com.blakebr0.ironjetpacks.crafting.ingredient.ModIngredients;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.handler.KeybindHandler;
-import com.blakebr0.ironjetpacks.handler.TemporarilyFixModelsHandler;
+import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.item.ModItems;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.sound.ModSounds;
@@ -51,14 +50,12 @@ public class IronJetpacks {
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
-			bus.register(new TemporarilyFixModelsHandler());
+			bus.register(new ModelHandler());
 		});
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfigs.COMMON);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModConfigs.SERVER);
-
-		new ModIngredients();
 	}
 
 	@SubscribeEvent
@@ -66,7 +63,7 @@ public class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 
-		ModIngredients.onCommonSetup();
+		ModRecipeSerializers.onCommonSetup();
 
 		DeferredWorkQueue.runLater(() -> {
 			NetworkHandler.onCommonSetup();

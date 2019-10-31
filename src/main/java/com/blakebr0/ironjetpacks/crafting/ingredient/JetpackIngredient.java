@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting.ingredient;
 
+import com.blakebr0.ironjetpacks.crafting.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -101,7 +102,7 @@ public class JetpackIngredient extends Ingredient {
 
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ModIngredients.JETPACK_INGREDIENT;
+        return ModRecipeSerializers.JETPACK_INGREDIENT;
     }
 
     public static class Serializer implements IIngredientSerializer<JetpackIngredient> {

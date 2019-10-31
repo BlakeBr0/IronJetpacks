@@ -53,42 +53,6 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		this.jetpack = jetpack;
 	}
 	
-	public Jetpack getJetpack() {
-		return this.jetpack;
-	}
-	
-	public IEnergyStorage getEnergyStorage(ItemStack stack) {
-		if (CapabilityEnergy.ENERGY == null)
-			return EMPTY_ENERGY_STORAGE;
-
-		return stack.getCapability(CapabilityEnergy.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
-	}
-	
-	public boolean isEngineOn(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Engine");
-	}
-	
-	public boolean toggleEngine(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Engine");
-		NBTHelper.flipBoolean(stack, "Engine");
-		return !current;
-	}
-	
-	public boolean isHovering(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Hover");
-	}
-	
-	public boolean toggleHover(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Hover");
-		NBTHelper.flipBoolean(stack, "Hover");
-		return !current;
-	}
-
-	private void fly(PlayerEntity player, double y) {
-		Vec3d motion = player.getMotion();
-		player.setMotion(motion.getX(), y, motion.getZ());
-	}
-	
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
 		String name = StringUtils.capitalize(this.jetpack.name.replace(" ", "_"));
@@ -270,5 +234,41 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	@Override
 	public boolean isEnabled() {
 		return !this.jetpack.disabled;
+	}
+
+	public Jetpack getJetpack() {
+		return this.jetpack;
+	}
+
+	public IEnergyStorage getEnergyStorage(ItemStack stack) {
+		if (CapabilityEnergy.ENERGY == null)
+			return EMPTY_ENERGY_STORAGE;
+
+		return stack.getCapability(CapabilityEnergy.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
+	}
+
+	public boolean isEngineOn(ItemStack stack) {
+		return NBTHelper.getBoolean(stack, "Engine");
+	}
+
+	public boolean toggleEngine(ItemStack stack) {
+		boolean current = NBTHelper.getBoolean(stack, "Engine");
+		NBTHelper.flipBoolean(stack, "Engine");
+		return !current;
+	}
+
+	public boolean isHovering(ItemStack stack) {
+		return NBTHelper.getBoolean(stack, "Hover");
+	}
+
+	public boolean toggleHover(ItemStack stack) {
+		boolean current = NBTHelper.getBoolean(stack, "Hover");
+		NBTHelper.flipBoolean(stack, "Hover");
+		return !current;
+	}
+
+	private void fly(PlayerEntity player, double y) {
+		Vec3d motion = player.getMotion();
+		player.setMotion(motion.getX(), y, motion.getZ());
 	}
 }

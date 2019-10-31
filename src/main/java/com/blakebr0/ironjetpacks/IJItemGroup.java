@@ -1,24 +1,25 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.item.ModItems;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
-public class IJItemGroup extends ItemGroup {
+import java.util.List;
 
+public class IJItemGroup extends ItemGroup {
 	public IJItemGroup() {
 		super(IronJetpacks.MOD_ID);
 	}
 	
 	@Override
 	public ItemStack createIcon() {
-		JetpackRegistry registry = JetpackRegistry.getInstance();
-		
-		if (registry.getAllJetpacks().isEmpty()) {
+		List<Jetpack> jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+		if (!jetpacks.isEmpty()) {
+			return new ItemStack(jetpacks.get(0).item);
 		}
-		return new ItemStack(ModItems.STRAP);
 
-//		return new ItemStack(registry.getAllJetpacks().get(0).item);
+		return new ItemStack(ModItems.STRAP.get());
 	}
 }

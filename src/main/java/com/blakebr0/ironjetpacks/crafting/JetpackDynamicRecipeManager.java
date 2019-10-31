@@ -141,7 +141,7 @@ public class JetpackDynamicRecipeManager implements IResourceManagerReloadListen
 
         Ingredient capacitor = Ingredient.fromItems(jetpack.capacitor);
         Ingredient thruster = Ingredient.fromItems(jetpack.thruster);
-        Ingredient strap = Ingredient.fromItems(ModItems.STRAP);
+        Ingredient strap = Ingredient.fromItems(ModItems.STRAP.get());
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, strap, material,
