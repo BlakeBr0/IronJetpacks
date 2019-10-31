@@ -106,6 +106,9 @@ public class KeybindHandler {
 		if (event.phase == TickEvent.Phase.START) {
 			Minecraft mc = Minecraft.getInstance();
 			GameSettings settings = mc.gameSettings;
+
+			if (mc.getConnection() == null)
+				return;
 			
 			boolean upNow = settings.keyBindJump.isKeyDown();
 			boolean downNow = settings.keyBindSneak.isKeyDown();
