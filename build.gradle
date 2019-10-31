@@ -42,11 +42,8 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
 
-            mods {
-                ironjetpacks {
-                    source sourceSets.main
-                }
-            }
+            ideaModule "${project.name}.main"
+            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath};${project.file("out/production/classes").canonicalPath}"
         }
 
         server {
@@ -55,19 +52,16 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
 
-            mods {
-                ironjetpacks {
-                    source sourceSets.main
-                }
-            }
+            ideaModule "${project.name}.main"
+            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath};${project.file("out/production/classes").canonicalPath}"
         }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.76'
 
-    compile files('../Cucumber/build/libs/Cucumber-1.14.4-2.0.2-deobf.jar')
+    compile files('../Cucumber/build/libs/Cucumber-1.14.4-2.0.4-deobf.jar')
     runtimeOnly fg.deobf('mcp.mobius.waila:Hwyla:1.10.5-B66_1.14.4')
     compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10")
