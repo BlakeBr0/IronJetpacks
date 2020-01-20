@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -44,15 +43,5 @@ public class ModelHandler {
                     registry.replace(location, jetpack);
             }
         });
-    }
-
-    @SubscribeEvent
-    public void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (event.getMap().getBasePath().equals("textures")) {
-            event.addSprite(new ResourceLocation(IronJetpacks.MOD_ID, "items/cell"));
-            event.addSprite(new ResourceLocation(IronJetpacks.MOD_ID, "items/capacitor"));
-            event.addSprite(new ResourceLocation(IronJetpacks.MOD_ID, "items/thruster"));
-            event.addSprite(new ResourceLocation(IronJetpacks.MOD_ID, "items/jetpack"));
-        }
     }
 }

@@ -4,6 +4,7 @@ import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.audio.TickableSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,9 +34,10 @@ public class JetpackSound extends TickableSound {
 
 	@Override
 	public void tick() {
-		this.x = (float) this.player.posX;
-		this.y = (float) this.player.posY - 10;
-		this.z = (float) this.player.posZ;
+		BlockPos pos = this.player.getPosition();
+		this.x = (float) pos.getX();
+		this.y = (float) pos.getY() - 10;
+		this.z = (float) pos.getZ();
 		
 		if (!JetpackUtils.isFlying(this.player)) {
 			synchronized (PLAYING_FOR) {
