@@ -44,7 +44,7 @@ public class HudHandler {
                         RenderHelper.drawTexturedModalRect(xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
                         RenderSystem.popMatrix();
 
-                        String fuel = HudHelper.getFuel(jetpack, chest);
+                        String fuel = Colors.GRAY + HudHelper.getFuel(jetpack, chest);
                         String engine = Colors.GRAY + "E: " + HudHelper.getOn(jetpack.isEngineOn(chest));
                         String hover = Colors.GRAY + "H: " + HudHelper.getOn(jetpack.isHovering(chest));
 
