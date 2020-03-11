@@ -104,7 +104,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 							this.fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
 						}
 						
-						float speedSideways = (float) (player.isSneaking() ? info.speedSide * 0.5F : info.speedSide);
+						float speedSideways = (float) (player.isCrouching() ? info.speedSide * 0.5F : info.speedSide);
 						float speedForward = (float) (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways);
 						
 						if (InputHandler.isHoldingForwards(player)) {

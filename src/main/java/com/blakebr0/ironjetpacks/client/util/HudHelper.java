@@ -12,7 +12,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class HudHelper {
 	public static HudPos getHudPos() {
-		MainWindow window = Minecraft.getInstance().getWindow();
+		MainWindow window = Minecraft.getInstance().getMainWindow();
 		int xOffset = ModConfigs.HUD_OFFSET_X.get();
 		int yOffset = ModConfigs.HUD_OFFSET_Y.get();
 		

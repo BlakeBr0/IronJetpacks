@@ -111,7 +111,7 @@ public class KeybindHandler {
 				return;
 			
 			boolean upNow = settings.keyBindJump.isKeyDown();
-			boolean downNow = settings.keySneak.isKeyDown();
+			boolean downNow = settings.keyBindSneak.isKeyDown();
 			boolean forwardsNow = settings.keyBindForward.isKeyDown();
 			boolean backwardsNow = settings.keyBindBack.isKeyDown();
 			boolean leftNow = settings.keyBindLeft.isKeyDown();
