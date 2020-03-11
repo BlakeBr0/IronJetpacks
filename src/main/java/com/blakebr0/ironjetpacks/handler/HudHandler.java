@@ -23,6 +23,9 @@ public class HudHandler {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
+            return;
+
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             if (ModConfigs.ENABLE_HUD.get() && (ModConfigs.SHOW_HUD_OVER_CHAT.get() || !ModConfigs.SHOW_HUD_OVER_CHAT.get() && !(mc.currentScreen instanceof ChatScreen)) && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo) {
@@ -57,8 +60,6 @@ public class HudHandler {
                             mc.fontRenderer.drawStringWithShadow(engine, pos.x + 6, pos.y + 4, 16383998);
                             mc.fontRenderer.drawStringWithShadow(hover, pos.x + 6, pos.y + 14, 16383998);
                         }
-
-                        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
                         mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
                     }
