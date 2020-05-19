@@ -7,7 +7,7 @@ loaderVersion="[31,)"
   displayName="Iron Jetpacks"
   # updateJSONURL="http://myurl.me/"
   displayURL="https://www.curseforge.com/minecraft/mc-mods/iron-jetpacks"
-  #logoFile="examplemod.png"
+  # logoFile="examplemod.png"
   authors="BlakeBr0"
   credits="Tonius, Tomson124"
   description='''
@@ -17,7 +17,7 @@ loaderVersion="[31,)"
   [[dependencies.ironjetpacks]]
       modId="forge"
       mandatory=true
-      versionRange="[31.0,)"
+      versionRange="[31.1,)"
       ordering="NONE"
       side="BOTH"
   [[dependencies.ironjetpacks]]

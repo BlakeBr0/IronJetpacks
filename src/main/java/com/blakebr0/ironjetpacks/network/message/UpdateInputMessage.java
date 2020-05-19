@@ -8,12 +8,12 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class UpdateInputMessage {
-	private boolean up;
-	private boolean down;
-	private boolean forwards;
-	private boolean backwards;
-	private boolean left;
-	private boolean right;
+	private final boolean up;
+	private final boolean down;
+	private final boolean forwards;
+	private final boolean backwards;
+	private final boolean left;
+	private final boolean right;
 	
 	public UpdateInputMessage(boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right) {
 		this.up = up;

@@ -21,9 +21,9 @@ import java.util.stream.Stream;
 
 public class JetpackIngredient extends Ingredient {
     public static final List<JetpackItem> ALL_JETPACKS = new ArrayList<>();
+    private final int tier;
     private ItemStack[] stacks;
     private IntList stacksPacked;
-    private int tier;
 
     public JetpackIngredient(int tier) {
         super(Stream.of());

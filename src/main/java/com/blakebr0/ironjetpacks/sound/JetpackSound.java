@@ -27,10 +27,6 @@ public class JetpackSound extends TickableSound {
 	public static boolean playing(int entityId) {
 		return PLAYING_FOR.containsKey(entityId) && PLAYING_FOR.get(entityId) != null && !PLAYING_FOR.get(entityId).donePlaying;
 	}
-	
-	public static void stopPlaying() {
-		PLAYING_FOR.clear();
-	}
 
 	@Override
 	public void tick() {

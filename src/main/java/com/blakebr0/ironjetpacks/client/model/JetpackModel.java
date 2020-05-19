@@ -13,9 +13,9 @@ import net.minecraftforge.energy.IEnergyStorage;
  * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/client/model/ModelJetpack.java
  */
 public class JetpackModel extends BipedModel<LivingEntity> {
-	private JetpackItem jetpack;
-	private ModelRenderer[] energyBarLeft = new ModelRenderer[6];
-	private ModelRenderer[] energyBarRight = new ModelRenderer[6];
+	private final JetpackItem jetpack;
+	private final ModelRenderer[] energyBarLeft = new ModelRenderer[6];
+	private final ModelRenderer[] energyBarRight = new ModelRenderer[6];
 
 	public JetpackModel(JetpackItem jetpack) {
 		super(1.0F, 0, 64, 64);

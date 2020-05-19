@@ -22,15 +22,17 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
         ItemStack jetpack = inv.getStackInSlot(4);
+        ItemStack result = this.getRecipeOutput().copy();
+
         if (!jetpack.isEmpty() && jetpack.getItem() instanceof JetpackItem) {
             CompoundNBT tag = jetpack.getTag();
-            ItemStack result = this.getRecipeOutput().copy();
             if (tag != null) {
                 result.setTag(tag);
                 return result;
             }
         }
-        return this.getRecipeOutput().copy();
+
+        return result;
     }
 
     @Override

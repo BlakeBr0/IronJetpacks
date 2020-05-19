@@ -46,7 +46,7 @@ import java.util.function.Function;
 
 public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
-	private Jetpack jetpack;
+	private final Jetpack jetpack;
 
 	public JetpackItem(Jetpack jetpack, Function<Properties, Properties> properties) {
 		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlotType.CHEST, properties.compose(p -> p.defaultMaxDamage(0).rarity(jetpack.rarity)));
@@ -173,7 +173,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 		
-		if (ModConfigs.isLoaded() && ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
+		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());

@@ -1,8 +1,6 @@
 package com.blakebr0.ironjetpacks.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
 
 public class ModConfigs {
 	public static final ForgeConfigSpec CLIENT;
@@ -18,8 +16,6 @@ public class ModConfigs {
 	public static final ForgeConfigSpec.IntValue HUD_OFFSET_X;
 	public static final ForgeConfigSpec.IntValue HUD_OFFSET_Y;
 	public static final ForgeConfigSpec.BooleanValue SHOW_HUD_OVER_CHAT;
-
-	private static boolean loaded = false;
 
 	// Client
 	static {
@@ -111,14 +107,5 @@ public class ModConfigs {
 		server.pop();
 
 		SERVER = server.build();
-	}
-
-	@SubscribeEvent
-	public void onConfigLoaded(ModConfig.Loading event) {
-		loaded = true;
-	}
-
-	public static boolean isLoaded() {
-		return loaded;
 	}
 }

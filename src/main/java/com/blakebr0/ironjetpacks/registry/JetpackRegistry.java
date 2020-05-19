@@ -3,15 +3,13 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.item.ModItems;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
-	private ArrayList<Jetpack> jetpacks = new ArrayList<>();
-	private ArrayList<Integer> tiers = new ArrayList<>();
+	private final ArrayList<Jetpack> jetpacks = new ArrayList<>();
+	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	
 	public static JetpackRegistry getInstance() {
