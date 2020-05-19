@@ -17,14 +17,18 @@ public class ColorHandler {
 	@SubscribeEvent
 	public void onItemColors(ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();
+		JetpackRegistry registry = JetpackRegistry.getInstance();
 
-		for (Jetpack jetpack : JetpackRegistry.getInstance().getAllJetpacks()) {
+		if (registry.isErrored())
+			return;
+
+		for (Jetpack jetpack : registry.getAllJetpacks()) {
 			COLORED_ITEMS.add(jetpack.item);
 			COLORED_ITEMS.add(jetpack.cell);
 			COLORED_ITEMS.add(jetpack.thruster);
 			COLORED_ITEMS.add(jetpack.capacitor);
 		}
-		
+
 		colors.register((stack, tint) -> {
 			IColored item = (IColored) stack.getItem();
 			return item.getColor(tint);

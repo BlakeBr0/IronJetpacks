@@ -123,7 +123,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 							player.moveRelative(1, new Vec3d(-speedSideways, 0, 0));
 						}
 						
-						if (!world.isRemote) {
+						if (!world.isRemote()) {
 							player.fallDistance = 0.0F;
 							
 							if (player instanceof ServerPlayerEntity) {

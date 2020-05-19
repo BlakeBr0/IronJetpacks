@@ -11,6 +11,7 @@ public class JetpackRegistry {
 	private final ArrayList<Jetpack> jetpacks = new ArrayList<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
+	private boolean isErrored = false;
 	
 	public static JetpackRegistry getInstance() {
 		return INSTANCE;
@@ -21,6 +22,11 @@ public class JetpackRegistry {
 	}
 	
 	public void register(Jetpack jetpack) {
+		if (this.jetpacks.stream().anyMatch(j -> j.name.equals(jetpack.name))) {
+			this.isErrored = true;
+			throw new RuntimeException(String.format("Tried to register multiple jetpacks with the same name: %s", jetpack.name));
+		}
+
 		this.jetpacks.add(jetpack);
 		
 		if (jetpack.tier > -1 && !this.tiers.contains(jetpack.tier)) {
@@ -52,5 +58,9 @@ public class JetpackRegistry {
 	
 	public Item getCoilForTier(int tier) {
 		return this.tiers.indexOf(tier) >= this.tiers.size() / 2 ? ModItems.ADVANCED_COIL.get() : ModItems.BASIC_COIL.get();
+	}
+
+	public boolean isErrored() {
+		return this.isErrored;
 	}
 }

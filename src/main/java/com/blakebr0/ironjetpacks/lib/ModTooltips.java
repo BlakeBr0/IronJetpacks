@@ -5,7 +5,6 @@ import com.blakebr0.cucumber.lib.Tooltip;
 public class ModTooltips {
 	public static final Tooltip ON = new Tooltip("tooltip.ironjetpacks.on");
 	public static final Tooltip OFF = new Tooltip("tooltip.ironjetpacks.off");
-	public static final Tooltip CREATIVE = new Tooltip("tooltip.ironjetpacks.creative");
 	public static final Tooltip INFINITE = new Tooltip("tooltip.ironjetpacks.infinite");
 	public static final Tooltip ENGINE = new Tooltip("tooltip.ironjetpacks.engine");
 	public static final Tooltip HOVER = new Tooltip("tooltip.ironjetpacks.hover");
