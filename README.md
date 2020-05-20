@@ -1,4 +1,6 @@
 # Iron Jetpacks
 Adds fully customizable FE powered jetpacks!
 
-JSON value explanation can be found here: https://github.com/BlakeBr0/IronJetpacks/wiki/JSON-Values
+[Version 2.x+ Docs](https://mods.blakebr0.com/docs/ironjetpacks)
+
+[Version 1.x Docs](https://github.com/BlakeBr0/IronJetpacks/wiki)
