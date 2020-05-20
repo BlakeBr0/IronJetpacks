@@ -10,6 +10,7 @@ import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -25,6 +26,7 @@ import org.lwjgl.glfw.GLFW;
 public class KeybindHandler {
 	private static KeyBinding keyEngine;
 	private static KeyBinding keyHover;
+	private static KeyBinding keyDescend;
 	
 	private static boolean up = false;
 	private static boolean down = false;
@@ -34,11 +36,13 @@ public class KeybindHandler {
 	private static boolean right = false;
 	
 	public static void onClientSetup() {
-		keyEngine = new KeyBinding("key.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
-		keyHover = new KeyBinding("key.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
+		keyEngine = new KeyBinding("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
+		keyHover = new KeyBinding("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
+		keyDescend = new KeyBinding("keybind.ironjetpacks.descend", InputMappings.INPUT_INVALID.getKeyCode(), IronJetpacks.NAME);
 		
 		ClientRegistry.registerKeyBinding(keyEngine);
 		ClientRegistry.registerKeyBinding(keyHover);
+		ClientRegistry.registerKeyBinding(keyDescend);
 	}
 	
 	@SubscribeEvent
@@ -111,7 +115,7 @@ public class KeybindHandler {
 				return;
 			
 			boolean upNow = settings.keyBindJump.isKeyDown();
-			boolean downNow = settings.keyBindSneak.isKeyDown();
+			boolean downNow = keyDescend.isInvalid() ? settings.keyBindSneak.isKeyDown() : keyDescend.isKeyDown();
 			boolean forwardsNow = settings.keyBindForward.isKeyDown();
 			boolean backwardsNow = settings.keyBindBack.isKeyDown();
 			boolean leftNow = settings.keyBindLeft.isKeyDown();
