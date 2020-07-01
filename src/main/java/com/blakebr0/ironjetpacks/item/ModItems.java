@@ -14,26 +14,31 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.blakebr0.ironjetpacks.IronJetpacks.ITEM_GROUP;
 
 public class ModItems {
-	public static final List<Supplier<? extends Item>> ENTRIES = new ArrayList<>();
+	public static final Map<RegistryObject<Item>, Supplier<Item>> ENTRIES = new LinkedHashMap<>();
 
-	public static final RegistryObject<BaseItem> STRAP = register("strap");
-	public static final RegistryObject<BaseItem> BASIC_COIL = register("basic_coil");
-	public static final RegistryObject<BaseItem> ADVANCED_COIL = register("advanced_coil");
-	public static final RegistryObject<BaseItem> ELITE_COIL = register("elite_coil");
-	public static final RegistryObject<BaseItem> ULTIMATE_COIL = register("ultimate_coil");
+	public static final RegistryObject<Item> STRAP = register("strap");
+	public static final RegistryObject<Item> BASIC_COIL = register("basic_coil");
+	public static final RegistryObject<Item> ADVANCED_COIL = register("advanced_coil");
+	public static final RegistryObject<Item> ELITE_COIL = register("elite_coil");
+	public static final RegistryObject<Item> ULTIMATE_COIL = register("ultimate_coil");
 
 	@SubscribeEvent
 	public void onRegisterItems(RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> registry = event.getRegistry();
 		JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
-		ENTRIES.stream().map(Supplier::get).forEach(registry::register);
+		ENTRIES.forEach((reg, item) -> {
+			registry.register(item.get());
+			reg.updateReference(registry);
+		});
 
 		ModJetpacks.loadJsons();
 
@@ -64,13 +69,14 @@ public class ModItems {
 		}
 	}
 
-	private static <T extends Item> RegistryObject<T> register(String name) {
+	private static RegistryObject<Item> register(String name) {
 		return register(name, () -> new BaseItem(p -> p.group(ITEM_GROUP)));
 	}
 
-	private static <T extends Item> RegistryObject<T> register(String name, Supplier<? extends Item> item) {
+	private static RegistryObject<Item> register(String name, Supplier<? extends Item> item) {
 		ResourceLocation loc = new ResourceLocation(IronJetpacks.MOD_ID, name);
-		ENTRIES.add(() -> item.get().setRegistryName(loc));
-		return RegistryObject.of(loc, ForgeRegistries.ITEMS);
+		RegistryObject<Item> reg = RegistryObject.of(loc, ForgeRegistries.ITEMS);
+		ENTRIES.put(reg, () -> item.get().setRegistryName(loc));
+		return reg;
 	}
 }
