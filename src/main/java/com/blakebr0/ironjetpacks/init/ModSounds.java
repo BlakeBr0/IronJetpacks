@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.sound;
+package com.blakebr0.ironjetpacks.init;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import net.minecraft.util.ResourceLocation;
@@ -7,7 +7,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModSounds {
+public final class ModSounds {
 	public static final SoundEvent JETPACK = new SoundEvent(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"));
 	
 	@SubscribeEvent

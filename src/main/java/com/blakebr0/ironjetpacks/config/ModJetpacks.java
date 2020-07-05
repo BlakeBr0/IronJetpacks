@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ModJetpacks {
+public final class ModJetpacks {
 	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks");
 	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone");
 	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, "tag:forge:ingots/iron");

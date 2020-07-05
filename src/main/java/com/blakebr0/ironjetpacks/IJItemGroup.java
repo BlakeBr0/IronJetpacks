@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks;
 
-import com.blakebr0.ironjetpacks.item.ModItems;
+import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.item.ItemGroup;

@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks.handler;
 
-import com.blakebr0.cucumber.lib.Pos3d;
+import com.blakebr0.cucumber.util.Pos3d;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
-public class JetpackClientHandler {
+public final class JetpackClientHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
@@ -30,7 +30,7 @@ public class JetpackClientHandler {
                     if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {
                         if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.gameSettings.particles != ParticleStatus.MINIMAL)) {
                             Jetpack jetpack = ((JetpackItem) item).getJetpack();
-                            Random rand = Utils.rand;
+                            Random rand = Utils.RANDOM;
 
                             Pos3d playerPos = new Pos3d(mc.player).translate(0, 1.5, 0);
 

@@ -3,7 +3,7 @@ package com.blakebr0.ironjetpacks.item;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.item.BaseItem;
-import com.blakebr0.cucumber.lib.Localizable;
+import com.blakebr0.cucumber.util.Localizable;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;

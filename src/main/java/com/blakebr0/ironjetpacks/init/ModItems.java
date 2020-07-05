@@ -1,8 +1,9 @@
-package com.blakebr0.ironjetpacks.item;
+package com.blakebr0.ironjetpacks.init;
 
 import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModJetpacks;
+import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.item.Item;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 
 import static com.blakebr0.ironjetpacks.IronJetpacks.ITEM_GROUP;
 
-public class ModItems {
+public final class ModItems {
 	public static final Map<RegistryObject<Item>, Supplier<Item>> ENTRIES = new LinkedHashMap<>();
 
 	public static final RegistryObject<Item> STRAP = register("strap");

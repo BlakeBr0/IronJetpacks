@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColorHandler {
-	private static final List<Item> COLORED_ITEMS = new ArrayList<>();
-
 	@SubscribeEvent
 	public void onItemColors(ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();
@@ -22,16 +20,18 @@ public class ColorHandler {
 		if (registry.isErrored())
 			return;
 
+		ArrayList<Item> coloredItems = new ArrayList<>();
+
 		for (Jetpack jetpack : registry.getAllJetpacks()) {
-			COLORED_ITEMS.add(jetpack.item);
-			COLORED_ITEMS.add(jetpack.cell);
-			COLORED_ITEMS.add(jetpack.thruster);
-			COLORED_ITEMS.add(jetpack.capacitor);
+			coloredItems.add(jetpack.item);
+			coloredItems.add(jetpack.cell);
+			coloredItems.add(jetpack.thruster);
+			coloredItems.add(jetpack.capacitor);
 		}
 
 		colors.register((stack, tint) -> {
 			IColored item = (IColored) stack.getItem();
 			return item.getColor(tint);
-		},  COLORED_ITEMS.toArray(new Item[0]));
+		},  coloredItems.toArray(new Item[0]));
 	}
 }

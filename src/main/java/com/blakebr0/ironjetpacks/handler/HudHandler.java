@@ -1,12 +1,13 @@
 package com.blakebr0.ironjetpacks.handler;
 
-import com.blakebr0.cucumber.helper.RenderHelper;
+import com.blakebr0.cucumber.client.helper.RenderHelper;
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.client.util.HudHelper;
-import com.blakebr0.ironjetpacks.client.util.HudHelper.HudPos;
+import com.blakebr0.ironjetpacks.client.helper.HudHelper;
+import com.blakebr0.ironjetpacks.client.helper.HudHelper.HudPos;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -18,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class HudHandler {
+public final class HudHandler {
     private static final ResourceLocation HUD_TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/gui/hud.png");
 
     @SubscribeEvent
@@ -47,21 +48,22 @@ public class HudHandler {
                         RenderHelper.drawTexturedModalRect(xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
                         RenderSystem.popMatrix();
 
-                        String fuel = Colors.GRAY + HudHelper.getFuel(jetpack, chest);
-                        String engine = Colors.GRAY + "E: " + HudHelper.getOn(jetpack.isEngineOn(chest));
-                        String hover = Colors.GRAY + "H: " + HudHelper.getOn(jetpack.isHovering(chest));
+                        String fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
+                        String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(jetpack.isEngineOn(chest));
+                        String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(jetpack.isHovering(chest));
 
+                        MatrixStack stack = event.getMatrixStack();
                         if (pos.side == 1) {
-                            mc.fontRenderer.drawStringWithShadow(fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
-                            mc.fontRenderer.drawStringWithShadow(engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
-                            mc.fontRenderer.drawStringWithShadow(hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
                         } else {
-                            mc.fontRenderer.drawStringWithShadow(fuel, pos.x + 6, pos.y - 21, 16383998);
-                            mc.fontRenderer.drawStringWithShadow(engine, pos.x + 6, pos.y + 4, 16383998);
-                            mc.fontRenderer.drawStringWithShadow(hover, pos.x + 6, pos.y + 14, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, engine, pos.x + 6, pos.y + 4, 16383998);
+                            mc.fontRenderer.func_238405_a_(stack, hover, pos.x + 6, pos.y + 14, 16383998);
                         }
 
-                        mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
+                        mc.getTextureManager().bindTexture(AbstractGui.field_230665_h_);
                     }
                 }
             }

@@ -4,7 +4,7 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackIngredient;
 import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
-import com.blakebr0.ironjetpacks.item.ModItems;
+import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.block.Blocks;

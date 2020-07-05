@@ -1,8 +1,8 @@
 package com.blakebr0.ironjetpacks.lib;
 
-import com.blakebr0.cucumber.lib.Tooltip;
+import com.blakebr0.cucumber.util.Tooltip;
 
-public class ModTooltips {
+public final class ModTooltips {
 	public static final Tooltip ON = new Tooltip("tooltip.ironjetpacks.on");
 	public static final Tooltip OFF = new Tooltip("tooltip.ironjetpacks.off");
 	public static final Tooltip INFINITE = new Tooltip("tooltip.ironjetpacks.infinite");

@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting.recipe;
 
-import com.blakebr0.ironjetpacks.crafting.ModRecipeSerializers;
+import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;

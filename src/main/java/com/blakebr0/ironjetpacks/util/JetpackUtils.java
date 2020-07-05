@@ -12,7 +12,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 
-public class JetpackUtils {
+public final class JetpackUtils {
 	public static boolean isFlying(PlayerEntity player) {
 		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
 		if (!stack.isEmpty()) {
@@ -21,7 +21,7 @@ public class JetpackUtils {
 				JetpackItem jetpack = (JetpackItem) item;
 				if (jetpack.isEngineOn(stack) && (jetpack.getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.getJetpack().creative)) {
 					if (jetpack.isHovering(stack)) {
-						return !player.onGround;
+						return !player.func_233570_aj_();
 					} else {
 						return InputHandler.isHoldingUp(player);
 					}
@@ -67,6 +67,11 @@ public class JetpackUtils {
 			@Override
 			public float getToughness() {
 				return 0;
+			}
+
+			@Override
+			public float func_230304_f_() {
+				return 0F;
 			}
 		};
 	}

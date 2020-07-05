@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.client.util;
+package com.blakebr0.ironjetpacks.client.helper;
 
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
@@ -7,10 +7,9 @@ import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class HudHelper {
+public final class HudHelper {
 	public static HudPos getHudPos() {
 		MainWindow window = Minecraft.getInstance().getMainWindow();
 		int xOffset = ModConfigs.HUD_OFFSET_X.get();
@@ -35,15 +34,20 @@ public class HudHelper {
 	}
 	
 	public static int getEnergyBarScaled(JetpackItem jetpack, ItemStack stack) {
-		if (jetpack.getJetpack().creative) return 156;
+		if (jetpack.getJetpack().creative)
+			return 156;
+
 		IEnergyStorage energy = jetpack.getEnergyStorage(stack);
 		int i = energy.getEnergyStored();
 		int j = energy.getMaxEnergyStored();
 		return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
 	}
 	
-	public static String getFuel(JetpackItem jetpack, ItemStack stack) {
-		if (jetpack.getJetpack().creative) return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
+	public static String getFuelString(JetpackItem jetpack, ItemStack stack) {
+		if (jetpack.getJetpack().creative) {
+			return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
+		}
+
 		int number = jetpack.getEnergyStorage(stack).getEnergyStored();
 		if (number >= 1000000000) {
 			return number / 1000000000 + Colors.GRAY + "G FE";
@@ -56,8 +60,8 @@ public class HudHelper {
 		}
 	}
 	
-	public static String getOn(boolean on) {
-		return on ? ModTooltips.ON.color(TextFormatting.GREEN).buildString() : ModTooltips.OFF.color(TextFormatting.RED).buildString();
+	public static String getStatusString(boolean on) {
+		return on ? Colors.GREEN + ModTooltips.ON.buildString() : Colors.RED + ModTooltips.OFF.buildString();
 	}
 	
 	public static class HudPos {

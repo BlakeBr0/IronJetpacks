@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
-public class KeybindHandler {
+public final class KeybindHandler {
 	private static KeyBinding keyEngine;
 	private static KeyBinding keyHover;
 	private static KeyBinding keyDescend;

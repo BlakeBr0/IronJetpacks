@@ -3,17 +3,18 @@ package com.blakebr0.ironjetpacks;
 import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.JetpackDynamicRecipeManager;
-import com.blakebr0.ironjetpacks.crafting.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.handler.KeybindHandler;
-import com.blakebr0.ironjetpacks.item.ModItems;
+import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
+import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
-import com.blakebr0.ironjetpacks.sound.ModSounds;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -46,7 +47,7 @@ public class IronJetpacks {
 		bus.register(new ModRecipeSerializers());
 		bus.register(new ModConfigs());
 
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
 			bus.register(new ModelHandler());
 		});
@@ -79,7 +80,7 @@ public class IronJetpacks {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onServerSetup(FMLServerAboutToStartEvent event) {
-		IReloadableResourceManager manager = event.getServer().getResourceManager();
+		IReloadableResourceManager manager = (IReloadableResourceManager) event.getServer().getDataPackRegistries().func_240970_h_();
 
 		manager.addReloadListener(new JetpackDynamicRecipeManager());
 	}

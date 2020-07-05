@@ -6,8 +6,8 @@ import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.item.BaseArmorItem;
-import com.blakebr0.cucumber.lib.Localizable;
 import com.blakebr0.cucumber.lib.Tooltips;
+import com.blakebr0.cucumber.util.Localizable;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
@@ -28,7 +28,7 @@ import net.minecraft.item.IDyeableArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -72,7 +72,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 			JetpackItem jetpack = (JetpackItem) item;
 			if (jetpack.isEngineOn(chest)) {
 				boolean hover = jetpack.isHovering(chest);
-				if (InputHandler.isHoldingUp(player) || hover && !player.onGround) {
+				if (InputHandler.isHoldingUp(player) || hover && !player.func_233570_aj_()) {
 					Jetpack info = jetpack.getJetpack();
 					
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
@@ -108,19 +108,19 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 						float speedForward = (float) (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways);
 						
 						if (InputHandler.isHoldingForwards(player)) {
-							player.moveRelative(1, new Vec3d(0, 0, speedForward));
+							player.moveRelative(1, new Vector3d(0, 0, speedForward));
 						}
 						
 						if (InputHandler.isHoldingBackwards(player)) {
-							player.moveRelative(1, new Vec3d(0, 0, -speedSideways * 0.8F));
+							player.moveRelative(1, new Vector3d(0, 0, -speedSideways * 0.8F));
 						}
 						
 						if (InputHandler.isHoldingLeft(player)) {
-							player.moveRelative(1, new Vec3d(speedSideways, 0, 0));
+							player.moveRelative(1, new Vector3d(speedSideways, 0, 0));
 						}
 						
 						if (InputHandler.isHoldingRight(player)) {
-							player.moveRelative(1, new Vec3d(-speedSideways, 0, 0));
+							player.moveRelative(1, new Vector3d(-speedSideways, 0, 0));
 						}
 						
 						if (!world.isRemote()) {
@@ -162,9 +162,9 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (!this.jetpack.creative) {
 			IEnergyStorage energy = this.getEnergyStorage(stack);
-			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").applyTextStyle(TextFormatting.GRAY));
+			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").func_240701_a_(TextFormatting.GRAY));
 		} else {
-			tooltip.add(ModTooltips.INFINITE.build().appendText(" FE"));
+			tooltip.add(ModTooltips.INFINITE.build().func_240702_b_(" FE"));
 		}
 
 		ITextComponent tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
@@ -175,7 +175,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));
-			if (!Screen.hasShiftDown()) {
+			if (!Screen.func_231173_s_()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
 			} else {
 				tooltip.add(ModTooltips.FUEL_USAGE.args(this.jetpack.usage + " FE/t").build());
@@ -268,7 +268,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 
 	private void fly(PlayerEntity player, double y) {
-		Vec3d motion = player.getMotion();
+		Vector3d motion = player.getMotion();
 		player.setMotion(motion.getX(), y, motion.getZ());
 	}
 }

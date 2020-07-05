@@ -11,7 +11,7 @@ import java.util.Map;
  * Keyboard handling system borrowed from Simply Jetpacks
  * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/handler/SyncHandler.java
  */
-public class InputHandler {
+public final class InputHandler {
 	private static final Map<PlayerEntity, Boolean> HOLDING_UP = new HashMap<>();
 	private static final Map<PlayerEntity, Boolean> HOLDING_DOWN = new HashMap<>();
 	private static final Map<PlayerEntity, Boolean> HOLDING_FORWARDS = new HashMap<>();

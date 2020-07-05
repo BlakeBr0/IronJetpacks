@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.crafting;
+package com.blakebr0.ironjetpacks.init;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackIngredient;
@@ -16,7 +16,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModRecipeSerializers {
+public final class ModRecipeSerializers {
     public static final IRecipeSerializer<JetpackUpgradeRecipe> CRAFTING_JETPACK_UPGRADE = new JetpackUpgradeRecipe.Serializer();
 
     public static final IIngredientSerializer<JetpackIngredient> JETPACK_INGREDIENT = new JetpackIngredient.Serializer();
