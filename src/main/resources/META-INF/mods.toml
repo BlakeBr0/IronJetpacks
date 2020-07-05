@@ -1,5 +1,6 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[32,)"
+
 [[mods]]
   issueTrackerURL="https://github.com/BlakeBr0/IronJetpacks/issues"
   modId="ironjetpacks"
@@ -17,18 +18,18 @@ loaderVersion="[31,)"
   [[dependencies.ironjetpacks]]
       modId="forge"
       mandatory=true
-      versionRange="[31.1,)"
+      versionRange="[32.0,)"
       ordering="NONE"
       side="BOTH"
   [[dependencies.ironjetpacks]]
       modId="minecraft"
       mandatory=true
-      versionRange="[1.15.2,1.16]"
+      versionRange="[1.16.1,1.17]"
       ordering="NONE"
       side="BOTH"
   [[dependencies.ironjetpacks]]
       modId="cucumber"
       mandatory=true
-      versionRange="[3.0.2,)"
+      versionRange="[4.0.0,)"
       ordering="NONE"
       side="BOTH"

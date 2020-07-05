@@ -13,7 +13,7 @@ apply plugin: 'idea'
 
 version = '3.0.3'
 group = 'com.blakebr0.ironjetpacks'
-archivesBaseName = 'IronJetpacks-1.15.2'
+archivesBaseName = 'IronJetpacks-1.16.1'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -27,7 +27,7 @@ repositories {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200216-1.15.1'
+    mappings channel: 'snapshot', version: '20200514-1.16'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -55,12 +55,12 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.1.18'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.47'
 
-    compile files('../Cucumber/build/libs/Cucumber-1.15.2-3.0.2-deobf.jar')
-    compile fg.deobf('ignored:Hwyla-forge:1.10.8-B72_1.15.2')
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
+    compile fg.deobf('ignored:Cucumber:1.16.1-4.0.0')
+//    compile fg.deobf('ignored:Hwyla-forge:1.10.8-B72_1.15.2')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.1:7.0.0.6:api')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.1:7.0.0.6')
 }
 
 jar {
