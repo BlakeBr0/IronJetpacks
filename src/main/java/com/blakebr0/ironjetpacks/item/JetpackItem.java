@@ -175,7 +175,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));
-			if (!Screen.func_231173_s_()) {
+			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
 			} else {
 				tooltip.add(ModTooltips.FUEL_USAGE.args(this.jetpack.usage + " FE/t").build());

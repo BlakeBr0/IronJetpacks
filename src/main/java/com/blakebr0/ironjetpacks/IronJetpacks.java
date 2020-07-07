@@ -2,7 +2,7 @@ package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.crafting.JetpackDynamicRecipeManager;
+import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
@@ -13,11 +13,8 @@ import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -27,12 +24,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(IronJetpacks.MOD_ID)
-public class IronJetpacks {
+public final class IronJetpacks {
 	public static final String MOD_ID = "ironjetpacks";
 	public static final String NAME = "Iron Jetpacks";
 
@@ -60,6 +55,7 @@ public class IronJetpacks {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new DynamicRecipeManager());
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 
 		ModRecipeSerializers.onCommonSetup();
@@ -76,17 +72,5 @@ public class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
 
 		KeybindHandler.onClientSetup();
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onServerSetup(FMLServerAboutToStartEvent event) {
-		IReloadableResourceManager manager = (IReloadableResourceManager) event.getServer().getDataPackRegistries().func_240970_h_();
-
-		manager.addReloadListener(new JetpackDynamicRecipeManager());
-	}
-
-	@SubscribeEvent
-	public void onServerStopping(FMLServerStoppingEvent event) {
-		InputHandler.clear();
 	}
 }

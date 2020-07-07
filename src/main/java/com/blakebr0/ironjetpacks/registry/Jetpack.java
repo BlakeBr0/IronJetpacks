@@ -8,7 +8,6 @@ import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -115,7 +114,7 @@ public class Jetpack {
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
 					ITag<Item> tag = ItemTags.getCollection().get(new ResourceLocation(parts[1], parts[2]));
-					if (tag != null && !tag.func_230236_b_().isEmpty())
+					if (tag != null && !tag.getAllElements().isEmpty())
 						this.craftingMaterial = Ingredient.fromTag(tag);
 				} else if (parts.length >= 2) {
 					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));

@@ -3,6 +3,7 @@ package com.blakebr0.ironjetpacks.handler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,12 +72,17 @@ public final class InputHandler {
 	}
 	
 	@SubscribeEvent
-	public void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
 		remove(event.getPlayer());
 	}
 	
 	@SubscribeEvent
-	public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+	public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
 		remove(event.getPlayer());
+	}
+
+	@SubscribeEvent
+	public void onServerStopping(FMLServerStoppingEvent event) {
+		InputHandler.clear();
 	}
 }

@@ -16,25 +16,22 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class JetpackDynamicRecipeManager implements IResourceManagerReloadListener {
+public class DynamicRecipeManager implements IResourceManagerReloadListener {
+    private static RecipeManager recipeManager;
+
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-
-        RecipeManager recipeManager = server.getRecipeManager();
-        recipeManager.recipes = new HashMap<>(recipeManager.recipes);
-        recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
-
-        Map<ResourceLocation, IRecipe<?>> recipes = recipeManager.recipes.get(IRecipeType.CRAFTING);
+        Map<ResourceLocation, IRecipe<?>> recipes = getRecipeManager().recipes.get(IRecipeType.CRAFTING);
         JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
         jetpacks.getAllJetpacks().forEach(jetpack -> {
@@ -55,6 +52,22 @@ public class JetpackDynamicRecipeManager implements IResourceManagerReloadListen
             if (jetpackUpgrade != null)
                 recipes.put(jetpackUpgrade.getId(), jetpackUpgrade);
         });
+    }
+
+    public static RecipeManager getRecipeManager() {
+        if (recipeManager == null) {
+            RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+            DynamicRecipeManager.recipeManager = recipeManager;
+        }
+
+        return recipeManager;
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListener(AddReloadListenerEvent event) {
+        event.addListener(this);
     }
 
     private ShapedRecipe makeCellRecipe(Jetpack jetpack) {

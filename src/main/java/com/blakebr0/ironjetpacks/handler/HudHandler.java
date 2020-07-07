@@ -54,16 +54,16 @@ public final class HudHandler {
 
                         MatrixStack stack = event.getMatrixStack();
                         if (pos.side == 1) {
-                            mc.fontRenderer.func_238405_a_(stack, fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
-                            mc.fontRenderer.func_238405_a_(stack, engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
-                            mc.fontRenderer.func_238405_a_(stack, hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
                         } else {
-                            mc.fontRenderer.func_238405_a_(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
-                            mc.fontRenderer.func_238405_a_(stack, engine, pos.x + 6, pos.y + 4, 16383998);
-                            mc.fontRenderer.func_238405_a_(stack, hover, pos.x + 6, pos.y + 14, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, engine, pos.x + 6, pos.y + 4, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, hover, pos.x + 6, pos.y + 14, 16383998);
                         }
 
-                        mc.getTextureManager().bindTexture(AbstractGui.field_230665_h_);
+                        mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
                     }
                 }
             }

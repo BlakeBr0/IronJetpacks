@@ -1,7 +1,7 @@
 package com.blakebr0.ironjetpacks.registry;
 
-import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.item.JetpackItem;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;

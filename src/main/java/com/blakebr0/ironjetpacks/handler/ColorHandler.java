@@ -9,7 +9,6 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ColorHandler {
 	@SubscribeEvent
