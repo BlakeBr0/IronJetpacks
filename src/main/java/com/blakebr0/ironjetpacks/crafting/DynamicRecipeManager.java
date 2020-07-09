@@ -21,7 +21,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +30,9 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
+        recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+        recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+
         Map<ResourceLocation, IRecipe<?>> recipes = getRecipeManager().recipes.get(IRecipeType.CRAFTING);
         JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
@@ -55,18 +57,13 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
     }
 
     public static RecipeManager getRecipeManager() {
-        if (recipeManager == null) {
-            RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
-            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
-            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
-            DynamicRecipeManager.recipeManager = recipeManager;
-        }
-
         return recipeManager;
     }
 
     @SubscribeEvent
     public void onAddReloadListener(AddReloadListenerEvent event) {
+        recipeManager = event.getDataPackRegistries().func_240967_e_();
+
         event.addListener(this);
     }
 
@@ -77,11 +74,12 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
         Ingredient material = jetpack.getCraftingMaterial();
+        System.out.println(material);
         if (material == Ingredient.EMPTY)
             return null;
 
         Ingredient coil = Ingredient.fromItems(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient redstone = Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE);
+        Ingredient redstone = Ingredient.EMPTY; // Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE);
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
