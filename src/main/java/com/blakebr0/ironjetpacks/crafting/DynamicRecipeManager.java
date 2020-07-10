@@ -8,6 +8,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -16,6 +17,8 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -74,12 +77,15 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
         Ingredient material = jetpack.getCraftingMaterial();
-        System.out.println(material);
         if (material == Ingredient.EMPTY)
             return null;
 
+        ITag<Item> redstoneTag = TagCollectionManager.func_232928_e_().func_232925_b_().get(Tags.Items.DUSTS_REDSTONE.getName());
+        if (redstoneTag == null)
+            return null;
+
         Ingredient coil = Ingredient.fromItems(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient redstone = Ingredient.EMPTY; // Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE);
+        Ingredient redstone = Ingredient.fromTag(redstoneTag);
         NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
