@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting;
 
+import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackIngredient;
@@ -10,10 +11,7 @@ import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
@@ -25,21 +23,10 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DynamicRecipeManager implements IResourceManagerReloadListener {
-    private static RecipeManager recipeManager;
-
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        recipeManager.recipes = new HashMap<>(recipeManager.recipes);
-        recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
-
-        Map<ResourceLocation, IRecipe<?>> recipes = getRecipeManager().recipes.get(IRecipeType.CRAFTING);
-        JetpackRegistry jetpacks = JetpackRegistry.getInstance();
-
-        jetpacks.getAllJetpacks().forEach(jetpack -> {
+        JetpackRegistry.getInstance().getAllJetpacks().forEach(jetpack -> {
             ShapedRecipe cell = this.makeCellRecipe(jetpack);
             ShapedRecipe thruster = this.makeThrusterRecipe(jetpack);
             ShapedRecipe capacitor = this.makeCapacitorRecipe(jetpack);
@@ -47,26 +34,20 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
             JetpackUpgradeRecipe jetpackUpgrade = this.makeJetpackUpgradeRecipe(jetpack);
 
             if (cell != null)
-                recipes.put(cell.getId(), cell);
+                RecipeHelper.addRecipe(cell);
             if (thruster != null)
-                recipes.put(thruster.getId(), thruster);
+                RecipeHelper.addRecipe(thruster);
             if (capacitor != null)
-                recipes.put(capacitor.getId(), capacitor);
+                RecipeHelper.addRecipe(capacitor);
             if (jetpackSelf != null)
-                recipes.put(jetpackSelf.getId(), jetpackSelf);
+                RecipeHelper.addRecipe(jetpackSelf);
             if (jetpackUpgrade != null)
-                recipes.put(jetpackUpgrade.getId(), jetpackUpgrade);
+                RecipeHelper.addRecipe(jetpackUpgrade);
         });
     }
 
-    public static RecipeManager getRecipeManager() {
-        return recipeManager;
-    }
-
     @SubscribeEvent
-    public void onAddReloadListener(AddReloadListenerEvent event) {
-        recipeManager = event.getDataPackRegistries().getRecipeManager();
-
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
     }
 
