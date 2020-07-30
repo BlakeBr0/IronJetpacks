@@ -72,7 +72,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 			JetpackItem jetpack = (JetpackItem) item;
 			if (jetpack.isEngineOn(chest)) {
 				boolean hover = jetpack.isHovering(chest);
-				if (InputHandler.isHoldingUp(player) || hover && !player.func_233570_aj_()) {
+				if (InputHandler.isHoldingUp(player) || hover && !player.isOnGround()) {
 					Jetpack info = jetpack.getJetpack();
 					
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
@@ -162,14 +162,14 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (!this.jetpack.creative) {
 			IEnergyStorage energy = this.getEnergyStorage(stack);
-			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").func_240701_a_(TextFormatting.GRAY));
+			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").mergeStyle(TextFormatting.GRAY));
 		} else {
-			tooltip.add(ModTooltips.INFINITE.build().func_240702_b_(" FE"));
+			tooltip.add(ModTooltips.INFINITE.build().appendString(" FE"));
 		}
 
 		ITextComponent tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
-		ITextComponent engine = ModTooltips.ENGINE.color(isEngineOn(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
-		ITextComponent hover = ModTooltips.HOVER.color(isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
+		ITextComponent engine = ModTooltips.ENGINE.color(this.isEngineOn(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
+		ITextComponent hover = ModTooltips.HOVER.color(this.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 		

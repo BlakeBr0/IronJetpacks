@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 
-public class ColorHandler {
+public final class ColorHandler {
 	@SubscribeEvent
 	public void onItemColors(ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();

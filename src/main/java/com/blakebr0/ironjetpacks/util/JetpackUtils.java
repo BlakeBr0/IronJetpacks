@@ -21,7 +21,7 @@ public final class JetpackUtils {
 				JetpackItem jetpack = (JetpackItem) item;
 				if (jetpack.isEngineOn(stack) && (jetpack.getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.getJetpack().creative)) {
 					if (jetpack.isHovering(stack)) {
-						return !player.func_233570_aj_();
+						return !player.isOnGround();
 					} else {
 						return InputHandler.isHoldingUp(player);
 					}
@@ -70,7 +70,7 @@ public final class JetpackUtils {
 			}
 
 			@Override
-			public float func_230304_f_() {
+			public float getKnockbackResistance() {
 				return 0F;
 			}
 		};
