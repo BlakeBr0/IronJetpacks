@@ -13,13 +13,13 @@ apply plugin: 'idea'
 
 version = '4.0.0'
 group = 'com.blakebr0.ironjetpacks'
-archivesBaseName = 'IronJetpacks-1.16.1'
+archivesBaseName = 'IronJetpacks-1.16.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 repositories {
-    maven { url "http://dvs1.progwml6.com/files/maven/" }
-    maven { url "https://maven.tehnut.info" }
+    maven { url 'http://dvs1.progwml6.com/files/maven/' }
+    maven { url 'https://maven.tehnut.info' }
 
     flatDir { dir 'libs' }
 }
@@ -37,7 +37,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
         }
 
         server {
@@ -47,31 +47,31 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
         }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.97'
+    minecraft 'net.minecraftforge:forge:1.16.2-33.0.5'
 
-    compile fg.deobf('ignored:Cucumber:1.16.1-4.0.0')
+    compile fg.deobf('ignored:Cucumber:1.16.2-4.1.0')
     runtimeOnly fg.deobf('mcp.mobius.waila:Hwyla:1.10.10-B77_1.16.1')
-    compileOnly fg.deobf('mezz.jei:jei-1.16.1:7.0.0.6:api')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.1:7.0.0.6')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.2:7.1.0.11:api')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.2:7.1.0.11')
 }
 
 jar {
     from sourceSets.main.output
     manifest {
         attributes([
-            "Specification-Title": "Iron Jetpacks",
-            "Specification-Vendor": "BlakeBr0",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" : "BlakeBr0",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            'Specification-Title': 'Iron Jetpacks',
+            'Specification-Vendor': 'BlakeBr0',
+            'Specification-Version': '1',
+            'Implementation-Title': project.name,
+            'Implementation-Version': "${version}",
+            'Implementation-Vendor' : 'BlakeBr0',
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
