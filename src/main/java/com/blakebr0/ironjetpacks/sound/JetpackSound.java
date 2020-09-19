@@ -39,7 +39,7 @@ public class JetpackSound extends TickableSound {
 		if (!JetpackUtils.isFlying(this.player)) {
 			synchronized (PLAYING_FOR) {
 				PLAYING_FOR.remove(this.player.getEntityId());
-				this.func_239509_o_();
+				this.finishPlaying();
 			}
 		}
 	}

@@ -114,7 +114,7 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					ITag<Item> tag = TagCollectionManager.func_242178_a().func_241836_b().get(new ResourceLocation(parts[1], parts[2]));
+					ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(parts[1], parts[2]));
 					if (tag != null && !tag.getAllElements().isEmpty())
 						this.craftingMaterial = Ingredient.fromTag(tag);
 				} else if (parts.length >= 2) {

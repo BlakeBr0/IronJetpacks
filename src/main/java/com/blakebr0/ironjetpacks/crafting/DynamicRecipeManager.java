@@ -61,7 +61,7 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        ITag<Item> redstoneTag = TagCollectionManager.func_242178_a().func_241836_b().get(Tags.Items.DUSTS_REDSTONE.getName());
+        ITag<Item> redstoneTag = TagCollectionManager.getManager().getItemTags().get(Tags.Items.DUSTS_REDSTONE.getName());
         if (redstoneTag == null)
             return null;
 
