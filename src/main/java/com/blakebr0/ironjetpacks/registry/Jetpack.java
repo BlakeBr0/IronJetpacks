@@ -7,13 +7,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Jetpack {
 	public String name;
+	public String displayName;
 	public int tier;
 	public int color;
 	public int armorPoints;
@@ -39,6 +43,7 @@ public class Jetpack {
 	
 	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
 		this.name = name;
+		this.displayName = this.makeDisplayName();
 		this.tier = tier;
 		this.color = color;
 		this.armorPoints = armorPoints;
@@ -126,5 +131,10 @@ public class Jetpack {
 		}
 
 		return this.craftingMaterial;
+	}
+
+	private String makeDisplayName() {
+		String[] parts = this.name.replaceAll(" ", "_").split("_");
+		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
 	}
 }

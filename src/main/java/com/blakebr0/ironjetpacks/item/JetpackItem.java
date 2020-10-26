@@ -55,8 +55,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
-		String name = StringUtils.capitalize(this.jetpack.name.replace(" ", "_"));
-		return Localizable.of("item.ironjetpacks.jetpack").args(name).build();
+		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).build();
 	}
 	
 	/*
