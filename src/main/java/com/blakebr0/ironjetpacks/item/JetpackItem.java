@@ -39,7 +39,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
@@ -47,6 +46,7 @@ import java.util.function.Function;
 public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 	private final Jetpack jetpack;
+	private BipedModel<?> model;
 
 	public JetpackItem(Jetpack jetpack, Function<Properties, Properties> properties) {
 		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlotType.CHEST, properties.compose(p -> p.defaultMaxDamage(0).rarity(jetpack.rarity)));
@@ -191,8 +191,11 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public BipedModel getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlotType slot, BipedModel _default) {
-		return new JetpackModel(this);
+	public BipedModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlotType slot, BipedModel _default) {
+		if (this.model == null)
+			this.model = new JetpackModel(this);
+
+		return this.model;
 	}
 	
 	@Override
