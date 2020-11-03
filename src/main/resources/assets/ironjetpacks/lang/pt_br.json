@@ -1,0 +1,38 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "Pulseira de Couro",
+  "item.ironjetpacks.basic_coil": "Bobina Básica",
+  "item.ironjetpacks.advanced_coil": "Bobina Avançada",
+  "item.ironjetpacks.elite_coil": "Bobina de Elite",
+  "item.ironjetpacks.ultimate_coil": "Bobina Definitiva",
+
+  "item.ironjetpacks.cell": "%s Célula de Energia",
+  "item.ironjetpacks.thruster": "%s Propulsor",
+  "item.ironjetpacks.capacitor": "%s Capacitor",
+  "item.ironjetpacks.jetpack": "%s Jetpack",
+
+  "keybind.ironjetpacks.engine": "Alternar Motor",
+  "keybind.ironjetpacks.hover": "Alternar Modo Pairar",
+  "keybind.ironjetpacks.descend": "Descer",
+
+  "subtitle.ironjetpacks.jetpack": "Jetpack",
+
+  "tooltip.ironjetpacks.on": "LIGADO",
+  "tooltip.ironjetpacks.off": "DESLIGADO",
+  "tooltip.ironjetpacks.infinite": "Infinito",
+  "tooltip.ironjetpacks.engine": "MOTOR",
+  "tooltip.ironjetpacks.hover": "PAIRAR",
+  "tooltip.ironjetpacks.tier": "TIER %s",
+  "tooltip.ironjetpacks.fuel_usage": "Uso de Combustível: %s",
+  "tooltip.ironjetpacks.vertical_speed": "Velocidade Vertical: %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Aceleração Vertical: %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Velocidade Horizontal: %s",
+  "tooltip.ironjetpacks.hover_speed": "Velocidade de Pairar: %s",
+  "tooltip.ironjetpacks.descend_speed": "Velocidade de Descida: %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Modificador Arrancada: %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Modificador de Combustível de Arrancada: %s",
+  "tooltip.ironjetpacks.toggle_engine": "Motor %s",
+  "tooltip.ironjetpacks.toggle_hover": "Pairar %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
+}
