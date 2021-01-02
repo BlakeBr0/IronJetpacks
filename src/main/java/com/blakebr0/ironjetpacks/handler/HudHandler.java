@@ -7,6 +7,7 @@ import com.blakebr0.ironjetpacks.client.helper.HudHelper;
 import com.blakebr0.ironjetpacks.client.helper.HudHelper.HudPos;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -49,8 +50,8 @@ public final class HudHandler {
                         RenderSystem.popMatrix();
 
                         String fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
-                        String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(jetpack.isEngineOn(chest));
-                        String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(jetpack.isHovering(chest));
+                        String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
+                        String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
 
                         MatrixStack stack = event.getMatrixStack();
                         if (pos.side == 1) {

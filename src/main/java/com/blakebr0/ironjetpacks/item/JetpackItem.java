@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
-	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 	private final Jetpack jetpack;
 	private BipedModel<?> model;
 
@@ -69,8 +68,8 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		Item item = chest.getItem();
 		if (!chest.isEmpty() && item instanceof JetpackItem) {
 			JetpackItem jetpack = (JetpackItem) item;
-			if (jetpack.isEngineOn(chest)) {
-				boolean hover = jetpack.isHovering(chest);
+			if (JetpackUtils.isEngineOn(chest)) {
+				boolean hover = JetpackUtils.isHovering(chest);
 				if (InputHandler.isHoldingUp(player) || hover && !player.isOnGround()) {
 					Jetpack info = jetpack.getJetpack();
 					
@@ -82,7 +81,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 					
 					boolean creative = info.creative;
 					
-					IEnergyStorage energy = jetpack.getEnergyStorage(chest);
+					IEnergyStorage energy = JetpackUtils.getEnergyStorage(chest);
 					if (!player.isCreative() && !creative) {
 						energy.extractEnergy((int) usage, false);
 					}
@@ -91,16 +90,16 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 						double motionY = player.getMotion().getY();
 						if (InputHandler.isHoldingUp(player)) {
 							if (!hover) {
-								this.fly(player, Math.min(motionY + currentAccel, currentSpeedVertical));
+								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical));
 							} else {
 								if (InputHandler.isHoldingDown(player)) {
-									this.fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow));
+									fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow));
 								} else {
-									this.fly(player, Math.min(motionY + currentAccel, info.speedHover));
+									fly(player, Math.min(motionY + currentAccel, info.speedHover));
 								}
 							}
 						} else {
-							this.fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
+							fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
 						}
 						
 						float speedSideways = (float) (player.isCrouching() ? info.speedSide * 0.5F : info.speedSide);
@@ -147,7 +146,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		IEnergyStorage energy = this.getEnergyStorage(stack);
+		IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
 		double stored = energy.getMaxEnergyStored() - energy.getEnergyStored();
 		return stored / energy.getMaxEnergyStored();
 	}
@@ -160,15 +159,15 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	@Override
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (!this.jetpack.creative) {
-			IEnergyStorage energy = this.getEnergyStorage(stack);
+			IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
 			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").mergeStyle(TextFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().appendString(" FE"));
 		}
 
 		ITextComponent tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
-		ITextComponent engine = ModTooltips.ENGINE.color(this.isEngineOn(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
-		ITextComponent hover = ModTooltips.HOVER.color(this.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
+		ITextComponent engine = ModTooltips.ENGINE.color(JetpackUtils.isEngineOn(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
+		ITextComponent hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 		
@@ -242,34 +241,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		return this.jetpack;
 	}
 
-	public IEnergyStorage getEnergyStorage(ItemStack stack) {
-		if (CapabilityEnergy.ENERGY == null)
-			return EMPTY_ENERGY_STORAGE;
-
-		return stack.getCapability(CapabilityEnergy.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
-	}
-
-	public boolean isEngineOn(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Engine");
-	}
-
-	public boolean toggleEngine(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Engine");
-		NBTHelper.flipBoolean(stack, "Engine");
-		return !current;
-	}
-
-	public boolean isHovering(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Hover");
-	}
-
-	public boolean toggleHover(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Hover");
-		NBTHelper.flipBoolean(stack, "Hover");
-		return !current;
-	}
-
-	private void fly(PlayerEntity player, double y) {
+	private static void fly(PlayerEntity player, double y) {
 		Vector3d motion = player.getMotion();
 		player.setMotion(motion.getX(), y, motion.getZ());
 	}

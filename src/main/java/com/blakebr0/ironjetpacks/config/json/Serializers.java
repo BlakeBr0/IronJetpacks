@@ -45,7 +45,10 @@ public class Serializers {
 			if (obj.has("rarity"))
 				rarity = Rarity.values()[obj.get("rarity").getAsInt()];
 			
-			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString).setRarity(rarity).setCreative(creative).setDisabled(disable);
+			Jetpack jetpack = JetpackRegistry.createJetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString)
+					.setRarity(rarity)
+					.setCreative(creative)
+					.setDisabled(disable);
 			
 			int capacity = obj.get("capacity").getAsInt();
 			int usage = obj.get("usage").getAsInt();

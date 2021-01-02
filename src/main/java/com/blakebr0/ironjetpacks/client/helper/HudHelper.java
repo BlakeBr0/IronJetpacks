@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,7 @@ public final class HudHelper {
 		if (jetpack.getJetpack().creative)
 			return 156;
 
-		IEnergyStorage energy = jetpack.getEnergyStorage(stack);
+		IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
 		int i = energy.getEnergyStored();
 		int j = energy.getMaxEnergyStored();
 		return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
@@ -48,7 +49,7 @@ public final class HudHelper {
 			return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
 		}
 
-		int number = jetpack.getEnergyStorage(stack).getEnergyStored();
+		int number = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
 		if (number >= 1000000000) {
 			return number / 1000000000 + Colors.GRAY + "G FE";
 		} else if (number >= 1000000) {

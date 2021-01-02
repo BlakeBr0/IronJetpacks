@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.client.model;
 
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
@@ -134,7 +135,7 @@ public class JetpackModel extends BipedModel<LivingEntity> {
 			this.energyBarRight[5].showModel = true;
 		} else {
 			ItemStack chest = entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
-			IEnergyStorage energy = this.jetpack.getEnergyStorage(chest);
+			IEnergyStorage energy = JetpackUtils.getEnergyStorage(chest);
 			double stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
 
 			int state = 0;

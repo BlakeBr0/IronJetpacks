@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.network.message;
 
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -26,8 +27,7 @@ public class ToggleHoverMessage {
 				ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
 				Item item = stack.getItem();
 				if (item instanceof JetpackItem) {
-					JetpackItem jetpack = (JetpackItem) item;
-					jetpack.toggleHover(stack);
+					JetpackUtils.toggleHover(stack);
 				}
 			}
 		});

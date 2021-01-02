@@ -7,6 +7,7 @@ import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -55,17 +56,15 @@ public final class KeybindHandler {
 		Item item = chest.getItem();
 		
 		if (item instanceof JetpackItem) {
-			JetpackItem jetpack = (JetpackItem) item;
-			
 			if (keyEngine.isPressed()) {
-				boolean on = jetpack.toggleEngine(chest);
+				boolean on = JetpackUtils.toggleEngine(chest);
 				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 			}
 			
 			if (keyHover.isPressed()) {
-				boolean on = jetpack.toggleHover(chest);
+				boolean on = JetpackUtils.toggleHover(chest);
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
 				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
@@ -83,17 +82,15 @@ public final class KeybindHandler {
 		Item item = chest.getItem();
 
 		if (item instanceof JetpackItem) {
-			JetpackItem jetpack = (JetpackItem) item;
-			
 			if (keyEngine.isPressed()) {
-				boolean on = jetpack.toggleEngine(chest);
+				boolean on = JetpackUtils.toggleEngine(chest);
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
 				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 			}
 			
 			if (keyHover.isPressed()) {
-				boolean on = jetpack.toggleHover(chest);
+				boolean on = JetpackUtils.toggleHover(chest);
 				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
 				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
