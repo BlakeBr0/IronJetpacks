@@ -170,6 +170,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		ITextComponent hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
+
+		ITextComponent throttle = new StringTextComponent((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
+
+		tooltip.add(ModTooltips.THROTTLE.args(throttle).build());
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));
