@@ -41,6 +41,7 @@ public final class KeybindHandler {
 	private static boolean backwards = false;
 	private static boolean left = false;
 	private static boolean right = false;
+	private static boolean sprint = false;
 	
 	public static void onClientSetup() {
 		keyEngine = new KeyBinding("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
@@ -103,17 +104,19 @@ public final class KeybindHandler {
 			boolean backwardsNow = settings.keyBindBack.isKeyDown();
 			boolean leftNow = settings.keyBindLeft.isKeyDown();
 			boolean rightNow = settings.keyBindRight.isKeyDown();
+			boolean sprintNow = settings.keyBindSprint.isKeyDown();
 			
-			if (upNow != up || downNow != down || forwardsNow != forwards || backwardsNow != backwards || leftNow != left || rightNow != right) {
+			if (upNow != up || downNow != down || forwardsNow != forwards || backwardsNow != backwards || leftNow != left || rightNow != right || sprintNow != sprint) {
 				up = upNow;
 				down = downNow;
 				forwards = forwardsNow;
 				backwards = backwardsNow;
 				left = leftNow;
 				right = rightNow;
+				sprint = sprintNow;
 
-				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow));
-				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow);
+				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow, sprintNow));
+				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow, sprintNow);
 			}
 		}
 	}

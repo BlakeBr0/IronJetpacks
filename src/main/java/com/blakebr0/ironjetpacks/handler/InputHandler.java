@@ -19,6 +19,7 @@ public final class InputHandler {
 	private static final Map<PlayerEntity, Boolean> HOLDING_BACKWARDS = new HashMap<>();
 	private static final Map<PlayerEntity, Boolean> HOLDING_LEFT = new HashMap<>();
 	private static final Map<PlayerEntity, Boolean> HOLDING_RIGHT = new HashMap<>();
+	private static final Map<PlayerEntity, Boolean> HOLDING_SPRINT = new HashMap<>();
 	
 	public static boolean isHoldingUp(PlayerEntity player) {
 		return HOLDING_UP.containsKey(player) && HOLDING_UP.get(player);
@@ -43,14 +44,19 @@ public final class InputHandler {
 	public static boolean isHoldingRight(PlayerEntity player) {
 		return HOLDING_RIGHT.containsKey(player) && HOLDING_RIGHT.get(player);
 	}
+
+	public static boolean isHoldingSneak(PlayerEntity player) {
+		return HOLDING_SPRINT.containsKey(player) && HOLDING_SPRINT.get(player);
+	}
 	
-	public static void update(PlayerEntity player, boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right) {
+	public static void update(PlayerEntity player, boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right, boolean sprint) {
 		HOLDING_UP.put(player, up);
 		HOLDING_DOWN.put(player, down);
 		HOLDING_FORWARDS.put(player, forwards);
 		HOLDING_BACKWARDS.put(player, backwards);
 		HOLDING_LEFT.put(player, left);
 		HOLDING_RIGHT.put(player, right);
+		HOLDING_SPRINT.put(player, sprint);
 	}
 	
 	public static void remove(PlayerEntity player) {
@@ -60,6 +66,7 @@ public final class InputHandler {
 		HOLDING_BACKWARDS.remove(player);
 		HOLDING_LEFT.remove(player);
 		HOLDING_RIGHT.remove(player);
+		HOLDING_SPRINT.remove(player);
 	}
 	
 	public static void clear() {
@@ -69,6 +76,7 @@ public final class InputHandler {
 		HOLDING_BACKWARDS.clear();
 		HOLDING_LEFT.clear();
 		HOLDING_RIGHT.clear();
+		HOLDING_SPRINT.clear();
 	}
 	
 	@SubscribeEvent

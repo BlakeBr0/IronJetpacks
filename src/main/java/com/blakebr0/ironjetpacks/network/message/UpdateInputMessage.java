@@ -14,18 +14,20 @@ public class UpdateInputMessage {
 	private final boolean backwards;
 	private final boolean left;
 	private final boolean right;
+	private final boolean sprint;
 	
-	public UpdateInputMessage(boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right) {
+	public UpdateInputMessage(boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right, boolean sprint) {
 		this.up = up;
 		this.down = down;
 		this.forwards = forwards;
 		this.backwards = backwards;
 		this.left = left;
 		this.right = right;
+		this.sprint = sprint;
 	}
 
 	public static UpdateInputMessage read(PacketBuffer buffer) {
-		return new UpdateInputMessage(buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
+		return new UpdateInputMessage(buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
 	}
 
 	public static void write(UpdateInputMessage message, PacketBuffer buffer) {
@@ -35,13 +37,14 @@ public class UpdateInputMessage {
 		buffer.writeBoolean(message.backwards);
 		buffer.writeBoolean(message.left);
 		buffer.writeBoolean(message.right);
+		buffer.writeBoolean(message.sprint);
 	}
 
 	public static void onMessage(UpdateInputMessage message, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
 			PlayerEntity player = context.get().getSender();
 			if (player != null) {
-				InputHandler.update(player, message.up, message.down, message.forwards, message.backwards, message.left, message.right);
+				InputHandler.update(player, message.up, message.down, message.forwards, message.backwards, message.left, message.right, message.sprint);
 			}
 		});
 
