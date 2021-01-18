@@ -50,16 +50,19 @@ public final class HudHandler {
                         RenderSystem.popMatrix();
 
                         String fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
+                        String throttle = Colors.GRAY + "T: " + (int) (JetpackUtils.getThrottle(chest) * 100) + "%";
                         String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
                         String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
 
                         MatrixStack stack = event.getMatrixStack();
                         if (pos.side == 1) {
                             mc.fontRenderer.drawStringWithShadow(stack, fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(fuel), pos.y - 21, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, fuel, pos.x - 8 - mc.fontRenderer.getStringWidth(throttle), pos.y - 6, 16383998);
                             mc.fontRenderer.drawStringWithShadow(stack, engine, pos.x - 8 - mc.fontRenderer.getStringWidth(engine), pos.y + 4, 16383998);
                             mc.fontRenderer.drawStringWithShadow(stack, hover, pos.x - 8 - mc.fontRenderer.getStringWidth(hover), pos.y + 14, 16383998);
                         } else {
                             mc.fontRenderer.drawStringWithShadow(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
+                            mc.fontRenderer.drawStringWithShadow(stack, throttle, pos.x + 6, pos.y - 6, 16383998);
                             mc.fontRenderer.drawStringWithShadow(stack, engine, pos.x + 6, pos.y + 4, 16383998);
                             mc.fontRenderer.drawStringWithShadow(stack, hover, pos.x + 6, pos.y + 14, 16383998);
                         }
