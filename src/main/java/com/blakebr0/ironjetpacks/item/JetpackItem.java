@@ -87,23 +87,25 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 					}
 					
 					if (energy.getEnergyStored() > 0 || player.isCreative() || creative) {
+						double throttle = JetpackUtils.getThrottle(stack);
+
 						double motionY = player.getMotion().getY();
 						if (InputHandler.isHoldingUp(player)) {
 							if (!hover) {
-								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical));
+								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical) * throttle);
 							} else {
 								if (InputHandler.isHoldingDown(player)) {
-									fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow));
+									fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow) * throttle);
 								} else {
-									fly(player, Math.min(motionY + currentAccel, info.speedHover));
+									fly(player, Math.min(motionY + currentAccel, info.speedHover) * throttle);
 								}
 							}
 						} else {
-							fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
+							fly(player, Math.min(motionY + currentAccel, -hoverSpeed) * throttle);
 						}
 						
-						float speedSideways = (float) (player.isCrouching() ? info.speedSide * 0.5F : info.speedSide);
-						float speedForward = (float) (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways);
+						double speedSideways = (player.isCrouching() ? info.speedSide * 0.5F : info.speedSide) * throttle;
+						double speedForward = (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways) * throttle;
 						
 						if (InputHandler.isHoldingForwards(player)) {
 							player.moveRelative(1, new Vector3d(0, 0, speedForward));
@@ -170,6 +172,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		ITextComponent hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
+
+		ITextComponent throttle = new StringTextComponent((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
+
+		tooltip.add(ModTooltips.THROTTLE.args(throttle).build());
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
 			tooltip.add(new StringTextComponent(""));

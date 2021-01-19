@@ -65,6 +65,34 @@ public final class JetpackUtils {
 		return !current;
 	}
 
+	public static double getThrottle(ItemStack stack) {
+		if (!NBTHelper.hasKey(stack, "Throttle")) {
+			NBTHelper.setDouble(stack, "Throttle", 1.0D);
+		}
+
+		return NBTHelper.getDouble(stack, "Throttle");
+	}
+
+	public static double incrementThrottle(ItemStack stack) {
+		double throttle = getThrottle(stack);
+		if (throttle < 1.0D) {
+			throttle = Math.min(throttle + 0.2D, 1.0D);
+			NBTHelper.setDouble(stack, "Throttle", throttle);
+		}
+
+		return throttle;
+	}
+
+	public static double decrementThrottle(ItemStack stack) {
+		double throttle = getThrottle(stack);
+		if (throttle > 0.2D) {
+			throttle = Math.max(throttle - 0.2D, 0.2D);
+			NBTHelper.setDouble(stack, "Throttle", throttle);
+		}
+
+		return throttle;
+	}
+
 	public static IArmorMaterial makeArmorMaterial(Jetpack jetpack) {
 		return new IArmorMaterial() {
 			@Override
@@ -89,7 +117,7 @@ public final class JetpackUtils {
 
 			@Override
 			public Ingredient getRepairMaterial() {
-				return null;
+				return Ingredient.EMPTY;
 			}
 
 			@Override

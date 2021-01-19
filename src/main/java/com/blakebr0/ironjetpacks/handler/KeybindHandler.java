@@ -4,6 +4,8 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
+import com.blakebr0.ironjetpacks.network.message.DecrementThrottleMessage;
+import com.blakebr0.ironjetpacks.network.message.IncrementThrottleMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
@@ -16,7 +18,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
@@ -28,7 +32,9 @@ public final class KeybindHandler {
 	private static KeyBinding keyEngine;
 	private static KeyBinding keyHover;
 	private static KeyBinding keyDescend;
-	
+	private static KeyBinding keyIncrementThrottle;
+	private static KeyBinding keyDecrementThrottle;
+
 	private static boolean up = false;
 	private static boolean down = false;
 	private static boolean forwards = false;
@@ -40,10 +46,14 @@ public final class KeybindHandler {
 		keyEngine = new KeyBinding("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyBinding("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
 		keyDescend = new KeyBinding("keybind.ironjetpacks.descend", InputMappings.INPUT_INVALID.getKeyCode(), IronJetpacks.NAME);
+		keyIncrementThrottle = new KeyBinding("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
+		keyDecrementThrottle = new KeyBinding("keybinding.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
 		
 		ClientRegistry.registerKeyBinding(keyEngine);
 		ClientRegistry.registerKeyBinding(keyHover);
 		ClientRegistry.registerKeyBinding(keyDescend);
+		ClientRegistry.registerKeyBinding(keyIncrementThrottle);
+		ClientRegistry.registerKeyBinding(keyDecrementThrottle);
 	}
 	
 	@SubscribeEvent
@@ -56,19 +66,7 @@ public final class KeybindHandler {
 		Item item = chest.getItem();
 		
 		if (item instanceof JetpackItem) {
-			if (keyEngine.isPressed()) {
-				boolean on = JetpackUtils.toggleEngine(chest);
-				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
-				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
-				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
-			}
-			
-			if (keyHover.isPressed()) {
-				boolean on = JetpackUtils.toggleHover(chest);
-				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
-				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
-				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
-			}
+			handleInput(player, chest);
 		}
 	}
 	
@@ -82,19 +80,7 @@ public final class KeybindHandler {
 		Item item = chest.getItem();
 
 		if (item instanceof JetpackItem) {
-			if (keyEngine.isPressed()) {
-				boolean on = JetpackUtils.toggleEngine(chest);
-				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
-				NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
-				player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
-			}
-			
-			if (keyHover.isPressed()) {
-				boolean on = JetpackUtils.toggleHover(chest);
-				ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
-				NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
-				player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
-			}
+			handleInput(player, chest);
 		}
 	}
 	
@@ -129,6 +115,36 @@ public final class KeybindHandler {
 				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow));
 				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow);
 			}
+		}
+	}
+
+	private static void handleInput(PlayerEntity player, ItemStack stack) {
+		if (keyEngine.isPressed()) {
+			boolean on = JetpackUtils.toggleEngine(stack);
+			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+			NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
+			player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
+		}
+
+		if (keyHover.isPressed()) {
+			boolean on = JetpackUtils.toggleHover(stack);
+			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+			NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
+			player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
+		}
+
+		if (keyIncrementThrottle.isPressed()) {
+			double throttle = JetpackUtils.incrementThrottle(stack);
+			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").mergeStyle(TextFormatting.GREEN);
+			NetworkHandler.INSTANCE.sendToServer(new IncrementThrottleMessage());
+			player.sendStatusMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
+		}
+
+		if (keyDecrementThrottle.isPressed()) {
+			double throttle = JetpackUtils.decrementThrottle(stack);
+			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").mergeStyle(TextFormatting.RED);
+			NetworkHandler.INSTANCE.sendToServer(new DecrementThrottleMessage());
+			player.sendStatusMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}
 	}
 }
