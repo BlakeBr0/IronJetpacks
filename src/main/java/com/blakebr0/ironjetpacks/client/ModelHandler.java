@@ -63,6 +63,8 @@ public class ModelHandler {
             }
         });
 
+        stopwatch.stop();
+
         LOGGER.info("Model replacement took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 }
