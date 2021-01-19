@@ -75,7 +75,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 					double currentAccel = info.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = info.speedVert * (player.isInWater() ? 0.4D : 1.0D);
 					
-					double usage = player.isSprinting() ? info.usage * info.sprintFuel : info.usage;
+					double usage = player.isSprinting() || InputHandler.isHoldingSprint(player) ? info.usage * info.sprintFuel : info.usage;
 					
 					boolean creative = info.creative;
 					
