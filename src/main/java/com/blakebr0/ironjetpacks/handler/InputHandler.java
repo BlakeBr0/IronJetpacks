@@ -45,7 +45,7 @@ public final class InputHandler {
 		return HOLDING_RIGHT.containsKey(player) && HOLDING_RIGHT.get(player);
 	}
 
-	public static boolean isHoldingSneak(PlayerEntity player) {
+	public static boolean isHoldingSprint(PlayerEntity player) {
 		return HOLDING_SPRINT.containsKey(player) && HOLDING_SPRINT.get(player);
 	}
 	

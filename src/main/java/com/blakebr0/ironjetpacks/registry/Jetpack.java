@@ -39,6 +39,7 @@ public class Jetpack {
 	public double speedHover;
 	public double speedHoverSlow;
 	public double sprintSpeed;
+	public double sprintSpeedVert;
 	public double sprintFuel;
 	
 	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
@@ -52,7 +53,7 @@ public class Jetpack {
 		this.item = new JetpackItem(this, p -> p.group(IronJetpacks.ITEM_GROUP));
 	}
 	
-	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintFuel) {
+	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
 		this.capacity = capacity;
 		this.usage = usage;
 		this.speedVert = speedVert;
@@ -61,6 +62,7 @@ public class Jetpack {
 		this.speedHover = speedHover;
 		this.speedHoverSlow = speedHoverSlow;
 		this.sprintSpeed = sprintSpeed;
+		this.sprintSpeedVert = sprintSpeedVert;
 		this.sprintFuel = sprintFuel;
 		
 		return this;
