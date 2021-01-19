@@ -2,7 +2,6 @@ package com.blakebr0.ironjetpacks.item;
 
 import com.blakebr0.cucumber.energy.EnergyCapabilityProvider;
 import com.blakebr0.cucumber.energy.ItemEnergyStorage;
-import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.item.BaseArmorItem;
@@ -36,8 +35,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.List;
@@ -72,9 +69,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 				boolean hover = JetpackUtils.isHovering(chest);
 				if (InputHandler.isHoldingUp(player) || hover && !player.isOnGround()) {
 					Jetpack info = jetpack.getJetpack();
-					
+
+					double motionY = player.getMotion().getY();
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
-					double currentAccel = info.accelVert * (player.getMotion().getY() < 0.3D ? 2.5D : 1.0D);
+					double currentAccel = info.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = info.speedVert * (player.isInWater() ? 0.4D : 1.0D);
 					
 					double usage = player.isSprinting() ? info.usage * info.sprintFuel : info.usage;
@@ -88,16 +86,16 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 					
 					if (energy.getEnergyStored() > 0 || player.isCreative() || creative) {
 						double throttle = JetpackUtils.getThrottle(stack);
+						double verticalSprintMulti =  InputHandler.isHoldingSprint(player) ? info.sprintSpeedVert : 1.0D;
 
-						double motionY = player.getMotion().getY();
 						if (InputHandler.isHoldingUp(player)) {
 							if (!hover) {
-								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical) * throttle);
+								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical) * throttle * verticalSprintMulti);
 							} else {
 								if (InputHandler.isHoldingDown(player)) {
 									fly(player, Math.min(motionY + currentAccel, -info.speedHoverSlow) * throttle);
 								} else {
-									fly(player, Math.min(motionY + currentAccel, info.speedHover) * throttle);
+									fly(player, Math.min(motionY + currentAccel, info.speedHover) * throttle * verticalSprintMulti);
 								}
 							}
 						} else {
@@ -189,6 +187,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 				tooltip.add(ModTooltips.HOVER_SPEED.args(this.jetpack.speedHoverSlow).build());
 				tooltip.add(ModTooltips.DESCEND_SPEED.args(this.jetpack.speedHover).build());
 				tooltip.add(ModTooltips.SPRINT_MODIFIER.args(this.jetpack.sprintSpeed).build());
+				tooltip.add(ModTooltips.SPRINT_VERTICAL_MODIFIER.args(this.jetpack.sprintSpeedVert).build());
 				tooltip.add(ModTooltips.SPRINT_FUEL_MODIFIER.args(this.jetpack.sprintFuel).build());
 			}
 		}

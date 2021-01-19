@@ -33,21 +33,21 @@ public final class ModJetpacks {
 	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, "tag:forge:ingots/platinum");
 
 	static {		
-		WOOD.setStats(20000, 32, 0.18D, 0.10D, 0.06D, 0.16D, 0.14D, 1.0D, 1.0D);
-		STONE.setStats(100000, 70, 0.25D, 0.11D, 0.08D, 0.18D, 0.1D, 1.0D, 1.0D);
-		IRON.setStats(800000, 120, 0.41D, 0.12D, 0.14D, 0.27D, 0.075D, 1.1D, 2.1D);
-		GOLD.setStats(10000000, 300, 0.61D, 0.13D, 0.15D, 0.34D, 0.03D, 1.5D, 3.2D);
-		DIAMOND.setStats(30000000, 650, 0.90D, 0.15D, 0.19D, 0.41D, 0.005D, 1.8D, 3.8D);
-		EMERALD.setStats(48000000, 880, 1.03D, 0.17D, 0.21D, 0.45D, 0.0D, 2.0D, 4.0D);
-		CREATIVE.setStats(0, 0, 1.03D, 0.17D, 0.21D, 0.45D, 0.0D, 2.0D, 0.0D);
+		WOOD.setStats(20000, 32, 0.18D, 0.10D, 0.06D, 0.16D, 0.14D, 1.0D, 1.0D, 1.0D);
+		STONE.setStats(100000, 70, 0.25D, 0.11D, 0.08D, 0.18D, 0.1D, 1.0D, 1.0D, 1.0D);
+		IRON.setStats(800000, 120, 0.41D, 0.12D, 0.14D, 0.27D, 0.075D, 1.1D, 1.0D, 2.1D);
+		GOLD.setStats(10000000, 300, 0.61D, 0.13D, 0.15D, 0.34D, 0.03D, 1.5D, 1.0D, 3.2D);
+		DIAMOND.setStats(30000000, 650, 0.90D, 0.15D, 0.19D, 0.41D, 0.005D, 1.8D, 1.0D, 3.8D);
+		EMERALD.setStats(48000000, 880, 1.03D, 0.17D, 0.21D, 0.45D, 0.0D, 2.0D, 1.0D, 4.0D);
+		CREATIVE.setStats(0, 0, 1.03D, 0.17D, 0.21D, 0.45D, 0.0D, 2.0D, 1.0D, 0.0D);
 
-		COPPER.setStats(250000, 85, 0.29D, 0.11D, 0.1D, 0.23D, 0.092D, 1.05D, 1.4D);
-		BRONZE.setStats(800000, 120, 0.41D, 0.12D, 0.14D, 0.27D, 0.075D, 1.1D, 2.1D);
-		SILVER.setStats(1200000, 150, 0.48D, 0.13D, 0.15D, 0.3D, 0.07D, 1.3D, 2.7D);
-		STEEL.setStats(12000000, 350, 0.67D, 0.135D, 0.155D, 0.35D, 0.025D, 1.5D, 3.2D);
-		ELECTRUM.setStats(10000000, 310, 0.79D, 0.14D, 0.17D, 0.37D, 0.03D, 1.6D, 3.5D);
-		INVAR.setStats(12000000, 350, 0.61D, 0.13D, 0.15D, 0.34D, 0.03D, 1.5D, 3.2D);
-		PLATINUM.setStats(36000000, 720, 0.92D, 0.155D, 0.193D, 0.42D, 0.005D, 1.8D, 3.8D);
+		COPPER.setStats(250000, 85, 0.29D, 0.11D, 0.1D, 0.23D, 0.092D, 1.05D, 1.0D, 1.4D);
+		BRONZE.setStats(800000, 120, 0.41D, 0.12D, 0.14D, 0.27D, 0.075D, 1.1D, 1.0D, 2.1D);
+		SILVER.setStats(1200000, 150, 0.48D, 0.13D, 0.15D, 0.3D, 0.07D, 1.3D, 1.0D, 2.7D);
+		STEEL.setStats(12000000, 350, 0.67D, 0.135D, 0.155D, 0.35D, 0.025D, 1.5D, 1.0D, 3.2D);
+		ELECTRUM.setStats(10000000, 310, 0.79D, 0.14D, 0.17D, 0.37D, 0.03D, 1.6D, 1.0D, 3.5D);
+		INVAR.setStats(12000000, 350, 0.61D, 0.13D, 0.15D, 0.34D, 0.03D, 1.5D, 1.0D, 3.2D);
+		PLATINUM.setStats(36000000, 720, 0.92D, 0.155D, 0.193D, 0.42D, 0.005D, 1.8D,  1.0D, 3.8D);
 	}
 	
 	public static void loadJsons() {

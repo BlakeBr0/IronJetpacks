@@ -17,6 +17,7 @@ public final class ModTooltips {
 	public static final Tooltip HOVER_SPEED = new Tooltip("tooltip.ironjetpacks.hover_speed");
 	public static final Tooltip DESCEND_SPEED = new Tooltip("tooltip.ironjetpacks.descend_speed");
 	public static final Tooltip SPRINT_MODIFIER = new Tooltip("tooltip.ironjetpacks.sprint_modifier");
+	public static final Tooltip SPRINT_VERTICAL_MODIFIER = new Tooltip("tooltip.ironjetpacks.sprint_vertical_modifier");
 	public static final Tooltip SPRINT_FUEL_MODIFIER = new Tooltip("tooltip.ironjetpacks.sprint_fuel_modifier");
 	public static final Tooltip TOGGLE_ENGINE = new Tooltip("tooltip.ironjetpacks.toggle_engine");
 	public static final Tooltip TOGGLE_HOVER = new Tooltip("tooltip.ironjetpacks.toggle_hover");

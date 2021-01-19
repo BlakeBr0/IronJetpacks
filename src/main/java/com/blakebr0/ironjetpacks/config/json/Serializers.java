@@ -59,9 +59,13 @@ public class Serializers {
 			double speedHoverSlow = obj.get("speedHover").getAsDouble();
 			double sprintSpeed = obj.get("sprintSpeedMulti").getAsDouble();
 			double sprintFuel = obj.get("sprintFuelMulti").getAsDouble();
-			
-			jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintFuel);
-			
+
+			double sprintSpeedVert = 1.0D;
+			if (obj.has("sprintSpeedMultiVertical"))
+				sprintSpeedVert = obj.get("sprintSpeedMultiVertical").getAsDouble();
+
+			jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
+
 			return jetpack;
 		}
 		
@@ -88,8 +92,9 @@ public class Serializers {
 			obj.addProperty("speedHoverDescend", src.speedHover);
 			obj.addProperty("speedHover", src.speedHoverSlow);
 			obj.addProperty("sprintSpeedMulti", src.sprintSpeed);
+			obj.addProperty("sprintSpeedMultiVertical", src.sprintSpeedVert);
 			obj.addProperty("sprintFuelMulti", src.sprintFuel);
-			
+
 			return obj;
 		}
 		
