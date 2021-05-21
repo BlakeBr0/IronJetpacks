@@ -1,0 +1,42 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "Кожаный ремень",
+  "item.ironjetpacks.basic_coil": "Базовая катушка",
+  "item.ironjetpacks.advanced_coil": "Продвинутая катушка",
+  "item.ironjetpacks.elite_coil": "Элитная катушка",
+  "item.ironjetpacks.ultimate_coil": "Высшая катушка",
+
+  "item.ironjetpacks.cell": "Капсула энергии %s",
+  "item.ironjetpacks.thruster": Ускоритель "%s",
+  "item.ironjetpacks.capacitor": "Ёмкость %s",
+  "item.ironjetpacks.jetpack": "Джетпак %s",
+
+  "keybind.ironjetpacks.engine": "Вкл двигатель",
+  "keybind.ironjetpacks.hover": "Вкл режим парения",
+  "keybind.ironjetpacks.descend": "Снижаться",
+  "keybind.ironjetpacks.increment_throttle": "Увеличить газ",
+  "keybind.ironjetpacks.decrement_throttle": "Снизить газ",
+
+  "subtitle.ironjetpacks.jetpack": "Джетпак",
+
+  "tooltip.ironjetpacks.on": "ВКЛ",
+  "tooltip.ironjetpacks.off": "ВЫКЛ",
+  "tooltip.ironjetpacks.infinite": "Безграничный",
+  "tooltip.ironjetpacks.engine": "ДВИГАТЕЛЬ",
+  "tooltip.ironjetpacks.hover": "ПАРЕНИЕ",
+  "tooltip.ironjetpacks.tier": "УРОВЕНЬ %s",
+  "tooltip.ironjetpacks.throttle": "Газ: %s",
+  "tooltip.ironjetpacks.fuel_usage": "Используется топлива: %s",
+  "tooltip.ironjetpacks.vertical_speed": "Вертикальная скорость: %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Вертикальное ускорение: %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Горизонтальная скорость: %s",
+  "tooltip.ironjetpacks.hover_speed": "Скорость парения: %s",
+  "tooltip.ironjetpacks.descend_speed": "Скорость снижения: %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Модификатор бега: %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Модификатор: Топливный бег: %s",
+  "tooltip.ironjetpacks.toggle_engine": "Переключено на Двигатель %s",
+  "tooltip.ironjetpacks.toggle_hover": "Переключено на Парение %s",
+  "tooltip.ironjetpacks.change_throttle": "Газ задан на %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
+}
