@@ -26,6 +26,11 @@ public class ComponentItem extends BaseItem implements IColored, IEnableable {
 	}
 
 	@Override
+	public String getTranslationKey(ItemStack stack) {
+		return "item.ironjetpacks." + this.type;
+	}
+
+	@Override
 	public int getColor(int i) {
 		return this.jetpack.color;
 	}

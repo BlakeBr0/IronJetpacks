@@ -53,7 +53,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	public ITextComponent getDisplayName(ItemStack stack) {
 		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).build();
 	}
-	
+
+	@Override
+	public String getTranslationKey(ItemStack stack) {
+		return "item.ironjetpacks.jetpack";
+	}
+
 	/*
 	 * Jetpack logic is very much like Simply Jetpacks, since I used it to learn how to make this work
 	 * Credit to Tonius & Tomson124
