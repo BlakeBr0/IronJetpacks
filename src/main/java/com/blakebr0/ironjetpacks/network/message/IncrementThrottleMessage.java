@@ -24,7 +24,7 @@ public class IncrementThrottleMessage {
 		context.get().enqueueWork(() -> {
 			ServerPlayerEntity player = context.get().getSender();
 			if (player != null) {
-				ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+				ItemStack stack = player.getItemBySlot(EquipmentSlotType.CHEST);
 				Item item = stack.getItem();
 				if (item instanceof JetpackItem) {
 					JetpackUtils.incrementThrottle(stack);

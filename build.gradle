@@ -13,19 +13,19 @@ apply plugin: 'idea'
 
 version = '4.2.0'
 group = 'com.blakebr0.ironjetpacks'
-archivesBaseName = 'IronJetpacks-1.16.4'
+archivesBaseName = 'IronJetpacks-1.16.5'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 repositories {
-    maven { url 'http://dvs1.progwml6.com/files/maven/' }
+    maven { url 'https://dvs1.progwml6.com/files/maven/' }
     maven { url 'https://maven.tehnut.info' }
 
     flatDir { dir 'libs' }
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.16.5'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -53,7 +53,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.0.2'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
 
     compile fg.deobf('ignored:Cucumber:1.16.4-4.1.4')
     runtimeOnly fg.deobf('mcp.mobius.waila:Hwyla:1.10.11-B78_1.16.2')

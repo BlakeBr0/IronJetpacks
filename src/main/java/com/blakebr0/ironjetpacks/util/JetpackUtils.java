@@ -20,7 +20,7 @@ public final class JetpackUtils {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 
 	public static boolean isFlying(PlayerEntity player) {
-		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		ItemStack stack = player.getItemBySlot(EquipmentSlotType.CHEST);
 		if (!stack.isEmpty()) {
 			Item item = stack.getItem();
 			if (item instanceof JetpackItem) {
@@ -96,27 +96,27 @@ public final class JetpackUtils {
 	public static IArmorMaterial makeArmorMaterial(Jetpack jetpack) {
 		return new IArmorMaterial() {
 			@Override
-			public int getDurability(EquipmentSlotType slot) {
+			public int getDurabilityForSlot(EquipmentSlotType slot) {
 				return 0;
 			}
 
 			@Override
-			public int getDamageReductionAmount(EquipmentSlotType slot) {
+			public int getDefenseForSlot(EquipmentSlotType slot) {
 				return jetpack.armorPoints;
 			}
 
 			@Override
-			public int getEnchantability() {
+			public int getEnchantmentValue() {
 				return jetpack.enchantablilty;
 			}
 
 			@Override
-			public SoundEvent getSoundEvent() {
-				return SoundEvents.ITEM_ARMOR_EQUIP_GENERIC;
+			public SoundEvent getEquipSound() {
+				return SoundEvents.ARMOR_EQUIP_GENERIC;
 			}
 
 			@Override
-			public Ingredient getRepairMaterial() {
+			public Ingredient getRepairIngredient() {
 				return Ingredient.EMPTY;
 			}
 

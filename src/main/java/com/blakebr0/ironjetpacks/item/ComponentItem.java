@@ -10,6 +10,8 @@ import net.minecraft.util.text.ITextComponent;
 
 import java.util.function.Function;
 
+import net.minecraft.item.Item.Properties;
+
 public class ComponentItem extends BaseItem implements IColored, IEnableable {
 	private final Jetpack jetpack;
 	private final String type;
@@ -21,12 +23,12 @@ public class ComponentItem extends BaseItem implements IColored, IEnableable {
 	}
 	
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
+	public ITextComponent getName(ItemStack stack) {
 		return Localizable.of("item.ironjetpacks." + this.type).args(this.jetpack.displayName).build();
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack) {
+	public String getDescriptionId(ItemStack stack) {
 		return "item.ironjetpacks." + this.type;
 	}
 

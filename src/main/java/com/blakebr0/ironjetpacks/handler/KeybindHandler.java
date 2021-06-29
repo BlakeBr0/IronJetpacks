@@ -46,7 +46,7 @@ public final class KeybindHandler {
 	public static void onClientSetup() {
 		keyEngine = new KeyBinding("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyBinding("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
-		keyDescend = new KeyBinding("keybind.ironjetpacks.descend", InputMappings.INPUT_INVALID.getKeyCode(), IronJetpacks.NAME);
+		keyDescend = new KeyBinding("keybind.ironjetpacks.descend", InputMappings.UNKNOWN.getValue(), IronJetpacks.NAME);
 		keyIncrementThrottle = new KeyBinding("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
 		keyDecrementThrottle = new KeyBinding("keybinding.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
 		
@@ -63,7 +63,7 @@ public final class KeybindHandler {
 		if (player == null)
 			return;
 
-		ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
 		Item item = chest.getItem();
 		
 		if (item instanceof JetpackItem) {
@@ -77,7 +77,7 @@ public final class KeybindHandler {
 		if (player == null)
 			return;
 
-		ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
 		Item item = chest.getItem();
 
 		if (item instanceof JetpackItem) {
@@ -93,18 +93,18 @@ public final class KeybindHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
 			Minecraft mc = Minecraft.getInstance();
-			GameSettings settings = mc.gameSettings;
+			GameSettings settings = mc.options;
 
 			if (mc.getConnection() == null)
 				return;
 			
-			boolean upNow = settings.keyBindJump.isKeyDown();
-			boolean downNow = keyDescend.isInvalid() ? settings.keyBindSneak.isKeyDown() : keyDescend.isKeyDown();
-			boolean forwardsNow = settings.keyBindForward.isKeyDown();
-			boolean backwardsNow = settings.keyBindBack.isKeyDown();
-			boolean leftNow = settings.keyBindLeft.isKeyDown();
-			boolean rightNow = settings.keyBindRight.isKeyDown();
-			boolean sprintNow = settings.keyBindSprint.isKeyDown();
+			boolean upNow = settings.keyJump.isDown();
+			boolean downNow = keyDescend.isUnbound() ? settings.keyShift.isDown() : keyDescend.isDown();
+			boolean forwardsNow = settings.keyUp.isDown();
+			boolean backwardsNow = settings.keyDown.isDown();
+			boolean leftNow = settings.keyLeft.isDown();
+			boolean rightNow = settings.keyRight.isDown();
+			boolean sprintNow = settings.keySprint.isDown();
 			
 			if (upNow != up || downNow != down || forwardsNow != forwards || backwardsNow != backwards || leftNow != left || rightNow != right || sprintNow != sprint) {
 				up = upNow;
@@ -122,32 +122,32 @@ public final class KeybindHandler {
 	}
 
 	private static void handleInput(PlayerEntity player, ItemStack stack) {
-		if (keyEngine.isPressed()) {
+		if (keyEngine.consumeClick()) {
 			boolean on = JetpackUtils.toggleEngine(stack);
 			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 			NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
-			player.sendStatusMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
+			player.displayClientMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 		}
 
-		if (keyHover.isPressed()) {
+		if (keyHover.consumeClick()) {
 			boolean on = JetpackUtils.toggleHover(stack);
 			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
 			NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
-			player.sendStatusMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
+			player.displayClientMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
 		}
 
-		if (keyIncrementThrottle.isPressed()) {
+		if (keyIncrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.incrementThrottle(stack);
-			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").mergeStyle(TextFormatting.GREEN);
+			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").withStyle(TextFormatting.GREEN);
 			NetworkHandler.INSTANCE.sendToServer(new IncrementThrottleMessage());
-			player.sendStatusMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
+			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}
 
-		if (keyDecrementThrottle.isPressed()) {
+		if (keyDecrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.decrementThrottle(stack);
-			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").mergeStyle(TextFormatting.RED);
+			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").withStyle(TextFormatting.RED);
 			NetworkHandler.INSTANCE.sendToServer(new DecrementThrottleMessage());
-			player.sendStatusMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
+			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}
 	}
 }

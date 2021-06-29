@@ -61,13 +61,13 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        ITag<Item> redstoneTag = TagCollectionManager.getManager().getItemTags().get(Tags.Items.DUSTS_REDSTONE.getName());
+        ITag<Item> redstoneTag = TagCollectionManager.getInstance().getItems().getTag(Tags.Items.DUSTS_REDSTONE.getName());
         if (redstoneTag == null)
             return null;
 
-        Ingredient coil = Ingredient.fromItems(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient redstone = Ingredient.fromTag(redstoneTag);
-        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+        Ingredient coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
+        Ingredient redstone = Ingredient.of(redstoneTag);
+        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY
@@ -89,10 +89,10 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient coil = Ingredient.fromItems(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient cell = Ingredient.fromItems(jetpack.cell);
-        Ingredient furnace = Ingredient.fromItems(Blocks.FURNACE);
-        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+        Ingredient coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
+        Ingredient cell = Ingredient.of(jetpack.cell);
+        Ingredient furnace = Ingredient.of(Blocks.FURNACE);
+        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
                 material, coil, material,
                 coil, cell, coil,
                 material, furnace, material
@@ -112,8 +112,8 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient cell = Ingredient.fromItems(jetpack.cell);
-        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+        Ingredient cell = Ingredient.of(jetpack.cell);
+        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
                 material, cell, material,
                 material, cell, material,
                 material, cell, material
@@ -137,10 +137,10 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient capacitor = Ingredient.fromItems(jetpack.capacitor);
-        Ingredient thruster = Ingredient.fromItems(jetpack.thruster);
-        Ingredient strap = Ingredient.fromItems(ModItems.STRAP.get());
-        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+        Ingredient capacitor = Ingredient.of(jetpack.capacitor);
+        Ingredient thruster = Ingredient.of(jetpack.thruster);
+        Ingredient strap = Ingredient.of(ModItems.STRAP.get());
+        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, strap, material,
                 thruster, Ingredient.EMPTY, thruster
@@ -164,10 +164,10 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient capacitor = Ingredient.fromItems(jetpack.capacitor);
-        Ingredient thruster = Ingredient.fromItems(jetpack.thruster);
+        Ingredient capacitor = Ingredient.of(jetpack.capacitor);
+        Ingredient thruster = Ingredient.of(jetpack.thruster);
         Ingredient jetpackTier = new JetpackIngredient(jetpack.tier - 1);
-        NonNullList<Ingredient> inputs = NonNullList.from(Ingredient.EMPTY,
+        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, jetpackTier, material,
                 thruster, Ingredient.EMPTY, thruster

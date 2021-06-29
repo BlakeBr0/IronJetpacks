@@ -50,7 +50,7 @@ public class Jetpack {
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
-		this.item = new JetpackItem(this, p -> p.group(IronJetpacks.ITEM_GROUP));
+		this.item = new JetpackItem(this, p -> p.tab(IronJetpacks.ITEM_GROUP));
 	}
 	
 	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
@@ -121,13 +121,13 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(parts[1], parts[2]));
-					if (tag != null && !tag.getAllElements().isEmpty())
-						this.craftingMaterial = Ingredient.fromTag(tag);
+					ITag<Item> tag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(parts[1], parts[2]));
+					if (tag != null && !tag.getValues().isEmpty())
+						this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {
 					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
 					if (item != null)
-						this.craftingMaterial = Ingredient.fromItems(item);
+						this.craftingMaterial = Ingredient.of(item);
 				}
 			}
 		}

@@ -23,12 +23,12 @@ public final class JetpackClientHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
         if (event.phase == TickEvent.Phase.END) {
-            if (mc.player != null && mc.world != null) {
-                if (!mc.isGamePaused()) {
-                    ItemStack chest = mc.player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+            if (mc.player != null && mc.level != null) {
+                if (!mc.isPaused()) {
+                    ItemStack chest = mc.player.getItemBySlot(EquipmentSlotType.CHEST);
                     Item item = chest.getItem();
                     if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {
-                        if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.gameSettings.particles != ParticleStatus.MINIMAL)) {
+                        if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.options.particles != ParticleStatus.MINIMAL)) {
                             Jetpack jetpack = ((JetpackItem) item).getJetpack();
                             Random rand = Utils.RANDOM;
 
@@ -37,20 +37,20 @@ public final class JetpackClientHandler {
                             float random = (rand.nextFloat() - 0.5F) * 0.1F;
                             double[] sneakBonus = mc.player.isCrouching() ? new double[]{-0.30, -0.10} : new double[]{0, 0};
 
-                            Pos3d vLeft = new Pos3d(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
-                            Pos3d vRight = new Pos3d(0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.renderYawOffset);
+                            Pos3d vLeft = (Pos3d) new Pos3d(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).xRot(0).yRot(mc.player.yBodyRot);
+                            Pos3d vRight = (Pos3d) new Pos3d(0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).xRot(0).yRot(mc.player.yBodyRot);
 
-                            Pos3d v = playerPos.translate(vLeft).translate(new Pos3d(mc.player.getMotion().scale(jetpack.speedSide)));
-                            mc.particles.addParticle(ParticleTypes.FLAME, v.x, v.y, v.z, random, -0.2D, random);
-                            mc.particles.addParticle(ParticleTypes.SMOKE, v.x, v.y, v.z, random, -0.2D, random);
+                            Pos3d v = playerPos.translate(vLeft).translate(new Pos3d(mc.player.getDeltaMovement().scale(jetpack.speedSide)));
+                            mc.particleEngine.createParticle(ParticleTypes.FLAME, v.x, v.y, v.z, random, -0.2D, random);
+                            mc.particleEngine.createParticle(ParticleTypes.SMOKE, v.x, v.y, v.z, random, -0.2D, random);
 
-                            v = playerPos.translate(vRight).translate(new Pos3d(mc.player.getMotion().scale(jetpack.speedSide)));
-                            mc.particles.addParticle(ParticleTypes.FLAME, v.x, v.y, v.z, random, -0.2D, random);
-                            mc.particles.addParticle(ParticleTypes.SMOKE, v.x, v.y, v.z, random, -0.2D, random);
+                            v = playerPos.translate(vRight).translate(new Pos3d(mc.player.getDeltaMovement().scale(jetpack.speedSide)));
+                            mc.particleEngine.createParticle(ParticleTypes.FLAME, v.x, v.y, v.z, random, -0.2D, random);
+                            mc.particleEngine.createParticle(ParticleTypes.SMOKE, v.x, v.y, v.z, random, -0.2D, random);
                         }
 
-                        if (ModConfigs.ENABLE_JETPACK_SOUNDS.get() && !JetpackSound.playing(mc.player.getEntityId())) {
-                            mc.getSoundHandler().play(new JetpackSound(mc.player));
+                        if (ModConfigs.ENABLE_JETPACK_SOUNDS.get() && !JetpackSound.playing(mc.player.getId())) {
+                            mc.getSoundManager().play(new JetpackSound(mc.player));
                         }
                     }
                 }

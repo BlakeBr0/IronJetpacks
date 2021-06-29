@@ -12,7 +12,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public final class HudHelper {
 	public static HudPos getHudPos() {
-		MainWindow window = Minecraft.getInstance().getMainWindow();
+		MainWindow window = Minecraft.getInstance().getWindow();
 		int xOffset = ModConfigs.HUD_OFFSET_X.get();
 		int yOffset = ModConfigs.HUD_OFFSET_Y.get();
 		
@@ -20,15 +20,15 @@ public final class HudHelper {
 			case 0:
 				return new HudPos(10 + xOffset, 30 + yOffset, 0);
 			case 1:
-				return new HudPos(10 + xOffset, window.getScaledHeight() / 2 + yOffset, 0);
+				return new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
 			case 2:
-				return new HudPos(10 + xOffset, window.getScaledHeight() - 30 + yOffset, 0);
+				return new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
 			case 3:
-				return new HudPos(window.getScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
+				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
 			case 4:
-				return new HudPos(window.getScaledWidth() - 8 - xOffset, window.getScaledHeight() / 2 + yOffset, 1);
+				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
 			case 5:
-				return new HudPos(window.getScaledWidth() - 8 - xOffset, window.getScaledHeight() - 30 + yOffset, 1);
+				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
 		}
 		
 		return null;

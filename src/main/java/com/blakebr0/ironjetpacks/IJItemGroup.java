@@ -14,7 +14,7 @@ public class IJItemGroup extends ItemGroup {
 	}
 	
 	@Override
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		List<Jetpack> jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
 		if (!jetpacks.isEmpty()) {
 			return new ItemStack(jetpacks.get(0).item);

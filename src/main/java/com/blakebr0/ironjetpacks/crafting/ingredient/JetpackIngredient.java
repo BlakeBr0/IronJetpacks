@@ -31,7 +31,7 @@ public class JetpackIngredient extends Ingredient {
     }
 
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         if (this.stacks == null)
             this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
 
@@ -39,13 +39,13 @@ public class JetpackIngredient extends Ingredient {
     }
 
     @Override
-    public IntList getValidItemStacksPacked() {
+    public IntList getStackingIds() {
         if (this.stacksPacked == null) {
             if (this.stacks == null)
                 this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
 
             this.stacksPacked = new IntArrayList(this.stacks.length);
-            Arrays.stream(this.stacks).forEach(s -> this.stacksPacked.add(RecipeItemHelper.pack(s)));
+            Arrays.stream(this.stacks).forEach(s -> this.stacksPacked.add(RecipeItemHelper.getStackingIndex(s)));
             this.stacksPacked.sort(IntComparators.NATURAL_COMPARATOR);
         }
 
@@ -73,12 +73,12 @@ public class JetpackIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return ALL_JETPACKS.stream().noneMatch(j -> j.getJetpack().tier == this.tier) && (this.stacks == null || this.stacks.length == 0) && (this.stacksPacked == null || this.stacksPacked.isEmpty());
     }
 
     @Override
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonArray json = new JsonArray();
         ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).filter(h -> h.getRegistryName() != null).forEach(h -> {
             JsonObject obj = new JsonObject();

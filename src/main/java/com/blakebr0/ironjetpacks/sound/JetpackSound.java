@@ -21,25 +21,25 @@ public class JetpackSound extends TickableSound {
 	public JetpackSound(PlayerEntity player) {
 		super(ModSounds.JETPACK, SoundCategory.PLAYERS);
 		this.player = player;
-		this.repeat = true;
-		PLAYING_FOR.put(player.getEntityId(), this);
+		this.looping = true;
+		PLAYING_FOR.put(player.getId(), this);
 	}
 	
 	public static boolean playing(int entityId) {
-		return PLAYING_FOR.containsKey(entityId) && PLAYING_FOR.get(entityId) != null && !PLAYING_FOR.get(entityId).isDonePlaying();
+		return PLAYING_FOR.containsKey(entityId) && PLAYING_FOR.get(entityId) != null && !PLAYING_FOR.get(entityId).isStopped();
 	}
 
 	@Override
 	public void tick() {
-		Vector3d pos = this.player.getPositionVec();
-		this.x = (float) pos.getX();
-		this.y = (float) pos.getY() - 10;
-		this.z = (float) pos.getZ();
+		Vector3d pos = this.player.position();
+		this.x = (float) pos.x();
+		this.y = (float) pos.y() - 10;
+		this.z = (float) pos.z();
 		
 		if (!JetpackUtils.isFlying(this.player)) {
 			synchronized (PLAYING_FOR) {
-				PLAYING_FOR.remove(this.player.getEntityId());
-				this.finishPlaying();
+				PLAYING_FOR.remove(this.player.getId());
+				this.stop();
 			}
 		}
 	}

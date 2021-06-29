@@ -40,22 +40,24 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.item.Item.Properties;
+
 public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
 	private final Jetpack jetpack;
 	private BipedModel<?> model;
 
 	public JetpackItem(Jetpack jetpack, Function<Properties, Properties> properties) {
-		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlotType.CHEST, properties.compose(p -> p.defaultMaxDamage(0).rarity(jetpack.rarity)));
+		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlotType.CHEST, properties.compose(p -> p.defaultDurability(0).rarity(jetpack.rarity)));
 		this.jetpack = jetpack;
 	}
 	
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
+	public ITextComponent getName(ItemStack stack) {
 		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).build();
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack) {
+	public String getDescriptionId(ItemStack stack) {
 		return "item.ironjetpacks.jetpack";
 	}
 
@@ -66,7 +68,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	 */
 	@Override
 	public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
-		ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
 		Item item = chest.getItem();
 		if (!chest.isEmpty() && item instanceof JetpackItem) {
 			JetpackItem jetpack = (JetpackItem) item;
@@ -75,7 +77,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 				if (InputHandler.isHoldingUp(player) || hover && !player.isOnGround()) {
 					Jetpack info = jetpack.getJetpack();
 
-					double motionY = player.getMotion().getY();
+					double motionY = player.getDeltaMovement().y();
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? info.speedHover : info.speedHoverSlow;
 					double currentAccel = info.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = info.speedVert * (player.isInWater() ? 0.4D : 1.0D);
@@ -126,11 +128,11 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 							player.moveRelative(1, new Vector3d(-speedSideways, 0, 0));
 						}
 						
-						if (!world.isRemote()) {
+						if (!world.isClientSide()) {
 							player.fallDistance = 0.0F;
 							
 							if (player instanceof ServerPlayerEntity) {
-								((ServerPlayerEntity) player).connection.floatingTickCount = 0;
+								((ServerPlayerEntity) player).connection.aboveGroundTickCount = 0;
 							}
 						}
 					}
@@ -162,12 +164,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (!this.jetpack.creative) {
 			IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
-			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(TextFormatting.GRAY));
 		} else {
-			tooltip.add(ModTooltips.INFINITE.build().appendString(" FE"));
+			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}
 
 		ITextComponent tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
@@ -223,7 +225,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 
 	@Override
-	public boolean hasColor(ItemStack stack) {
+	public boolean hasCustomColor(ItemStack stack) {
 		return true;
 	}
 
@@ -233,7 +235,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 
 	@Override
-	public void removeColor(ItemStack stack) {
+	public void clearColor(ItemStack stack) {
 
 	}
 
@@ -252,7 +254,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 
 	private static void fly(PlayerEntity player, double y) {
-		Vector3d motion = player.getMotion();
-		player.setMotion(motion.getX(), y, motion.getZ());
+		Vector3d motion = player.getDeltaMovement();
+		player.setDeltaMovement(motion.x(), y, motion.z());
 	}
 }

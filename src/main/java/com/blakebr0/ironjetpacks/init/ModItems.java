@@ -43,21 +43,21 @@ public final class ModItems {
 
 		// Energy Cells
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
-			ComponentItem item = new ComponentItem(jetpack, "cell", p -> p.group(ITEM_GROUP));
+			ComponentItem item = new ComponentItem(jetpack, "cell", p -> p.tab(ITEM_GROUP));
 			jetpack.setCellItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_cell"));
 		}
 		
 		// Thrusters
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
-			ComponentItem item = new ComponentItem(jetpack, "thruster", p -> p.group(ITEM_GROUP));
+			ComponentItem item = new ComponentItem(jetpack, "thruster", p -> p.tab(ITEM_GROUP));
 			jetpack.setThrusterItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_thruster"));
 		}
 		
 		// Capacitors
 		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
-			ComponentItem item = new ComponentItem(jetpack, "capacitor", p -> p.group(ITEM_GROUP));
+			ComponentItem item = new ComponentItem(jetpack, "capacitor", p -> p.tab(ITEM_GROUP));
 			jetpack.setCapacitorItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_capacitor"));
 		}
@@ -69,7 +69,7 @@ public final class ModItems {
 	}
 
 	private static RegistryObject<Item> register(String name) {
-		return register(name, () -> new BaseItem(p -> p.group(ITEM_GROUP)));
+		return register(name, () -> new BaseItem(p -> p.tab(ITEM_GROUP)));
 	}
 
 	private static RegistryObject<Item> register(String name, Supplier<? extends Item> item) {
