@@ -37,8 +37,8 @@ public final class JetpackClientHandler {
                             float random = (rand.nextFloat() - 0.5F) * 0.1F;
                             double[] sneakBonus = mc.player.isCrouching() ? new double[]{-0.30, -0.10} : new double[]{0, 0};
 
-                            Pos3d vLeft = (Pos3d) new Pos3d(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).xRot(0).yRot(mc.player.yBodyRot);
-                            Pos3d vRight = (Pos3d) new Pos3d(0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).xRot(0).yRot(mc.player.yBodyRot);
+                            Pos3d vLeft = new Pos3d(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.yBodyRot);
+                            Pos3d vRight = new Pos3d(0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]).rotatePitch(0).rotateYaw(mc.player.yBodyRot);
 
                             Pos3d v = playerPos.translate(vLeft).translate(new Pos3d(mc.player.getDeltaMovement().scale(jetpack.speedSide)));
                             mc.particleEngine.createParticle(ParticleTypes.FLAME, v.x, v.y, v.z, random, -0.2D, random);

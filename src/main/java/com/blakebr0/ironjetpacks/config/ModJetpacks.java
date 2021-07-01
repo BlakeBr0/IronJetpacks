@@ -1,21 +1,31 @@
 package com.blakebr0.ironjetpacks.config;
 
-import com.blakebr0.ironjetpacks.config.json.Serializers;
+import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public final class ModJetpacks {
+	private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
 	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks");
 	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone");
 	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, "tag:forge:ingots/iron");
@@ -53,18 +63,15 @@ public final class ModJetpacks {
 	public static void loadJsons() {
 		final JetpackRegistry registry = JetpackRegistry.getInstance();
 		File dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
-		Gson gson = Serializers.initGson();
 		
 		if (!dir.exists() && dir.mkdirs()) {		
 			for (Jetpack jetpack : defaults()) {
-				String json = gson.toJson(jetpack);
-				try {
-					File file = new File(dir, jetpack.name + ".json");
-					FileWriter writer = new FileWriter(file);
-					writer.write(json);
-					writer.close();
+				File file = new File(dir, jetpack.name + ".json");
+
+				try (Writer writer = new FileWriter(file)) {
+					GSON.toJson(jetpack.toJson(), writer);
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error("An error occurred while generating jetpack jsons", e);
 				}
 			}
 		}
@@ -78,28 +85,70 @@ public final class ModJetpacks {
 		
 		for (File file : files) {
 			Jetpack jetpack = null;
+			FileReader reader = null;
+
 			try {
-				FileReader reader = new FileReader(file);
-				jetpack = gson.fromJson(reader, Jetpack.class);
+				JsonParser parser = new JsonParser();
+				reader = new FileReader(file);
+				JsonObject json = parser.parse(reader).getAsJsonObject();
+
 				reader.close();
+
+				if (handleMigrations(json)) {
+					try (Writer writer = new FileWriter(file)) {
+						GSON.toJson(json, writer);
+					} catch (Exception e) {
+						LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
+						continue;
+					}
+				}
+
+				jetpack = Jetpack.fromJson(json);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("An error occurred while reading jetpack json {}", file.getName(), e);
+			} finally {
+				IOUtils.closeQuietly(reader);
 			}
 			
 			if (jetpack != null && !jetpack.disabled) {
 				jetpacks.add(jetpack);
 			}
 		}
-		
+
 		jetpacks.sort(Comparator.comparingInt(Jetpack::getTier));
 		
 		for (Jetpack j : jetpacks) {
 			registry.register(j);
 		}
 	}
+
+	private static boolean handleMigrations(JsonObject json) {
+		boolean changed = false;
+
+		// add creative flag
+		if (!json.has("creative")) {
+			json.addProperty("creative", false);
+			changed = true;
+		}
+
+		// add rarity field
+		if (!json.has("rarity")) {
+			json.addProperty("rarity", 0);
+			changed = true;
+		}
+
+		// add vertical sprint speed field
+		if (!json.has("sprintSpeedMultiVertical")) {
+			json.addProperty("sprintSpeedMultiVertical", 1.0D);
+			changed = true;
+		}
+
+		return changed;
+	}
 	
 	private static List<Jetpack> defaults() {
 		List<Jetpack> defaults = new ArrayList<>();
+
 		defaults.add(WOOD);
 		defaults.add(STONE);
 		defaults.add(IRON);

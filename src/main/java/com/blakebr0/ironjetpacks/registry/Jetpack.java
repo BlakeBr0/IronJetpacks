@@ -3,6 +3,7 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
@@ -138,5 +139,64 @@ public class Jetpack {
 	private String makeDisplayName() {
 		String[] parts = this.name.replaceAll(" ", "_").split("_");
 		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
+	}
+
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+
+		json.addProperty("name", this.name);
+		json.addProperty("disable", this.disabled);
+		json.addProperty("tier", this.tier);
+		json.addProperty("color", Integer.toHexString(this.color));
+		json.addProperty("armorPoints", this.armorPoints);
+		json.addProperty("enchantability", this.enchantablilty);
+		json.addProperty("craftingMaterial", this.craftingMaterialString);
+		json.addProperty("creative", this.creative);
+		json.addProperty("rarity", this.rarity.ordinal());
+
+		json.addProperty("capacity", this.capacity);
+		json.addProperty("usage", this.usage);
+		json.addProperty("speedVertical", this.speedVert);
+		json.addProperty("accelVertical", this.accelVert);
+		json.addProperty("speedSideways", this.speedSide);
+		json.addProperty("speedHoverDescend", this.speedHover);
+		json.addProperty("speedHover", this.speedHoverSlow);
+		json.addProperty("sprintSpeedMulti", this.sprintSpeed);
+		json.addProperty("sprintSpeedMultiVertical", this.sprintSpeedVert);
+		json.addProperty("sprintFuelMulti", this.sprintFuel);
+
+		return json;
+	}
+
+	public static Jetpack fromJson(JsonObject json) {
+		String name = json.get("name").getAsString();
+		boolean disable = json.get("disable").getAsBoolean();
+		int tier = json.get("tier").getAsInt();
+		int color = Integer.parseInt(json.get("color").getAsString(), 16);
+		int armorPoints = json.get("armorPoints").getAsInt();
+		int enchantability = json.get("enchantability").getAsInt();
+		String craftingMaterialString = json.get("craftingMaterial").getAsString();
+		boolean creative = json.get("creative").getAsBoolean();
+		Rarity rarity = Rarity.values()[json.get("rarity").getAsInt()];
+
+		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString)
+				.setRarity(rarity)
+				.setCreative(creative)
+				.setDisabled(disable);
+
+		int capacity = json.get("capacity").getAsInt();
+		int usage = json.get("usage").getAsInt();
+		double speedVert = json.get("speedVertical").getAsDouble();
+		double accelVert = json.get("accelVertical").getAsDouble();
+		double speedSide = json.get("speedSideways").getAsDouble();
+		double speedHover = json.get("speedHoverDescend").getAsDouble();
+		double speedHoverSlow = json.get("speedHover").getAsDouble();
+		double sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
+		double sprintFuel = json.get("sprintFuelMulti").getAsDouble();
+		double sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
+
+		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
+
+		return jetpack;
 	}
 }
