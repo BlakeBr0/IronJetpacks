@@ -127,12 +127,12 @@ public final class JetpackUtils {
 
 			@Override
 			public float getToughness() {
-				return 0;
+				return jetpack.toughness;
 			}
 
 			@Override
 			public float getKnockbackResistance() {
-				return 0F;
+				return jetpack.knockbackResistance;
 			}
 		};
 	}
