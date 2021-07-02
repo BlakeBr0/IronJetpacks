@@ -17,10 +17,6 @@ public class JetpackRegistry {
 		return INSTANCE;
 	}
 	
-	public static Jetpack createJetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
-		return new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString);
-	}
-	
 	public void register(Jetpack jetpack) {
 		if (this.jetpacks.stream().anyMatch(j -> j.name.equals(jetpack.name))) {
 			this.isErrored = true;

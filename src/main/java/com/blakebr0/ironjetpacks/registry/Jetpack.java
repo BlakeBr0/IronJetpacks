@@ -29,6 +29,8 @@ public class Jetpack {
 	public boolean creative = false;
 	public boolean disabled = false;
 	public Rarity rarity = Rarity.COMMON;
+	public float toughness;
+	public float knockbackResistance;
 	public ComponentItem cell;
 	public ComponentItem thruster;
 	public ComponentItem capacitor;
@@ -43,7 +45,7 @@ public class Jetpack {
 	public double sprintSpeedVert;
 	public double sprintFuel;
 	
-	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString) {
+	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString, float toughness, float knockbackResistance) {
 		this.name = name;
 		this.displayName = this.makeDisplayName();
 		this.tier = tier;
@@ -52,6 +54,8 @@ public class Jetpack {
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
 		this.item = new JetpackItem(this, p -> p.tab(IronJetpacks.ITEM_GROUP));
+		this.toughness = toughness;
+		this.knockbackResistance = knockbackResistance;
 	}
 	
 	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
@@ -153,6 +157,8 @@ public class Jetpack {
 		json.addProperty("craftingMaterial", this.craftingMaterialString);
 		json.addProperty("creative", this.creative);
 		json.addProperty("rarity", this.rarity.ordinal());
+		json.addProperty("toughness", this.toughness);
+		json.addProperty("knockbackResistance", this.knockbackResistance);
 
 		json.addProperty("capacity", this.capacity);
 		json.addProperty("usage", this.usage);
@@ -178,8 +184,10 @@ public class Jetpack {
 		String craftingMaterialString = json.get("craftingMaterial").getAsString();
 		boolean creative = json.get("creative").getAsBoolean();
 		Rarity rarity = Rarity.values()[json.get("rarity").getAsInt()];
+		float toughness = json.get("toughness").getAsFloat();
+		float knockbackResistance = json.get("knockbackResistance").getAsFloat();
 
-		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString)
+		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
 				.setDisabled(disable);

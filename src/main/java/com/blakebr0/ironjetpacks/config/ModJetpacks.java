@@ -26,23 +26,23 @@ public final class ModJetpacks {
 	private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-	private static final Jetpack WOOD = JetpackRegistry.createJetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks");
-	private static final Jetpack STONE = JetpackRegistry.createJetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone");
-	private static final Jetpack IRON = JetpackRegistry.createJetpack("iron", 2, 0xC1C1C1, 3, 9, "tag:forge:ingots/iron");
-	private static final Jetpack GOLD = JetpackRegistry.createJetpack("gold", 3, 0xDEDE00, 2, 25, "tag:forge:ingots/gold");
-	private static final Jetpack DIAMOND = JetpackRegistry.createJetpack("diamond", 4, 0x4AEDD1, 4, 10, "tag:forge:gems/diamond");
-	private static final Jetpack EMERALD = JetpackRegistry.createJetpack("emerald", 5, 0x41F384, 4, 15, "tag:forge:gems/emerald");
-	private static final Jetpack CREATIVE = JetpackRegistry.createJetpack("creative", 0, 0xCF1AE9, 8, 0, "null").setCreative();
+	private static final Jetpack WOOD = new Jetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks", 0F, 0F);
+	private static final Jetpack STONE = new Jetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone", 0F, 0F);
+	private static final Jetpack IRON = new Jetpack("iron", 2, 0xC1C1C1, 3, 9, "tag:forge:ingots/iron", 0F, 0F);
+	private static final Jetpack GOLD = new Jetpack("gold", 3, 0xDEDE00, 2, 25, "tag:forge:ingots/gold", 0F, 0F);
+	private static final Jetpack DIAMOND = new Jetpack("diamond", 4, 0x4AEDD1, 4, 10, "tag:forge:gems/diamond", 0F, 0F);
+	private static final Jetpack EMERALD = new Jetpack("emerald", 5, 0x41F384, 4, 15, "tag:forge:gems/emerald", 0F, 0F);
+	private static final Jetpack CREATIVE = new Jetpack("creative", 0, 0xCF1AE9, 8, 0, "null", 0F, 0F).setCreative();
 
-	private static final Jetpack COPPER = JetpackRegistry.createJetpack("copper", 1, 0xCE7201, 2, 12, "tag:forge:ingots/copper");
-	private static final Jetpack BRONZE = JetpackRegistry.createJetpack("bronze", 2, 0xEC9E3F, 3, 9, "tag:forge:ingots/bronze");
-	private static final Jetpack SILVER = JetpackRegistry.createJetpack("silver", 2, 0x9FC4DD, 3, 12, "tag:forge:ingots/silver");
-	private static final Jetpack STEEL = JetpackRegistry.createJetpack("steel", 3, 0x565656, 3, 15, "tag:forge:ingots/steel");
-	private static final Jetpack ELECTRUM = JetpackRegistry.createJetpack("electrum", 3, 0xA79135, 2, 18, "tag:forge:ingots/electrum");
-	private static final Jetpack INVAR = JetpackRegistry.createJetpack("invar", 3, 0x929D97, 3, 15, "tag:forge:ingots/invar");
-	private static final Jetpack PLATINUM = JetpackRegistry.createJetpack("platinum", 4, 0x6FEAEF, 4, 12, "tag:forge:ingots/platinum");
+	private static final Jetpack COPPER = new Jetpack("copper", 1, 0xCE7201, 2, 12, "tag:forge:ingots/copper", 0F, 0F);
+	private static final Jetpack BRONZE = new Jetpack("bronze", 2, 0xEC9E3F, 3, 9, "tag:forge:ingots/bronze", 0F, 0F);
+	private static final Jetpack SILVER = new Jetpack("silver", 2, 0x9FC4DD, 3, 12, "tag:forge:ingots/silver", 0F, 0F);
+	private static final Jetpack STEEL = new Jetpack("steel", 3, 0x565656, 3, 15, "tag:forge:ingots/steel", 0F, 0F);
+	private static final Jetpack ELECTRUM = new Jetpack("electrum", 3, 0xA79135, 2, 18, "tag:forge:ingots/electrum", 0F, 0F);
+	private static final Jetpack INVAR = new Jetpack("invar", 3, 0x929D97, 3, 15, "tag:forge:ingots/invar", 0F, 0F);
+	private static final Jetpack PLATINUM = new Jetpack("platinum", 4, 0x6FEAEF, 4, 12, "tag:forge:ingots/platinum", 0F, 0F);
 
-	static {		
+	static {
 		WOOD.setStats(20000, 32, 0.18D, 0.10D, 0.06D, 0.16D, 0.14D, 1.0D, 1.0D, 1.0D);
 		STONE.setStats(100000, 70, 0.25D, 0.11D, 0.08D, 0.18D, 0.1D, 1.0D, 1.0D, 1.0D);
 		IRON.setStats(800000, 120, 0.41D, 0.12D, 0.14D, 0.27D, 0.075D, 1.1D, 1.0D, 2.1D);
@@ -140,6 +140,18 @@ public final class ModJetpacks {
 		// add vertical sprint speed field
 		if (!json.has("sprintSpeedMultiVertical")) {
 			json.addProperty("sprintSpeedMultiVertical", 1.0D);
+			changed = true;
+		}
+
+		// add armor toughness field
+		if (!json.has("toughness")) {
+			json.addProperty("toughness", 0F);
+			changed = true;
+		}
+
+		// add knockback resistance field
+		if (!json.has("knockbackResistance")) {
+			json.addProperty("knockbackResistance", 0F);
 			changed = true;
 		}
 
