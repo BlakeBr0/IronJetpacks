@@ -5,7 +5,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class ModConfigs {
 	public static final ForgeConfigSpec CLIENT;
 	public static final ForgeConfigSpec COMMON;
-	public static final ForgeConfigSpec SERVER;
 
 	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_SOUNDS;
 	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_PARTICLES;
@@ -64,6 +63,11 @@ public final class ModConfigs {
 
 	public static final ForgeConfigSpec.BooleanValue ENCHANTABLE_JETPACKS;
 
+	public static final ForgeConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_CAPACITOR_RECIPES;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_RECIPES;
+
 	// Common
 	static {
 		final ForgeConfigSpec.Builder common = new ForgeConfigSpec.Builder();
@@ -75,37 +79,25 @@ public final class ModConfigs {
 				.define("enchantableJetpacks", false);
 		common.pop();
 
-		COMMON = common.build();
-	}
-
-	public static final ForgeConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_CAPACITOR_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_RECIPES;
-
-	// Server
-	static {
-		final ForgeConfigSpec.Builder server = new ForgeConfigSpec.Builder();
-
-		server.comment("Dynamic recipe options.").push("Recipe");
-		ENABLE_CELL_RECIPES = server
+		common.comment("Dynamic recipe options.").push("Recipe");
+		ENABLE_CELL_RECIPES = common
 				.comment("Enable default recipes for Energy Cells?")
 				.translation("configGui.ironjetpacks.enable_cell_recipes")
 				.define("cells", true);
-		ENABLE_THRUSTER_RECIPES = server
+		ENABLE_THRUSTER_RECIPES = common
 				.comment("Enable default recipes for Thrusters?")
 				.translation("configGui.ironjetpacks.enable_thruster_recipes")
 				.define("thrusters", true);
-		ENABLE_CAPACITOR_RECIPES = server
+		ENABLE_CAPACITOR_RECIPES = common
 				.comment("Enable default recipes for Capacitors?")
 				.translation("configGui.ironjetpacks.enable_capacitor_recipes")
 				.define("capacitors", true);
-		ENABLE_JETPACK_RECIPES = server
+		ENABLE_JETPACK_RECIPES = common
 				.comment("Enable default recipes for Jetpacks?")
 				.translation("configGui.ironjetpacks.enable_jetpack_recipes")
 				.define("jetpacks", true);
-		server.pop();
+		common.pop();
 
-		SERVER = server.build();
+		COMMON = common.build();
 	}
 }
