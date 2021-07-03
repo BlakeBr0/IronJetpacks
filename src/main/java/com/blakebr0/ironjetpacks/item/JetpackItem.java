@@ -58,7 +58,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
-		return "item.ironjetpacks.jetpack";
+		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).buildString();
 	}
 
 	/*

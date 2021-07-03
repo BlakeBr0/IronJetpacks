@@ -29,7 +29,7 @@ public class ComponentItem extends BaseItem implements IColored, IEnableable {
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
-		return "item.ironjetpacks." + this.type;
+		return Localizable.of("item.ironjetpacks." + this.type).args(this.jetpack.displayName).buildString();
 	}
 
 	@Override
