@@ -93,7 +93,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 					
 					if (energy.getEnergyStored() > 0 || player.isCreative() || creative) {
 						double throttle = JetpackUtils.getThrottle(stack);
-						double verticalSprintMulti =  InputHandler.isHoldingSprint(player) ? info.sprintSpeedVert : 1.0D;
+						double verticalSprintMulti = motionY >= 0 && InputHandler.isHoldingSprint(player) ? info.sprintSpeedVert : 1.0D;
 
 						if (InputHandler.isHoldingUp(player)) {
 							if (!hover) {
@@ -235,14 +235,10 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 
 	@Override
-	public void clearColor(ItemStack stack) {
-
-	}
+	public void clearColor(ItemStack stack) { }
 
 	@Override
-	public void setColor(ItemStack stack, int color) {
-
-	}
+	public void setColor(ItemStack stack, int color) { }
 
 	@Override
 	public boolean isEnabled() {
