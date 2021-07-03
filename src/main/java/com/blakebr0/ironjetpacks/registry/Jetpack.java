@@ -200,8 +200,8 @@ public class Jetpack {
 		double speedHover = json.get("speedHoverDescend").getAsDouble();
 		double speedHoverSlow = json.get("speedHover").getAsDouble();
 		double sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
-		double sprintFuel = json.get("sprintFuelMulti").getAsDouble();
 		double sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
+		double sprintFuel = json.get("sprintFuelMulti").getAsDouble();
 
 		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
