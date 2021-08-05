@@ -12,7 +12,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,7 +30,7 @@ public final class IronJetpacks {
 	public static final String MOD_ID = "ironjetpacks";
 	public static final String NAME = "Iron Jetpacks";
 
-	public static final ItemGroup ITEM_GROUP = new IJItemGroup();
+	public static final CreativeModeTab ITEM_GROUP = new IJItemGroup();
 
 	public IronJetpacks() {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

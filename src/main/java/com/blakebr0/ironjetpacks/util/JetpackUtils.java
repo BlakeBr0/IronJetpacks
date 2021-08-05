@@ -4,14 +4,14 @@ import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -19,8 +19,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 public final class JetpackUtils {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 
-	public static boolean isFlying(PlayerEntity player) {
-		ItemStack stack = player.getItemBySlot(EquipmentSlotType.CHEST);
+	public static boolean isFlying(Player player) {
+		ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
 		if (!stack.isEmpty()) {
 			Item item = stack.getItem();
 			if (item instanceof JetpackItem) {
@@ -93,15 +93,15 @@ public final class JetpackUtils {
 		return throttle;
 	}
 
-	public static IArmorMaterial makeArmorMaterial(Jetpack jetpack) {
-		return new IArmorMaterial() {
+	public static ArmorMaterial makeArmorMaterial(Jetpack jetpack) {
+		return new ArmorMaterial() {
 			@Override
-			public int getDurabilityForSlot(EquipmentSlotType slot) {
+			public int getDurabilityForSlot(EquipmentSlot slot) {
 				return 0;
 			}
 
 			@Override
-			public int getDefenseForSlot(EquipmentSlotType slot) {
+			public int getDefenseForSlot(EquipmentSlot slot) {
 				return jetpack.armorPoints;
 			}
 

@@ -5,7 +5,7 @@ import com.blakebr0.ironjetpacks.network.message.IncrementThrottleMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 

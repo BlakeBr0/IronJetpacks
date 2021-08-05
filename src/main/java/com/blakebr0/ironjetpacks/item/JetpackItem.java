@@ -15,23 +15,23 @@ import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IDyeableArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -40,19 +40,17 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.List;
 import java.util.function.Function;
 
-import net.minecraft.item.Item.Properties;
-
-public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmorItem, IEnableable {
+public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeatherItem, IEnableable {
 	private final Jetpack jetpack;
-	private BipedModel<?> model;
+	private HumanoidModel<?> model;
 
 	public JetpackItem(Jetpack jetpack, Function<Properties, Properties> properties) {
-		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlotType.CHEST, properties.compose(p -> p.defaultDurability(0).rarity(jetpack.rarity)));
+		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlot.CHEST, properties.compose(p -> p.defaultDurability(0).rarity(jetpack.rarity)));
 		this.jetpack = jetpack;
 	}
 	
 	@Override
-	public ITextComponent getName(ItemStack stack) {
+	public Component getName(ItemStack stack) {
 		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).build();
 	}
 
@@ -67,8 +65,8 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	 * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/item/rewrite/ItemJetpack.java
 	 */
 	@Override
-	public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
-		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
+	public void onArmorTick(ItemStack stack, Level world, Player player) {
+		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		Item item = chest.getItem();
 		if (!chest.isEmpty() && item instanceof JetpackItem) {
 			JetpackItem jetpack = (JetpackItem) item;
@@ -113,26 +111,26 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 						double speedForward = (player.isSprinting() ? speedSideways * info.sprintSpeed : speedSideways) * throttle;
 						
 						if (InputHandler.isHoldingForwards(player)) {
-							player.moveRelative(1, new Vector3d(0, 0, speedForward));
+							player.moveRelative(1, new Vec3(0, 0, speedForward));
 						}
 						
 						if (InputHandler.isHoldingBackwards(player)) {
-							player.moveRelative(1, new Vector3d(0, 0, -speedSideways * 0.8F));
+							player.moveRelative(1, new Vec3(0, 0, -speedSideways * 0.8F));
 						}
 						
 						if (InputHandler.isHoldingLeft(player)) {
-							player.moveRelative(1, new Vector3d(speedSideways, 0, 0));
+							player.moveRelative(1, new Vec3(speedSideways, 0, 0));
 						}
 						
 						if (InputHandler.isHoldingRight(player)) {
-							player.moveRelative(1, new Vector3d(-speedSideways, 0, 0));
+							player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
 						}
 						
 						if (!world.isClientSide()) {
 							player.fallDistance = 0.0F;
 							
-							if (player instanceof ServerPlayerEntity) {
-								((ServerPlayerEntity) player).connection.aboveGroundTickCount = 0;
+							if (player instanceof ServerPlayer) {
+								((ServerPlayer) player).connection.aboveGroundTickCount = 0;
 							}
 						}
 					}
@@ -164,26 +162,26 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag advanced) {
 		if (!this.jetpack.creative) {
 			IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
-			tooltip.add(new StringTextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(TextFormatting.GRAY));
+			tooltip.add(new TextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}
 
-		ITextComponent tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
-		ITextComponent engine = ModTooltips.ENGINE.color(JetpackUtils.isEngineOn(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
-		ITextComponent hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? TextFormatting.GREEN : TextFormatting.RED).build();
+		Component tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
+		Component engine = ModTooltips.ENGINE.color(JetpackUtils.isEngineOn(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).build();
+		Component hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).build();
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 
-		ITextComponent throttle = new StringTextComponent((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
+		Component throttle = new TextComponent((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
 
 		tooltip.add(ModTooltips.THROTTLE.args(throttle).build());
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
-			tooltip.add(new StringTextComponent(""));
+			tooltip.add(new TextComponent(""));
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
 			} else {
@@ -202,7 +200,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public BipedModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlotType slot, BipedModel _default) {
+	public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel _default) {
 		if (this.model == null)
 			this.model = new JetpackModel(this);
 
@@ -210,12 +208,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 	}
 	
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 		return type == null ? IronJetpacks.MOD_ID + ":textures/armor/jetpack.png" : IronJetpacks.MOD_ID + ":textures/armor/jetpack_overlay.png";
 	}
 	
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
 		return new EnergyCapabilityProvider(new ItemEnergyStorage(stack, this.jetpack.capacity));
 	}
 
@@ -249,8 +247,8 @@ public class JetpackItem extends BaseArmorItem implements IColored, IDyeableArmo
 		return this.jetpack;
 	}
 
-	private static void fly(PlayerEntity player, double y) {
-		Vector3d motion = player.getDeltaMovement();
+	private static void fly(Player player, double y) {
+		Vec3 motion = player.getDeltaMovement();
 		player.setDeltaMovement(motion.x(), y, motion.z());
 	}
 }

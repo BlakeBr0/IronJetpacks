@@ -8,24 +8,24 @@ import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class DynamicRecipeManager implements IResourceManagerReloadListener {
+public class DynamicRecipeManager implements ResourceManagerReloadListener {
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         JetpackRegistry.getInstance().getAllJetpacks().forEach(jetpack -> {
             ShapedRecipe cell = this.makeCellRecipe(jetpack);
             ShapedRecipe thruster = this.makeThrusterRecipe(jetpack);
@@ -61,7 +61,7 @@ public class DynamicRecipeManager implements IResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        ITag<Item> redstoneTag = TagCollectionManager.getInstance().getItems().getTag(Tags.Items.DUSTS_REDSTONE.getName());
+        Tag<Item> redstoneTag = SerializationTags.getInstance().getItems().getTag(Tags.Items.DUSTS_REDSTONE.getName());
         if (redstoneTag == null)
             return null;
 

@@ -3,15 +3,15 @@ package com.blakebr0.ironjetpacks.crafting.recipe;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class JetpackUpgradeRecipe extends ShapedRecipe {
@@ -20,12 +20,12 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack jetpack = inv.getItem(4);
         ItemStack result = this.getResultItem().copy();
 
         if (!jetpack.isEmpty() && jetpack.getItem() instanceof JetpackItem) {
-            CompoundNBT tag = jetpack.getTag();
+            CompoundTag tag = jetpack.getTag();
             if (tag != null) {
                 result.setTag(tag);
                 return result;
@@ -36,19 +36,19 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.CRAFTING_JETPACK_UPGRADE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<JetpackUpgradeRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<JetpackUpgradeRecipe> {
         @Override
         public JetpackUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = IRecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
+            ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
             return new JetpackUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
         }
 
         @Override
-        public JetpackUpgradeRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public JetpackUpgradeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
             String s = buffer.readUtf(32767);
@@ -63,7 +63,7 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, JetpackUpgradeRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, JetpackUpgradeRecipe recipe) {
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
             buffer.writeUtf(recipe.getGroup());

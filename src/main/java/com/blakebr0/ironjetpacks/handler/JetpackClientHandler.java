@@ -8,11 +8,11 @@ import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.sound.JetpackSound;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.ParticleStatus;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.client.ParticleStatus;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -25,7 +25,7 @@ public final class JetpackClientHandler {
         if (event.phase == TickEvent.Phase.END) {
             if (mc.player != null && mc.level != null) {
                 if (!mc.isPaused()) {
-                    ItemStack chest = mc.player.getItemBySlot(EquipmentSlotType.CHEST);
+                    ItemStack chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
                     Item item = chest.getItem();
                     if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {
                         if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.options.particles != ParticleStatus.MINIMAL)) {

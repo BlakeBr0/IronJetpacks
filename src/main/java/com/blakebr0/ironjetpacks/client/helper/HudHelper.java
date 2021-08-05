@@ -5,14 +5,14 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public final class HudHelper {
 	public static HudPos getHudPos() {
-		MainWindow window = Minecraft.getInstance().getWindow();
+		Window window = Minecraft.getInstance().getWindow();
 		int xOffset = ModConfigs.HUD_OFFSET_X.get();
 		int yOffset = ModConfigs.HUD_OFFSET_Y.get();
 		

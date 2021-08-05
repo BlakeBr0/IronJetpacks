@@ -10,18 +10,18 @@ import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.client.GameSettings;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.Options;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,11 +29,11 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 public final class KeybindHandler {
-	private static KeyBinding keyEngine;
-	private static KeyBinding keyHover;
-	private static KeyBinding keyDescend;
-	private static KeyBinding keyIncrementThrottle;
-	private static KeyBinding keyDecrementThrottle;
+	private static KeyMapping keyEngine;
+	private static KeyMapping keyHover;
+	private static KeyMapping keyDescend;
+	private static KeyMapping keyIncrementThrottle;
+	private static KeyMapping keyDecrementThrottle;
 
 	private static boolean up = false;
 	private static boolean down = false;
@@ -44,11 +44,11 @@ public final class KeybindHandler {
 	private static boolean sprint = false;
 	
 	public static void onClientSetup() {
-		keyEngine = new KeyBinding("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
-		keyHover = new KeyBinding("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
-		keyDescend = new KeyBinding("keybind.ironjetpacks.descend", InputMappings.UNKNOWN.getValue(), IronJetpacks.NAME);
-		keyIncrementThrottle = new KeyBinding("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
-		keyDecrementThrottle = new KeyBinding("keybinding.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
+		keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
+		keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
+		keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
+		keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
+		keyDecrementThrottle = new KeyMapping("keybinding.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
 		
 		ClientRegistry.registerKeyBinding(keyEngine);
 		ClientRegistry.registerKeyBinding(keyHover);
@@ -59,11 +59,11 @@ public final class KeybindHandler {
 	
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		PlayerEntity player = Minecraft.getInstance().player;
+		Player player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
 
-		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
+		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		Item item = chest.getItem();
 		
 		if (item instanceof JetpackItem) {
@@ -73,11 +73,11 @@ public final class KeybindHandler {
 	
 	@SubscribeEvent
 	public void onMouseInput(InputEvent.MouseInputEvent event) {
-		PlayerEntity player = Minecraft.getInstance().player;
+		Player player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
 
-		ItemStack chest = player.getItemBySlot(EquipmentSlotType.CHEST);
+		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		Item item = chest.getItem();
 
 		if (item instanceof JetpackItem) {
@@ -93,7 +93,7 @@ public final class KeybindHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
 			Minecraft mc = Minecraft.getInstance();
-			GameSettings settings = mc.options;
+			Options settings = mc.options;
 
 			if (mc.getConnection() == null)
 				return;
@@ -121,31 +121,31 @@ public final class KeybindHandler {
 		}
 	}
 
-	private static void handleInput(PlayerEntity player, ItemStack stack) {
+	private static void handleInput(Player player, ItemStack stack) {
 		if (keyEngine.consumeClick()) {
 			boolean on = JetpackUtils.toggleEngine(stack);
-			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+			Component state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
 			NetworkHandler.INSTANCE.sendToServer(new ToggleEngineMessage());
 			player.displayClientMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
 		}
 
 		if (keyHover.consumeClick()) {
 			boolean on = JetpackUtils.toggleHover(stack);
-			ITextComponent state = on ? ModTooltips.ON.color(TextFormatting.GREEN).build() : ModTooltips.OFF.color(TextFormatting.RED).build();
+			Component state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
 			NetworkHandler.INSTANCE.sendToServer(new ToggleHoverMessage());
 			player.displayClientMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
 		}
 
 		if (keyIncrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.incrementThrottle(stack);
-			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").withStyle(TextFormatting.GREEN);
+			MutableComponent throttleText = new TextComponent((int) (throttle * 100) + "%").withStyle(ChatFormatting.GREEN);
 			NetworkHandler.INSTANCE.sendToServer(new IncrementThrottleMessage());
 			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}
 
 		if (keyDecrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.decrementThrottle(stack);
-			IFormattableTextComponent throttleText = new StringTextComponent((int) (throttle * 100) + "%").withStyle(TextFormatting.RED);
+			MutableComponent throttleText = new TextComponent((int) (throttle * 100) + "%").withStyle(ChatFormatting.RED);
 			NetworkHandler.INSTANCE.sendToServer(new DecrementThrottleMessage());
 			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}

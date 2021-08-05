@@ -2,21 +2,21 @@ package com.blakebr0.ironjetpacks.client.model;
 
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.IEnergyStorage;
 
 /*
  * This is a slightly modified version of the model from Simply Jetpacks
  * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/client/model/ModelJetpack.java
  */
-public class JetpackModel extends BipedModel<LivingEntity> {
+public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private final JetpackItem jetpack;
-	private final ModelRenderer[] energyBarLeft = new ModelRenderer[6];
-	private final ModelRenderer[] energyBarRight = new ModelRenderer[6];
+	private final ModelPart[] energyBarLeft = new ModelPart[6];
+	private final ModelPart[] energyBarRight = new ModelPart[6];
 
 	public JetpackModel(JetpackItem jetpack) {
 		super(1.0F, 0, 64, 64);
@@ -30,67 +30,67 @@ public class JetpackModel extends BipedModel<LivingEntity> {
 		this.rightLeg.visible = false;
 		this.leftLeg.visible = false;
 
-		ModelRenderer middle = new ModelRenderer(this, 0, 54);
+		ModelPart middle = new ModelPart(this, 0, 54);
 		middle.addBox(-2F, 5F, 3.6F, 4, 3, 2);
 		middle.setPos(0F, 0F, 0F);
 		middle.mirror = true;
 		this.setRotation(middle, 0F, 0F, 0F);
 
-		ModelRenderer leftCanister = new ModelRenderer(this, 0, 32);
+		ModelPart leftCanister = new ModelPart(this, 0, 32);
 		leftCanister.addBox(0.5F, 2F, 2.6F, 4, 7, 4);
 		leftCanister.setPos(0F, 0F, 0F);
 		leftCanister.mirror = true;
 		this.setRotation(leftCanister, 0F, 0F, 0F);
 
-		ModelRenderer rightCanister = new ModelRenderer(this, 17, 32);
+		ModelPart rightCanister = new ModelPart(this, 17, 32);
 		rightCanister.addBox(-4.5F, 2F, 2.6F, 4, 7, 4);
 		rightCanister.setPos(0F, 0F, 0F);
 		rightCanister.mirror = true;
 		this.setRotation(rightCanister, 0F, 0F, 0F);
 
-		ModelRenderer leftTip1 = new ModelRenderer(this, 0, 45);
+		ModelPart leftTip1 = new ModelPart(this, 0, 45);
 		leftTip1.addBox(1F, 0F, 3.1F, 3, 2, 3);
 		leftTip1.setPos(0F, 0F, 0F);
 		leftTip1.mirror = true;
 		this.setRotation(leftTip1, 0F, 0F, 0F);
 
-		ModelRenderer leftTip2 = new ModelRenderer(this, 0, 50);
+		ModelPart leftTip2 = new ModelPart(this, 0, 50);
 		leftTip2.addBox(1.5F, -1F, 3.6F, 2, 1, 2);
 		leftTip2.setPos(0F, 0F, 0F);
 		leftTip2.mirror = true;
 		this.setRotation(leftTip2, 0F, 0F, 0F);
 
-		ModelRenderer rightTip1 = new ModelRenderer(this, 17, 45);
+		ModelPart rightTip1 = new ModelPart(this, 17, 45);
 		rightTip1.addBox(-4F, 0F, 3.1F, 3, 2, 3);
 		rightTip1.setPos(0F, 0F, 0F);
 		rightTip1.mirror = true;
 		this.setRotation(rightTip1, 0F, 0F, 0F);
 
-		ModelRenderer rightTip2 = new ModelRenderer(this, 17, 50);
+		ModelPart rightTip2 = new ModelPart(this, 17, 50);
 		rightTip2.addBox(-3.5F, -1F, 3.6F, 2, 1, 2);
 		rightTip2.setPos(0F, 0F, 0F);
 		rightTip2.mirror = true;
 		this.setRotation(rightTip2, 0F, 0F, 0F);
 
-		ModelRenderer leftExhaust1 = new ModelRenderer(this, 35, 32);
+		ModelPart leftExhaust1 = new ModelPart(this, 35, 32);
 		leftExhaust1.addBox(1F, 9F, 3.1F, 3, 1, 3);
 		leftExhaust1.setPos(0F, 0F, 0F);
 		leftExhaust1.mirror = true;
 		this.setRotation(leftExhaust1, 0F, 0F, 0F);
 
-		ModelRenderer leftExhaust2 = new ModelRenderer(this, 35, 37);
+		ModelPart leftExhaust2 = new ModelPart(this, 35, 37);
 		leftExhaust2.addBox(0.5F, 10F, 2.6F, 4, 3, 4);
 		leftExhaust2.setPos(0F, 0F, 0F);
 		leftExhaust2.mirror = true;
 		this.setRotation(leftExhaust2, 0F, 0F, 0F);
 
-		ModelRenderer rightExhaust1 = new ModelRenderer(this, 48, 32);
+		ModelPart rightExhaust1 = new ModelPart(this, 48, 32);
 		rightExhaust1.addBox(-4F, 9F, 3.1F, 3, 1, 3);
 		rightExhaust1.setPos(0F, 0F, 0F);
 		rightExhaust1.mirror = true;
 		this.setRotation(rightExhaust1, 0F, 0F, 0F);
 
-		ModelRenderer rightExhaust2 = new ModelRenderer(this, 35, 45);
+		ModelPart rightExhaust2 = new ModelPart(this, 35, 45);
 		rightExhaust2.addBox(-4.5F, 10F, 2.6F, 4, 3, 4);
 		rightExhaust2.setPos(0F, 0F, 0F);
 		rightExhaust2.mirror = true;
@@ -109,14 +109,14 @@ public class JetpackModel extends BipedModel<LivingEntity> {
 		this.body.addChild(rightExhaust2);
 
 		for (int i = 0; i < 6; i++) {
-			ModelRenderer left = new ModelRenderer(this, 16 + (i * 4), 55);
+			ModelPart left = new ModelPart(this, 16 + (i * 4), 55);
 			this.energyBarLeft[i] = left;
 			left.addBox(2F, 3F, 5.8F, 1, 5, 1, 0F);
 			left.visible = false;
 			this.setRotation(left, 0F, 0F, 0F);
 			this.body.addChild(left);
 
-			ModelRenderer right = new ModelRenderer(this, 16 + (i * 4), 55);
+			ModelPart right = new ModelPart(this, 16 + (i * 4), 55);
 			this.energyBarRight[i] = right;
 			right.addBox(-3F, 3F, 5.8F, 1, 5, 1, 0F);
 			right.visible = false;
@@ -134,7 +134,7 @@ public class JetpackModel extends BipedModel<LivingEntity> {
 			this.energyBarLeft[5].visible = true;
 			this.energyBarRight[5].visible = true;
 		} else {
-			ItemStack chest = entity.getItemBySlot(EquipmentSlotType.CHEST);
+			ItemStack chest = entity.getItemBySlot(EquipmentSlot.CHEST);
 			IEnergyStorage energy = JetpackUtils.getEnergyStorage(chest);
 			double stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
 
@@ -157,7 +157,7 @@ public class JetpackModel extends BipedModel<LivingEntity> {
 		}
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private void setRotation(ModelPart model, float x, float y, float z) {
 		model.xRot = x;
 		model.yRot = y;
 		model.zRot = z;

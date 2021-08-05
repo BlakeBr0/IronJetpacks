@@ -2,10 +2,10 @@ package com.blakebr0.ironjetpacks.sound;
 
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.client.audio.TickableSound;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class JetpackSound extends TickableSound {
+public class JetpackSound extends AbstractTickableSoundInstance {
 	private static final Map<Integer, JetpackSound> PLAYING_FOR = Collections.synchronizedMap(new HashMap<>());
-	private final PlayerEntity player;
+	private final Player player;
 	
-	public JetpackSound(PlayerEntity player) {
-		super(ModSounds.JETPACK, SoundCategory.PLAYERS);
+	public JetpackSound(Player player) {
+		super(ModSounds.JETPACK, SoundSource.PLAYERS);
 		this.player = player;
 		this.looping = true;
 		PLAYING_FOR.put(player.getId(), this);
@@ -31,7 +31,7 @@ public class JetpackSound extends TickableSound {
 
 	@Override
 	public void tick() {
-		Vector3d pos = this.player.position();
+		Vec3 pos = this.player.position();
 		this.x = (float) pos.x();
 		this.y = (float) pos.y() - 10;
 		this.z = (float) pos.z();

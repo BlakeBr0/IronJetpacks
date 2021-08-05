@@ -3,9 +3,9 @@ package com.blakebr0.ironjetpacks.client;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.common.base.Stopwatch;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -30,12 +30,12 @@ public class ModelHandler {
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event) {
         Stopwatch stopwatch = Stopwatch.createStarted();
-        Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
 
-        IBakedModel cell = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/cell"));
-        IBakedModel capacitor = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/capacitor"));
-        IBakedModel thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
-        IBakedModel jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
+        BakedModel cell = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/cell"));
+        BakedModel capacitor = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/capacitor"));
+        BakedModel thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
+        BakedModel jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
 
         JetpackRegistry.getInstance().getAllJetpacks().forEach(pack -> {
             ResourceLocation cellLocation = pack.cell.getRegistryName();

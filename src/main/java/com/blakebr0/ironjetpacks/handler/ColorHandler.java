@@ -3,8 +3,8 @@ package com.blakebr0.ironjetpacks.handler;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.Item;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

@@ -8,15 +8,15 @@ import com.blakebr0.ironjetpacks.client.helper.HudHelper.HudPos;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -31,7 +31,7 @@ public final class HudHandler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             if (ModConfigs.ENABLE_HUD.get() && (ModConfigs.SHOW_HUD_OVER_CHAT.get() || !ModConfigs.SHOW_HUD_OVER_CHAT.get() && !(mc.screen instanceof ChatScreen)) && !mc.options.hideGui && !mc.options.renderDebug) {
-                ItemStack chest = mc.player.getItemBySlot(EquipmentSlotType.CHEST);
+                ItemStack chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
                 Item item = chest.getItem();
                 if (!chest.isEmpty() && item instanceof JetpackItem) {
                     JetpackItem jetpack = (JetpackItem) item;
@@ -54,7 +54,7 @@ public final class HudHandler {
                         String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
                         String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
 
-                        MatrixStack stack = event.getMatrixStack();
+                        PoseStack stack = event.getMatrixStack();
                         if (pos.side == 1) {
                             mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
                             mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
@@ -67,7 +67,7 @@ public final class HudHandler {
                             mc.font.drawShadow(stack, hover, pos.x + 6, pos.y + 14, 16383998);
                         }
 
-                        mc.getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
+                        mc.getTextureManager().bind(GuiComponent.GUI_ICONS_LOCATION);
                     }
                 }
             }

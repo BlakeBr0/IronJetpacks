@@ -4,12 +4,12 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
@@ -126,7 +126,7 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					ITag<Item> tag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(parts[1], parts[2]));
+					Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(parts[1], parts[2]));
 					if (tag != null && !tag.getValues().isEmpty())
 						this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {

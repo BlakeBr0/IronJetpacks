@@ -5,12 +5,10 @@ import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.util.Localizable;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
-
-import net.minecraft.item.Item.Properties;
 
 public class ComponentItem extends BaseItem implements IColored, IEnableable {
 	private final Jetpack jetpack;
@@ -23,7 +21,7 @@ public class ComponentItem extends BaseItem implements IColored, IEnableable {
 	}
 	
 	@Override
-	public ITextComponent getName(ItemStack stack) {
+	public Component getName(ItemStack stack) {
 		return Localizable.of("item.ironjetpacks." + this.type).args(this.jetpack.displayName).build();
 	}
 

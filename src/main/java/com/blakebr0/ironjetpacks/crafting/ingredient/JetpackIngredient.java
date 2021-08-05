@@ -8,10 +8,10 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class JetpackIngredient extends Ingredient {
                 this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
 
             this.stacksPacked = new IntArrayList(this.stacks.length);
-            Arrays.stream(this.stacks).forEach(s -> this.stacksPacked.add(RecipeItemHelper.getStackingIndex(s)));
+            Arrays.stream(this.stacks).forEach(s -> this.stacksPacked.add(StackedContents.getStackingIndex(s)));
             this.stacksPacked.sort(IntComparators.NATURAL_COMPARATOR);
         }
 
@@ -107,7 +107,7 @@ public class JetpackIngredient extends Ingredient {
 
     public static class Serializer implements IIngredientSerializer<JetpackIngredient> {
         @Override
-        public JetpackIngredient parse(PacketBuffer buffer) {
+        public JetpackIngredient parse(FriendlyByteBuf buffer) {
             return new JetpackIngredient(buffer.readInt());
         }
 
@@ -117,7 +117,7 @@ public class JetpackIngredient extends Ingredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, JetpackIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, JetpackIngredient ingredient) {
             buffer.writeInt(ingredient.tier);
         }
     }
