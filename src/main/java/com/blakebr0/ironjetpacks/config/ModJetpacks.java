@@ -61,14 +61,14 @@ public final class ModJetpacks {
 	}
 	
 	public static void loadJsons() {
-		final JetpackRegistry registry = JetpackRegistry.getInstance();
-		File dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
+		final var registry = JetpackRegistry.getInstance();
+		var dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
 		
 		if (!dir.exists() && dir.mkdirs()) {
-			for (Jetpack jetpack : defaults()) {
-				File file = new File(dir, jetpack.name + ".json");
+			for (var jetpack : defaults()) {
+				var file = new File(dir, jetpack.name + ".json");
 
-				try (Writer writer = new FileWriter(file)) {
+				try (var writer = new FileWriter(file)) {
 					GSON.toJson(jetpack.toJson(), writer);
 				} catch (Exception e) {
 					LOGGER.error("An error occurred while generating jetpack jsons", e);
@@ -76,26 +76,27 @@ public final class ModJetpacks {
 			}
 		}
 		
-		File[] files = dir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
+		var files = dir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
 		
 		if (files == null)
 			return;
 		
 		List<Jetpack> jetpacks = new ArrayList<>();
 		
-		for (File file : files) {
+		for (var file : files) {
 			Jetpack jetpack = null;
 			FileReader reader = null;
 
 			try {
-				JsonParser parser = new JsonParser();
 				reader = new FileReader(file);
-				JsonObject json = parser.parse(reader).getAsJsonObject();
+
+				var parser = new JsonParser();
+				var json = parser.parse(reader).getAsJsonObject();
 
 				reader.close();
 
 				if (handleMigrations(json)) {
-					try (Writer writer = new FileWriter(file)) {
+					try (var writer = new FileWriter(file)) {
 						GSON.toJson(json, writer);
 					} catch (Exception e) {
 						LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
@@ -117,7 +118,7 @@ public final class ModJetpacks {
 
 		jetpacks.sort(Comparator.comparingInt(Jetpack::getTier));
 		
-		for (Jetpack j : jetpacks) {
+		for (var j : jetpacks) {
 			registry.register(j);
 		}
 	}

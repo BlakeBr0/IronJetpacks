@@ -18,7 +18,7 @@ public final class ModConfigs {
 
 	// Client
 	static {
-		final ForgeConfigSpec.Builder client = new ForgeConfigSpec.Builder();
+		final var client = new ForgeConfigSpec.Builder();
 
 		client.comment("General configuration options.").push("General");
 		ENABLE_JETPACK_SOUNDS = client
@@ -70,7 +70,7 @@ public final class ModConfigs {
 
 	// Common
 	static {
-		final ForgeConfigSpec.Builder common = new ForgeConfigSpec.Builder();
+		final var common = new ForgeConfigSpec.Builder();
 
 		common.comment("General configuration options.").push("General");
 		ENCHANTABLE_JETPACKS = common

@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -20,11 +19,12 @@ public final class JetpackUtils {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 
 	public static boolean isFlying(Player player) {
-		ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		var stack = player.getItemBySlot(EquipmentSlot.CHEST);
+
 		if (!stack.isEmpty()) {
-			Item item = stack.getItem();
-			if (item instanceof JetpackItem) {
-				JetpackItem jetpack = (JetpackItem) item;
+			var item = stack.getItem();
+
+			if (item instanceof JetpackItem jetpack) {
 				if (isEngineOn(stack) && (getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.getJetpack().creative)) {
 					if (isHovering(stack)) {
 						return !player.isOnGround();

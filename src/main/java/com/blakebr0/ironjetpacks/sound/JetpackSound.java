@@ -5,7 +5,6 @@ import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -31,7 +30,8 @@ public class JetpackSound extends AbstractTickableSoundInstance {
 
 	@Override
 	public void tick() {
-		Vec3 pos = this.player.position();
+		var pos = this.player.position();
+
 		this.x = (float) pos.x();
 		this.y = (float) pos.y() - 10;
 		this.z = (float) pos.z();

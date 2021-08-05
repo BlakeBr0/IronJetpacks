@@ -62,7 +62,7 @@ public class JetpackIngredient extends Ingredient {
             if (this.stacks == null)
                 this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
 
-            for (ItemStack itemstack : this.stacks) {
+            for (var itemstack : this.stacks) {
                 if (itemstack.getItem() == stack.getItem()) {
                     return true;
                 }
@@ -79,9 +79,10 @@ public class JetpackIngredient extends Ingredient {
 
     @Override
     public JsonElement toJson() {
-        JsonArray json = new JsonArray();
+        var json = new JsonArray();
+
         ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).filter(h -> h.getRegistryName() != null).forEach(h -> {
-            JsonObject obj = new JsonObject();
+            var obj = new JsonObject();
             obj.addProperty("item", h.getRegistryName().toString());
             json.add(obj);
         });

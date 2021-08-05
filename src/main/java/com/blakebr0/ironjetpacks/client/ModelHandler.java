@@ -29,36 +29,36 @@ public class ModelHandler {
 
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
+        var stopwatch = Stopwatch.createStarted();
+        var registry = event.getModelRegistry();
 
-        BakedModel cell = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/cell"));
-        BakedModel capacitor = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/capacitor"));
-        BakedModel thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
-        BakedModel jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
+        var cell = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/cell"));
+        var capacitor = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/capacitor"));
+        var thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
+        var jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
 
         JetpackRegistry.getInstance().getAllJetpacks().forEach(pack -> {
-            ResourceLocation cellLocation = pack.cell.getRegistryName();
+            var cellLocation = pack.cell.getRegistryName();
             if (cellLocation != null) {
-                ModelResourceLocation location = new ModelResourceLocation(cellLocation, "inventory");
+                var location = new ModelResourceLocation(cellLocation, "inventory");
                 registry.replace(location, cell);
             }
 
-            ResourceLocation capacitorLocation = pack.capacitor.getRegistryName();
+            var capacitorLocation = pack.capacitor.getRegistryName();
             if (capacitorLocation != null) {
-                ModelResourceLocation location = new ModelResourceLocation(capacitorLocation, "inventory");
+                var location = new ModelResourceLocation(capacitorLocation, "inventory");
                 registry.replace(location, capacitor);
             }
 
-            ResourceLocation thrusterLocation = pack.thruster.getRegistryName();
+            var thrusterLocation = pack.thruster.getRegistryName();
             if (thrusterLocation != null) {
-                ModelResourceLocation location = new ModelResourceLocation(thrusterLocation, "inventory");
+                var location = new ModelResourceLocation(thrusterLocation, "inventory");
                 registry.replace(location, thruster);
             }
 
-            ResourceLocation jetpackLocation = pack.item.getRegistryName();
+            var jetpackLocation = pack.item.getRegistryName();
             if (jetpackLocation != null) {
-                ModelResourceLocation location = new ModelResourceLocation(jetpackLocation, "inventory");
+                var location = new ModelResourceLocation(jetpackLocation, "inventory");
                 registry.replace(location, jetpack);
             }
         });

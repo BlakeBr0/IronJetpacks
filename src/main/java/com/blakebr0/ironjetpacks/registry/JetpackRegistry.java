@@ -48,7 +48,7 @@ public class JetpackRegistry {
 	}
 	
 	public JetpackItem getJetpackForName(String name) {
-		Jetpack jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
+		var jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
 		return jetpack == null ? null : jetpack.item;
 	}
 	

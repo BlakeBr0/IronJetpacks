@@ -9,6 +9,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -61,7 +62,7 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (material == Ingredient.EMPTY)
             return null;
 
-        Tag<Item> redstoneTag = SerializationTags.getInstance().getItems().getTag(Tags.Items.DUSTS_REDSTONE.getName());
+        Tag<Item> redstoneTag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(Tags.Items.DUSTS_REDSTONE.getName());
         if (redstoneTag == null)
             return null;
 

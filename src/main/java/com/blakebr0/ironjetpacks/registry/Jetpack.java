@@ -4,6 +4,7 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.Tag;
@@ -126,7 +127,7 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				String[] parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(parts[1], parts[2]));
+					Tag<Item> tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(parts[1], parts[2]));
 					if (tag != null && !tag.getValues().isEmpty())
 						this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {

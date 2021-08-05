@@ -9,7 +9,6 @@ import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Localizable;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
@@ -24,7 +23,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
@@ -32,8 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -198,14 +194,14 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel _default) {
-		if (this.model == null)
-			this.model = new JetpackModel(this);
-
-		return this.model;
-	}
+//	@OnlyIn(Dist.CLIENT)
+//	@Override
+//	public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel _default) {
+//		if (this.model == null)
+//			this.model = new JetpackModel(this);
+//
+//		return this.model;
+//	}
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {

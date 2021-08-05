@@ -21,11 +21,12 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv) {
-        ItemStack jetpack = inv.getItem(4);
-        ItemStack result = this.getResultItem().copy();
+        var jetpack = inv.getItem(4);
+        var result = this.getResultItem().copy();
 
         if (!jetpack.isEmpty() && jetpack.getItem() instanceof JetpackItem) {
-            CompoundTag tag = jetpack.getTag();
+            var tag = jetpack.getTag();
+
             if (tag != null) {
                 result.setTag(tag);
                 return result;
@@ -43,30 +44,31 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<JetpackUpgradeRecipe> {
         @Override
         public JetpackUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
+            var recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
             return new JetpackUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
         }
 
         @Override
         public JetpackUpgradeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int i = buffer.readVarInt();
-            int j = buffer.readVarInt();
-            String s = buffer.readUtf(32767);
-            NonNullList<Ingredient> inputs = NonNullList.withSize(i * j, Ingredient.EMPTY);
+            var group = buffer.readUtf(32767);
+            int width = buffer.readVarInt();
+            int height = buffer.readVarInt();
+            var inputs = NonNullList.withSize(width * height, Ingredient.EMPTY);
 
             for (int k = 0; k < inputs.size(); k++) {
                 inputs.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItem();
-            return new JetpackUpgradeRecipe(recipeId, s, i, j, inputs, output);
+            var output = buffer.readItem();
+
+            return new JetpackUpgradeRecipe(recipeId, group, width, height, inputs, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, JetpackUpgradeRecipe recipe) {
+            buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
-            buffer.writeUtf(recipe.getGroup());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);

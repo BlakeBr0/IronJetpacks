@@ -15,7 +15,6 @@ import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -33,7 +32,7 @@ public final class IronJetpacks {
 	public static final CreativeModeTab ITEM_GROUP = new IJItemGroup();
 
 	public IronJetpacks() {
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		var bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		bus.register(this);
 		bus.register(new ModItems());

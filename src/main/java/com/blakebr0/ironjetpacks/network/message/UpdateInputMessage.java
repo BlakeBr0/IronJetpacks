@@ -2,8 +2,7 @@ package com.blakebr0.ironjetpacks.network.message;
 
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -42,7 +41,8 @@ public class UpdateInputMessage {
 
 	public static void onMessage(UpdateInputMessage message, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
-			Player player = context.get().getSender();
+			var player = context.get().getSender();
+
 			if (player != null) {
 				InputHandler.update(player, message.up, message.down, message.forwards, message.backwards, message.left, message.right, message.sprint);
 			}

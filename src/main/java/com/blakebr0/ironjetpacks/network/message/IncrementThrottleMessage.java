@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -16,9 +16,7 @@ public class IncrementThrottleMessage {
 		return new IncrementThrottleMessage();
 	}
 
-	public static void write(IncrementThrottleMessage message, FriendlyByteBuf buffer) {
-
-	}
+	public static void write(IncrementThrottleMessage message, FriendlyByteBuf buffer) { }
 
 	public static void onMessage(IncrementThrottleMessage message, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {

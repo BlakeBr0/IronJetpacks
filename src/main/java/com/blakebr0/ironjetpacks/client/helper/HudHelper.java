@@ -12,35 +12,30 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public final class HudHelper {
 	public static HudPos getHudPos() {
-		Window window = Minecraft.getInstance().getWindow();
+		var window = Minecraft.getInstance().getWindow();
 		int xOffset = ModConfigs.HUD_OFFSET_X.get();
 		int yOffset = ModConfigs.HUD_OFFSET_Y.get();
-		
-		switch (ModConfigs.HUD_POSITION.get()) {
-			case 0:
-				return new HudPos(10 + xOffset, 30 + yOffset, 0);
-			case 1:
-				return new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
-			case 2:
-				return new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
-			case 3:
-				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
-			case 4:
-				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
-			case 5:
-				return new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
-		}
-		
-		return null;
+
+		return switch (ModConfigs.HUD_POSITION.get()) {
+			case 0 -> new HudPos(10 + xOffset, 30 + yOffset, 0);
+			case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
+			case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
+			case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
+			case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
+			case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
+			default -> null;
+		};
+
 	}
 	
 	public static int getEnergyBarScaled(JetpackItem jetpack, ItemStack stack) {
 		if (jetpack.getJetpack().creative)
 			return 156;
 
-		IEnergyStorage energy = JetpackUtils.getEnergyStorage(stack);
+		var energy = JetpackUtils.getEnergyStorage(stack);
 		int i = energy.getEnergyStored();
 		int j = energy.getMaxEnergyStored();
+
 		return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
 	}
 	

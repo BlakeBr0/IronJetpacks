@@ -15,7 +15,8 @@ public class IJItemGroup extends CreativeModeTab {
 	
 	@Override
 	public ItemStack makeIcon() {
-		List<Jetpack> jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+		var jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+
 		if (!jetpacks.isEmpty()) {
 			return new ItemStack(jetpacks.get(0).item);
 		}
