@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.network.message;
 
+import com.blakebr0.cucumber.network.message.Message;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,14 +9,14 @@ import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ToggleEngineMessage {
-	public static ToggleEngineMessage read(FriendlyByteBuf buffer) {
+public class ToggleEngineMessage extends Message<ToggleEngineMessage> {
+	public ToggleEngineMessage read(FriendlyByteBuf buffer) {
 		return new ToggleEngineMessage();
 	}
 
-	public static void write(ToggleEngineMessage message, FriendlyByteBuf buffer) { }
+	public void write(ToggleEngineMessage message, FriendlyByteBuf buffer) { }
 
-	public static void onMessage(ToggleEngineMessage message, Supplier<NetworkEvent.Context> context) {
+	public void onMessage(ToggleEngineMessage message, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
 			var player = context.get().getSender();
 
