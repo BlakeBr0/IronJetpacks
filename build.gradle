@@ -71,9 +71,11 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.19'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.33'
 
     implementation project(':Cucumber')
+
+    runtimeOnly fg.deobf('mezz.jei:jei-1.17.1:8.0.0.14')
 }
 
 jar {

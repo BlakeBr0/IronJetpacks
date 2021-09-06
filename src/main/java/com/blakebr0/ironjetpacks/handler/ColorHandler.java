@@ -1,9 +1,7 @@
 package com.blakebr0.ironjetpacks.handler;
 
 import com.blakebr0.cucumber.iface.IColored;
-import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,24 +11,24 @@ import java.util.ArrayList;
 public final class ColorHandler {
 	@SubscribeEvent
 	public void onItemColors(ColorHandlerEvent.Item event) {
-		ItemColors colors = event.getItemColors();
-		JetpackRegistry registry = JetpackRegistry.getInstance();
+		var colors = event.getItemColors();
+		var registry = JetpackRegistry.getInstance();
 
 		if (registry.isErrored())
 			return;
 
-		ArrayList<Item> coloredItems = new ArrayList<>();
+		ArrayList<Item> items = new ArrayList<>();
 
-		for (Jetpack jetpack : registry.getAllJetpacks()) {
-			coloredItems.add(jetpack.item);
-			coloredItems.add(jetpack.cell);
-			coloredItems.add(jetpack.thruster);
-			coloredItems.add(jetpack.capacitor);
+		for (var jetpack : registry.getAllJetpacks()) {
+			items.add(jetpack.item);
+			items.add(jetpack.cell);
+			items.add(jetpack.thruster);
+			items.add(jetpack.capacitor);
 		}
 
 		colors.register((stack, tint) -> {
-			IColored item = (IColored) stack.getItem();
+			var item = (IColored) stack.getItem();
 			return item.getColor(tint);
-		},  coloredItems.toArray(new Item[0]));
+		},  items.toArray(new Item[0]));
 	}
 }

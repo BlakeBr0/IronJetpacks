@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
@@ -28,49 +30,57 @@ public final class HudHandler {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
             return;
 
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null) {
-            if (ModConfigs.ENABLE_HUD.get() && (ModConfigs.SHOW_HUD_OVER_CHAT.get() || !ModConfigs.SHOW_HUD_OVER_CHAT.get() && !(mc.screen instanceof ChatScreen)) && !mc.options.hideGui && !mc.options.renderDebug) {
-                ItemStack chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
-                Item item = chest.getItem();
-//                if (!chest.isEmpty() && item instanceof JetpackItem) {
-//                    JetpackItem jetpack = (JetpackItem) item;
-//                    HudPos pos = HudHelper.getHudPos();
-//                    if (pos != null) {
-//                        int xPos = (int) (pos.x / 0.33) - 18;
-//                        int yPos = (int) (pos.y / 0.33) - 78;
-//
-//                        mc.getTextureManager().bind(HUD_TEXTURE);
-//
-//                        RenderSystem.pushMatrix();
-//                        RenderSystem.scaled(0.33, 0.33, 1.0);
-//                        RenderHelper.drawTexturedModalRect(xPos, yPos, 0, 0, 28, 156);
-//                        int i2 = HudHelper.getEnergyBarScaled(jetpack, chest);
-//                        RenderHelper.drawTexturedModalRect(xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
-//                        RenderSystem.popMatrix();
-//
-//                        String fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
-//                        String throttle = Colors.GRAY + "T: " + (int) (JetpackUtils.getThrottle(chest) * 100) + "%";
-//                        String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
-//                        String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
-//
-//                        PoseStack stack = event.getMatrixStack();
-//                        if (pos.side == 1) {
-//                            mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
-//                            mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
-//                            mc.font.drawShadow(stack, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
-//                            mc.font.drawShadow(stack, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
-//                        } else {
-//                            mc.font.drawShadow(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
-//                            mc.font.drawShadow(stack, throttle, pos.x + 6, pos.y - 6, 16383998);
-//                            mc.font.drawShadow(stack, engine, pos.x + 6, pos.y + 4, 16383998);
-//                            mc.font.drawShadow(stack, hover, pos.x + 6, pos.y + 14, 16383998);
-//                        }
-//
-//                        mc.getTextureManager().bind(GuiComponent.GUI_ICONS_LOCATION);
-//                    }
-//                }
+        var mc = Minecraft.getInstance();
+        if (mc.player != null && isVisible(mc)) {
+            var chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
+            var item = chest.getItem();
+
+            if (!chest.isEmpty() && item instanceof JetpackItem jetpack) {
+                var pos = HudHelper.getHudPos();
+                if (pos != null) {
+                    int xPos = (int) (pos.x / 0.33) - 18;
+                    int yPos = (int) (pos.y / 0.33) - 78;
+
+                    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    RenderSystem.setShaderTexture(0, HUD_TEXTURE);
+
+                    var stack = event.getMatrixStack();
+
+                    stack.pushPose();
+                    stack.scale(0.33F, 0.33F, 1.0F);
+                    Screen.blit(stack, xPos, yPos, 0, 0, 28, 156, 256, 256);
+                    int i2 = HudHelper.getEnergyBarScaled(jetpack, chest);
+                    Screen.blit(stack, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
+                    stack.popPose();
+
+                    var fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
+                    var throttle = Colors.GRAY + "T: " + (int) (JetpackUtils.getThrottle(chest) * 100) + "%";
+                    var engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
+                    var hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
+
+                    if (pos.side == 1) {
+                        mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
+                        mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
+                        mc.font.drawShadow(stack, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
+                        mc.font.drawShadow(stack, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
+                    } else {
+                        mc.font.drawShadow(stack, fuel, pos.x + 6, pos.y - 21, 16383998);
+                        mc.font.drawShadow(stack, throttle, pos.x + 6, pos.y - 6, 16383998);
+                        mc.font.drawShadow(stack, engine, pos.x + 6, pos.y + 4, 16383998);
+                        mc.font.drawShadow(stack, hover, pos.x + 6, pos.y + 14, 16383998);
+                    }
+                }
             }
         }
+    }
+
+    private static boolean isVisible(Minecraft mc) {
+        return ModConfigs.ENABLE_HUD.get()
+                && (ModConfigs.SHOW_HUD_OVER_CHAT.get()
+                || !ModConfigs.SHOW_HUD_OVER_CHAT.get()
+                && !(mc.screen instanceof ChatScreen))
+                && !mc.options.hideGui
+                && !mc.options.renderDebug;
     }
 }

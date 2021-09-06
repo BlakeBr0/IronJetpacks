@@ -1,11 +1,15 @@
 package com.blakebr0.ironjetpacks.client;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.client.model.JetpackModel;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.common.base.Stopwatch;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -18,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ModelHandler {
     private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
+    public static final ModelLayerLocation JETPACK_LAYER = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "ironjetpacks:jetpack");
 
     @SubscribeEvent
     public void onRegisterModels(ModelRegistryEvent event) {
@@ -37,7 +42,7 @@ public class ModelHandler {
         var thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
         var jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
 
-        JetpackRegistry.getInstance().getAllJetpacks().forEach(pack -> {
+        for (var pack : JetpackRegistry.getInstance().getAllJetpacks()) {
             var cellLocation = pack.cell.getRegistryName();
             if (cellLocation != null) {
                 var location = new ModelResourceLocation(cellLocation, "inventory");
@@ -61,10 +66,15 @@ public class ModelHandler {
                 var location = new ModelResourceLocation(jetpackLocation, "inventory");
                 registry.replace(location, jetpack);
             }
-        });
+        }
 
         stopwatch.stop();
 
         LOGGER.info("Model replacement took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+    }
+
+    @SubscribeEvent
+    public void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(JETPACK_LAYER, JetpackModel::createBodyLayer);
     }
 }
