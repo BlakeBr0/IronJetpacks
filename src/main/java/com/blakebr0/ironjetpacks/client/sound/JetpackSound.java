@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.sound;
+package com.blakebr0.ironjetpacks.client.sound;
 
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;

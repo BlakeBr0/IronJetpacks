@@ -4,20 +4,15 @@ import com.blakebr0.cucumber.helper.VecHelper;
 import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.blakebr0.ironjetpacks.registry.Jetpack;
-import com.blakebr0.ironjetpacks.sound.JetpackSound;
+import com.blakebr0.ironjetpacks.client.sound.JetpackSound;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.Random;
 
 public final class JetpackClientHandler {
     @SubscribeEvent
