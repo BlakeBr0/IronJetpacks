@@ -64,7 +64,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	 * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/item/rewrite/ItemJetpack.java
 	 */
 	@Override
-	public void onArmorTick(ItemStack stack, Level world, Player player) {
+	public void onArmorTick(ItemStack stack, Level level, Player player) {
 		var chest = player.getItemBySlot(EquipmentSlot.CHEST);
 		var item = chest.getItem();
 
@@ -126,7 +126,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 							player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
 						}
 						
-						if (!world.isClientSide()) {
+						if (!level.isClientSide()) {
 							player.fallDistance = 0.0F;
 							
 							if (player instanceof ServerPlayer) {
@@ -163,7 +163,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag advanced) {
 		if (!this.jetpack.creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);
 			tooltip.add(new TextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
