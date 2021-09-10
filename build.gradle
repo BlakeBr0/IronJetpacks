@@ -21,7 +21,12 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 
 repositories {
     maven { url 'https://dvs1.progwml6.com/files/maven/' }
-    maven { url 'https://maven.tehnut.info' }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 minecraft {
@@ -76,6 +81,7 @@ dependencies {
     implementation project(':Cucumber')
 
     runtimeOnly fg.deobf('mezz.jei:jei-1.17.1:8.0.0.14')
+    runtimeOnly fg.deobf('curse.maven:jade-324717:3447700')
 }
 
 jar {
