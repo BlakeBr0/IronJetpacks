@@ -22,9 +22,9 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 repositories {
     maven { url 'https://dvs1.progwml6.com/files/maven/' }
     maven {
-        url "https://cursemaven.com"
+        url 'https://cursemaven.com'
         content {
-            includeGroup "curse.maven"
+            includeGroup 'curse.maven'
         }
     }
 }
@@ -76,7 +76,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.58'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.71'
 
     implementation project(':Cucumber')
 
