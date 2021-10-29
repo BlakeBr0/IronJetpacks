@@ -13,6 +13,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,11 +43,13 @@ public final class HudHandler {
 
                         mc.getTextureManager().bind(HUD_TEXTURE);
 
+                        MatrixStack stack = event.getMatrixStack();
+
                         RenderSystem.pushMatrix();
                         RenderSystem.scaled(0.33, 0.33, 1.0);
-                        RenderHelper.drawTexturedModalRect(xPos, yPos, 0, 0, 28, 156);
+                        Screen.blit(stack, xPos, yPos, 0, 0, 28, 156, 256, 256);
                         int i2 = HudHelper.getEnergyBarScaled(jetpack, chest);
-                        RenderHelper.drawTexturedModalRect(xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2);
+                        Screen.blit(stack, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
                         RenderSystem.popMatrix();
 
                         String fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
@@ -54,7 +57,6 @@ public final class HudHandler {
                         String engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
                         String hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));
 
-                        MatrixStack stack = event.getMatrixStack();
                         if (pos.side == 1) {
                             mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
                             mc.font.drawShadow(stack, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
