@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '4.2.1'
+version = '4.2.2'
 group = 'com.blakebr0.ironjetpacks'
 archivesBaseName = 'IronJetpacks-1.17.1'
 
