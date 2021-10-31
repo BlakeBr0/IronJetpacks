@@ -2,11 +2,9 @@ package com.blakebr0.ironjetpacks.client;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
-import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.google.common.base.Stopwatch;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -14,14 +12,10 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ModelHandler {
-    private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
     public static final ModelLayerLocation JETPACK_LAYER = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "ironjetpacks:jetpack");
 
     @SubscribeEvent
@@ -70,7 +64,7 @@ public class ModelHandler {
 
         stopwatch.stop();
 
-        LOGGER.info("Model replacement took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        IronJetpacks.LOGGER.info("Model replacement took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     @SubscribeEvent

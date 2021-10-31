@@ -10,20 +10,16 @@ import com.google.gson.JsonParser;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public final class ModJetpacks {
-	private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
 	private static final Jetpack WOOD = new Jetpack("wood", 0, 0x6B511F, 1, 15, "tag:minecraft:planks", 0F, 0F);
@@ -71,7 +67,7 @@ public final class ModJetpacks {
 				try (var writer = new FileWriter(file)) {
 					GSON.toJson(jetpack.toJson(), writer);
 				} catch (Exception e) {
-					LOGGER.error("An error occurred while generating jetpack jsons", e);
+					IronJetpacks.LOGGER.error("An error occurred while generating jetpack jsons", e);
 				}
 			}
 		}
@@ -99,14 +95,14 @@ public final class ModJetpacks {
 					try (var writer = new FileWriter(file)) {
 						GSON.toJson(json, writer);
 					} catch (Exception e) {
-						LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
+						IronJetpacks.LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
 						continue;
 					}
 				}
 
 				jetpack = Jetpack.fromJson(json);
 			} catch (Exception e) {
-				LOGGER.error("An error occurred while reading jetpack json {}", file.getName(), e);
+				IronJetpacks.LOGGER.error("An error occurred while reading jetpack json {}", file.getName(), e);
 			} finally {
 				IOUtils.closeQuietly(reader);
 			}

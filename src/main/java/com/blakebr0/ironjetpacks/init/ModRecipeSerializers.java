@@ -11,7 +11,6 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public final class ModRecipeSerializers {
 
     @SubscribeEvent
     public void onRegisterSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+        var registry = event.getRegistry();
 
         registry.register(CRAFTING_JETPACK_UPGRADE.setRegistryName(new ResourceLocation(IronJetpacks.MOD_ID, "crafting_jetpack_upgrade")));
 
@@ -32,7 +31,11 @@ public final class ModRecipeSerializers {
 
     public static void onCommonSetup() {
         List<JetpackItem> jetpacks = new ArrayList<>();
-        ForgeRegistries.ITEMS.getValues().stream().filter(i -> i instanceof JetpackItem).forEach(i -> jetpacks.add((JetpackItem) i));
+
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(i -> i instanceof JetpackItem)
+                .forEach(i -> jetpacks.add((JetpackItem) i));
+
         JetpackIngredient.ALL_JETPACKS.addAll(jetpacks);
     }
 }

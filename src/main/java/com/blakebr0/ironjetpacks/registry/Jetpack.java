@@ -54,7 +54,7 @@ public class Jetpack {
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
-		this.item = new JetpackItem(this, p -> p.tab(IronJetpacks.ITEM_GROUP));
+		this.item = new JetpackItem(this, p -> p.tab(IronJetpacks.CREATIVE_TAB));
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
 	}
@@ -142,12 +142,12 @@ public class Jetpack {
 	}
 
 	private String makeDisplayName() {
-		String[] parts = this.name.replaceAll(" ", "_").split("_");
+		var parts = this.name.replaceAll(" ", "_").split("_");
 		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
 	}
 
 	public JsonObject toJson() {
-		JsonObject json = new JsonObject();
+		var json = new JsonObject();
 
 		json.addProperty("name", this.name);
 		json.addProperty("disable", this.disabled);
@@ -176,19 +176,19 @@ public class Jetpack {
 	}
 
 	public static Jetpack fromJson(JsonObject json) {
-		String name = json.get("name").getAsString();
+		var name = json.get("name").getAsString();
 		boolean disable = json.get("disable").getAsBoolean();
 		int tier = json.get("tier").getAsInt();
 		int color = Integer.parseInt(json.get("color").getAsString(), 16);
 		int armorPoints = json.get("armorPoints").getAsInt();
 		int enchantability = json.get("enchantability").getAsInt();
-		String craftingMaterialString = json.get("craftingMaterial").getAsString();
+		var craftingMaterialString = json.get("craftingMaterial").getAsString();
 		boolean creative = json.get("creative").getAsBoolean();
-		Rarity rarity = Rarity.values()[json.get("rarity").getAsInt()];
+		var rarity = Rarity.values()[json.get("rarity").getAsInt()];
 		float toughness = json.get("toughness").getAsFloat();
 		float knockbackResistance = json.get("knockbackResistance").getAsFloat();
 
-		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
+		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
 				.setDisabled(disable);

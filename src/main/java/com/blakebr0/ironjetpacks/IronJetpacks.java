@@ -23,13 +23,15 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(IronJetpacks.MOD_ID)
 public final class IronJetpacks {
 	public static final String MOD_ID = "ironjetpacks";
 	public static final String NAME = "Iron Jetpacks";
-
-	public static final CreativeModeTab ITEM_GROUP = new IJItemGroup();
+	public static final Logger LOGGER = LogManager.getLogger(NAME);
+	public static final CreativeModeTab CREATIVE_TAB = new IJCreativeTab();
 
 	public IronJetpacks() {
 		var bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -38,7 +40,6 @@ public final class IronJetpacks {
 		bus.register(new ModItems());
 		bus.register(new ModSounds());
 		bus.register(new ModRecipeSerializers());
-		bus.register(new ModConfigs());
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());

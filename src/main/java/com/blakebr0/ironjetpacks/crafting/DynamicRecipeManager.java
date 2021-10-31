@@ -14,8 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.tags.SerializationTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -28,11 +26,11 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
         JetpackRegistry.getInstance().getAllJetpacks().forEach(jetpack -> {
-            ShapedRecipe cell = this.makeCellRecipe(jetpack);
-            ShapedRecipe thruster = this.makeThrusterRecipe(jetpack);
-            ShapedRecipe capacitor = this.makeCapacitorRecipe(jetpack);
-            ShapedRecipe jetpackSelf = this.makeJetpackRecipe(jetpack);
-            JetpackUpgradeRecipe jetpackUpgrade = this.makeJetpackUpgradeRecipe(jetpack);
+            var cell = this.makeCellRecipe(jetpack);
+            var thruster = this.makeThrusterRecipe(jetpack);
+            var capacitor = this.makeCapacitorRecipe(jetpack);
+            var jetpackSelf = this.makeJetpackRecipe(jetpack);
+            var jetpackUpgrade = this.makeJetpackUpgradeRecipe(jetpack);
 
             if (cell != null)
                 RecipeHelper.addRecipe(cell);
@@ -56,26 +54,26 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (!ModConfigs.ENABLE_CELL_RECIPES.get())
             return null;
 
-        JetpackRegistry jetpacks = JetpackRegistry.getInstance();
+        var jetpacks = JetpackRegistry.getInstance();
 
-        Ingredient material = jetpack.getCraftingMaterial();
+        var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        Tag<Item> redstoneTag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(Tags.Items.DUSTS_REDSTONE.getName());
+        var redstoneTag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(Tags.Items.DUSTS_REDSTONE.getName());
         if (redstoneTag == null)
             return null;
 
-        Ingredient coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient redstone = Ingredient.of(redstoneTag);
-        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
+        var coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
+        var redstone = Ingredient.of(redstoneTag);
+        var inputs = NonNullList.of(Ingredient.EMPTY,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY
         );
 
-        ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_cell");
-        ItemStack output = new ItemStack(jetpack.cell);
+        var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_cell");
+        var output = new ItemStack(jetpack.cell);
 
         return new ShapedRecipe(name, "ironjetpacks:cells", 3, 3, inputs, output);
     }
@@ -84,23 +82,23 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (!ModConfigs.ENABLE_THRUSTER_RECIPES.get())
             return null;
 
-        JetpackRegistry jetpacks = JetpackRegistry.getInstance();
+        var jetpacks = JetpackRegistry.getInstance();
 
-        Ingredient material = jetpack.getCraftingMaterial();
+        var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
-        Ingredient cell = Ingredient.of(jetpack.cell);
-        Ingredient furnace = Ingredient.of(Blocks.FURNACE);
-        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
+        var coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
+        var cell = Ingredient.of(jetpack.cell);
+        var furnace = Ingredient.of(Blocks.FURNACE);
+        var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, coil, material,
                 coil, cell, coil,
                 material, furnace, material
         );
 
-        ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_thruster");
-        ItemStack output = new ItemStack(jetpack.thruster);
+        var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_thruster");
+        var output = new ItemStack(jetpack.thruster);
 
         return new ShapedRecipe(name, "ironjetpacks:thrusters", 3, 3, inputs, output);
     }
@@ -109,19 +107,19 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (!ModConfigs.ENABLE_CAPACITOR_RECIPES.get())
             return null;
 
-        Ingredient material = jetpack.getCraftingMaterial();
+        var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient cell = Ingredient.of(jetpack.cell);
-        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
+        var cell = Ingredient.of(jetpack.cell);
+        var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, cell, material,
                 material, cell, material,
                 material, cell, material
         );
 
-        ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_capacitor");
-        ItemStack output = new ItemStack(jetpack.capacitor);
+        var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_capacitor");
+        var output = new ItemStack(jetpack.capacitor);
 
         return new ShapedRecipe(name, "ironjetpacks:capacitors", 3, 3, inputs, output);
     }
@@ -130,25 +128,25 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (!ModConfigs.ENABLE_JETPACK_RECIPES.get())
             return null;
 
-        JetpackRegistry jetpacks = JetpackRegistry.getInstance();
+        var jetpacks = JetpackRegistry.getInstance();
         if (jetpack.tier != jetpacks.getLowestTier())
             return null;
 
-        Ingredient material = jetpack.getCraftingMaterial();
+        var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient capacitor = Ingredient.of(jetpack.capacitor);
-        Ingredient thruster = Ingredient.of(jetpack.thruster);
-        Ingredient strap = Ingredient.of(ModItems.STRAP.get());
-        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
+        var capacitor = Ingredient.of(jetpack.capacitor);
+        var thruster = Ingredient.of(jetpack.thruster);
+        var strap = Ingredient.of(ModItems.STRAP.get());
+        var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, strap, material,
                 thruster, Ingredient.EMPTY, thruster
         );
 
-        ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
-        ItemStack output = new ItemStack(jetpack.item);
+        var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
+        var output = new ItemStack(jetpack.item);
 
         return new ShapedRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
     }
@@ -157,25 +155,25 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         if (!ModConfigs.ENABLE_JETPACK_RECIPES.get())
             return null;
 
-        JetpackRegistry jetpacks = JetpackRegistry.getInstance();
+        var jetpacks = JetpackRegistry.getInstance();
         if (jetpack.tier == jetpacks.getLowestTier())
             return null;
 
-        Ingredient material = jetpack.getCraftingMaterial();
+        var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        Ingredient capacitor = Ingredient.of(jetpack.capacitor);
-        Ingredient thruster = Ingredient.of(jetpack.thruster);
-        Ingredient jetpackTier = new JetpackIngredient(jetpack.tier - 1);
-        NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY,
+        var capacitor = Ingredient.of(jetpack.capacitor);
+        var thruster = Ingredient.of(jetpack.thruster);
+        var jetpackTier = new JetpackIngredient(jetpack.tier - 1);
+        var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, jetpackTier, material,
                 thruster, Ingredient.EMPTY, thruster
         );
 
-        ResourceLocation name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
-        ItemStack output = new ItemStack(jetpack.item);
+        var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
+        var output = new ItemStack(jetpack.item);
 
         return new JetpackUpgradeRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
     }

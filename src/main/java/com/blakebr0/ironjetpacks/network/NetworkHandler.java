@@ -8,8 +8,6 @@ import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class NetworkHandler {
 	public static final BaseNetworkHandler INSTANCE = new BaseNetworkHandler(new ResourceLocation(IronJetpacks.MOD_ID, "main"));

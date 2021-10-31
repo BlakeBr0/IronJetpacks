@@ -2,9 +2,9 @@ package com.blakebr0.ironjetpacks.handler;
 
 import com.blakebr0.cucumber.helper.VecHelper;
 import com.blakebr0.cucumber.util.Utils;
+import com.blakebr0.ironjetpacks.client.sound.JetpackSound;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.blakebr0.ironjetpacks.client.sound.JetpackSound;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;

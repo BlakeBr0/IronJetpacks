@@ -4,7 +4,6 @@ import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -70,7 +69,7 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (var ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
 

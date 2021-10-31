@@ -11,8 +11,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.IEnergyStorage;
 
 public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private static final String MIDDLE = "middle";

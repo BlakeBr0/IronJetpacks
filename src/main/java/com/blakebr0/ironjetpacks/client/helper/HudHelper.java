@@ -5,10 +5,8 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.IEnergyStorage;
 
 public final class HudHelper {
 	public static HudPos getHudPos() {
