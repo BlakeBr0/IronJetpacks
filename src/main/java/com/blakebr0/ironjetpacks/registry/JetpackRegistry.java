@@ -1,14 +1,16 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.init.ModItems;
-import com.blakebr0.ironjetpacks.item.JetpackItem;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
-	private final ArrayList<Jetpack> jetpacks = new ArrayList<>();
+	private final Map<String, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
@@ -18,12 +20,12 @@ public class JetpackRegistry {
 	}
 	
 	public void register(Jetpack jetpack) {
-		if (this.jetpacks.stream().anyMatch(j -> j.name.equals(jetpack.name))) {
+		if (this.jetpacks.containsKey(jetpack.name)) {
 			this.isErrored = true;
 			throw new RuntimeException(String.format("Tried to register multiple jetpacks with the same name: %s", jetpack.name));
 		}
 
-		this.jetpacks.add(jetpack);
+		this.jetpacks.put(jetpack.name, jetpack);
 		
 		if (jetpack.tier > -1 && !this.tiers.contains(jetpack.tier)) {
 			this.tiers.add(jetpack.tier);
@@ -35,8 +37,8 @@ public class JetpackRegistry {
 		}
 	}
 	
-	public ArrayList<Jetpack> getAllJetpacks() {
-		return this.jetpacks;
+	public List<Jetpack> getAllJetpacks() {
+		return new ArrayList<>(this.jetpacks.values());
 	}
 	
 	public ArrayList<Integer> getAllTiers() {
@@ -47,9 +49,8 @@ public class JetpackRegistry {
 		return this.lowestTier;
 	}
 	
-	public JetpackItem getJetpackForName(String name) {
-		Jetpack jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
-		return jetpack == null ? null : jetpack.item;
+	public Jetpack getJetpackByName(String name) {
+		return this.jetpacks.get(name);
 	}
 	
 	public Item getCoilForTier(int tier) {

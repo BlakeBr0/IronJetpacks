@@ -15,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -32,7 +33,6 @@ public final class ModItems {
 	@SubscribeEvent
 	public void onRegisterItems(RegistryEvent.Register<Item> event) {
 		IForgeRegistry<Item> registry = event.getRegistry();
-		JetpackRegistry jetpacks = JetpackRegistry.getInstance();
 
 		ENTRIES.forEach((reg, item) -> {
 			registry.register(item.get());
@@ -41,29 +41,31 @@ public final class ModItems {
 
 		ModJetpacks.loadJsons();
 
+		List<Jetpack> jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+
 		// Energy Cells
-		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+		for (Jetpack jetpack : jetpacks) {
 			ComponentItem item = new ComponentItem(jetpack, "cell", p -> p.tab(ITEM_GROUP));
 			jetpack.setCellItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_cell"));
 		}
 		
 		// Thrusters
-		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+		for (Jetpack jetpack : jetpacks) {
 			ComponentItem item = new ComponentItem(jetpack, "thruster", p -> p.tab(ITEM_GROUP));
 			jetpack.setThrusterItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_thruster"));
 		}
 		
 		// Capacitors
-		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+		for (Jetpack jetpack : jetpacks) {
 			ComponentItem item = new ComponentItem(jetpack, "capacitor", p -> p.tab(ITEM_GROUP));
 			jetpack.setCapacitorItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_capacitor"));
 		}
 		
 		// Jetpacks
-		for (Jetpack jetpack : jetpacks.getAllJetpacks()) {
+		for (Jetpack jetpack : jetpacks) {
 			registry.register(jetpack.item.setRegistryName(jetpack.name + "_jetpack"));
 		}
 	}
