@@ -15,9 +15,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -85,11 +87,11 @@ public final class ModJetpacks {
 		
 		for (File file : files) {
 			Jetpack jetpack = null;
-			FileReader reader = null;
+			InputStreamReader reader = null;
 
 			try {
 				JsonParser parser = new JsonParser();
-				reader = new FileReader(file);
+				reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
 				JsonObject json = parser.parse(reader).getAsJsonObject();
 
 				reader.close();
