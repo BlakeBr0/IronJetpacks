@@ -1,14 +1,22 @@
 package com.blakebr0.ironjetpacks.registry;
 
+import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.init.ModItems;
-import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
 import net.minecraft.item.Item;
+import net.minecraft.network.PacketBuffer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
-	private final ArrayList<Jetpack> jetpacks = new ArrayList<>();
+	private static final Logger LOGGER = LogManager.getLogger(IronJetpacks.NAME);
+	private final Map<String, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
@@ -18,12 +26,12 @@ public class JetpackRegistry {
 	}
 	
 	public void register(Jetpack jetpack) {
-		if (this.jetpacks.stream().anyMatch(j -> j.name.equals(jetpack.name))) {
+		if (this.jetpacks.containsKey(jetpack.name)) {
 			this.isErrored = true;
 			throw new RuntimeException(String.format("Tried to register multiple jetpacks with the same name: %s", jetpack.name));
 		}
 
-		this.jetpacks.add(jetpack);
+		this.jetpacks.put(jetpack.name, jetpack);
 		
 		if (jetpack.tier > -1 && !this.tiers.contains(jetpack.tier)) {
 			this.tiers.add(jetpack.tier);
@@ -35,11 +43,11 @@ public class JetpackRegistry {
 		}
 	}
 	
-	public ArrayList<Jetpack> getAllJetpacks() {
-		return this.jetpacks;
+	public List<Jetpack> getAllJetpacks() {
+		return new ArrayList<>(this.jetpacks.values());
 	}
 	
-	public ArrayList<Integer> getAllTiers() {
+	public List<Integer> getAllTiers() {
 		return this.tiers;
 	}
 	
@@ -47,9 +55,8 @@ public class JetpackRegistry {
 		return this.lowestTier;
 	}
 	
-	public JetpackItem getJetpackForName(String name) {
-		Jetpack jetpack = this.jetpacks.stream().filter(j -> j.name.equals(name)).findFirst().orElse(null);
-		return jetpack == null ? null : jetpack.item;
+	public Jetpack getJetpackByName(String name) {
+		return this.jetpacks.get(name);
 	}
 	
 	public Item getCoilForTier(int tier) {
@@ -70,5 +77,37 @@ public class JetpackRegistry {
 
 	public boolean isErrored() {
 		return this.isErrored;
+	}
+
+	public void writeToBuffer(PacketBuffer buffer) {
+		buffer.writeVarInt(this.jetpacks.size());
+
+		this.jetpacks.forEach((name, jetpack) -> {
+			jetpack.write(buffer);
+		});
+	}
+
+	public List<Jetpack> readFromBuffer(PacketBuffer buffer) {
+		List<Jetpack> jetpacks = new ArrayList<>();
+
+		int size = buffer.readVarInt();
+
+		for (int i = 0; i < size; i++) {
+			Jetpack singularity = Jetpack.read(buffer);
+
+			jetpacks.add(singularity);
+		}
+
+		return jetpacks;
+	}
+
+	public void loadJetpacks(SyncJetpacksMessage message) {
+		this.jetpacks.clear();
+
+		for (Jetpack jetpack : message.getJetpacks()) {
+			this.jetpacks.put(jetpack.name, jetpack);
+		}
+
+		LOGGER.info("Loaded {} singularities from the server", this.jetpacks.size());
 	}
 }

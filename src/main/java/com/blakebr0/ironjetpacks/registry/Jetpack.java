@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
@@ -53,7 +54,7 @@ public class Jetpack {
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
-		this.item = new JetpackItem(this, p -> p.tab(IronJetpacks.ITEM_GROUP));
+		this.item = new JetpackItem(name, p -> p.tab(IronJetpacks.ITEM_GROUP));
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
 	}
@@ -202,6 +203,65 @@ public class Jetpack {
 		double sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
 		double sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
 		double sprintFuel = json.get("sprintFuelMulti").getAsDouble();
+
+		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
+
+		return jetpack;
+	}
+
+	public void write(PacketBuffer buffer) {
+		buffer.writeUtf(this.name);
+		buffer.writeBoolean(this.disabled);
+		buffer.writeVarInt(this.tier);
+		buffer.writeVarInt(this.color);
+		buffer.writeVarInt(this.armorPoints);
+		buffer.writeVarInt(this.enchantablilty);
+		buffer.writeUtf(this.craftingMaterialString);
+		buffer.writeBoolean(this.creative);
+		buffer.writeVarInt(this.rarity.ordinal());
+		buffer.writeFloat(this.toughness);
+		buffer.writeFloat(this.knockbackResistance);
+
+		buffer.writeVarInt(this.capacity);
+		buffer.writeVarInt(this.usage);
+		buffer.writeDouble(this.speedVert);
+		buffer.writeDouble(this.accelVert);
+		buffer.writeDouble(this.speedSide);
+		buffer.writeDouble(this.speedHover);
+		buffer.writeDouble(this.speedHoverSlow);
+		buffer.writeDouble(this.sprintSpeed);
+		buffer.writeDouble(this.sprintSpeedVert);
+		buffer.writeDouble(this.sprintFuel);
+	}
+
+	public static Jetpack read(PacketBuffer buffer) {
+		String name = buffer.readUtf();
+		boolean disabled = buffer.readBoolean();
+		int tier = buffer.readVarInt();
+		int color = buffer.readVarInt();
+		int armorPoints = buffer.readVarInt();
+		int enchantability = buffer.readVarInt();
+		String craftingMaterialString = buffer.readUtf();
+		boolean creative = buffer.readBoolean();
+		Rarity rarity = Rarity.values()[buffer.readVarInt()];
+		float toughness = buffer.readFloat();
+		float knockbackResistance = buffer.readFloat();
+
+		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
+				.setRarity(rarity)
+				.setCreative(creative)
+				.setDisabled(disabled);
+
+		int capacity = buffer.readVarInt();
+		int usage = buffer.readVarInt();
+		double speedVert = buffer.readDouble();
+		double accelVert = buffer.readDouble();
+		double speedSide = buffer.readDouble();
+		double speedHover = buffer.readDouble();
+		double speedHoverSlow = buffer.readDouble();
+		double sprintSpeed = buffer.readDouble();
+		double sprintSpeedVert = buffer.readDouble();
+		double sprintFuel = buffer.readDouble();
 
 		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
