@@ -29,7 +29,7 @@ public final class HudHandler {
             var chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
             var item = chest.getItem();
 
-            if (!chest.isEmpty() && item instanceof JetpackItem jetpack) {
+            if (!chest.isEmpty() && item instanceof JetpackItem) {
                 var pos = HudHelper.getHudPos();
                 if (pos != null) {
                     int xPos = (int) (pos.x / 0.33) - 18;
@@ -44,11 +44,11 @@ public final class HudHandler {
                     stack.pushPose();
                     stack.scale(0.33F, 0.33F, 1.0F);
                     Screen.blit(stack, xPos, yPos, 0, 0, 28, 156, 256, 256);
-                    int i2 = HudHelper.getEnergyBarScaled(jetpack, chest);
+                    int i2 = HudHelper.getEnergyBarScaled(chest);
                     Screen.blit(stack, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
                     stack.popPose();
 
-                    var fuel = Colors.GRAY + HudHelper.getFuelString(jetpack, chest);
+                    var fuel = Colors.GRAY + HudHelper.getFuelString(chest);
                     var throttle = Colors.GRAY + "T: " + (int) (JetpackUtils.getThrottle(chest) * 100) + "%";
                     var engine = Colors.GRAY + "E: " + HudHelper.getStatusString(JetpackUtils.isEngineOn(chest));
                     var hover = Colors.GRAY + "H: " + HudHelper.getStatusString(JetpackUtils.isHovering(chest));

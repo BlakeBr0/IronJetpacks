@@ -26,8 +26,9 @@ public final class HudHelper {
 
 	}
 	
-	public static int getEnergyBarScaled(JetpackItem jetpack, ItemStack stack) {
-		if (jetpack.getJetpack().creative)
+	public static int getEnergyBarScaled(ItemStack stack) {
+		var jetpack = JetpackUtils.getJetpack(stack);
+		if (jetpack.creative)
 			return 156;
 
 		var energy = JetpackUtils.getEnergyStorage(stack);
@@ -37,8 +38,9 @@ public final class HudHelper {
 		return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
 	}
 	
-	public static String getFuelString(JetpackItem jetpack, ItemStack stack) {
-		if (jetpack.getJetpack().creative) {
+	public static String getFuelString(ItemStack stack) {
+		var jetpack = JetpackUtils.getJetpack(stack);
+		if (jetpack.creative) {
 			return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
 		}
 

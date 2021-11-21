@@ -38,9 +38,10 @@ public final class IronJetpacks {
 		var bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		bus.register(this);
-		bus.register(new ModItems());
 		bus.register(new ModSounds());
 		bus.register(new ModRecipeSerializers());
+
+		ModItems.REGISTRY.register(bus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());

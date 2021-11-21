@@ -2,15 +2,17 @@ package com.blakebr0.ironjetpacks.util;
 
 import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
+import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
+import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -24,8 +26,13 @@ public final class JetpackUtils {
 		if (!stack.isEmpty()) {
 			var item = stack.getItem();
 
-			if (item instanceof JetpackItem jetpack) {
-				if (isEngineOn(stack) && (getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.getJetpack().creative)) {
+			if (item instanceof JetpackItem) {
+				if (!isEngineOn(stack))
+					return false;
+
+				var jetpack = JetpackUtils.getJetpack(stack);
+
+				if (getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.creative) {
 					if (isHovering(stack)) {
 						return !player.isOnGround();
 					} else {
@@ -93,47 +100,37 @@ public final class JetpackUtils {
 		return throttle;
 	}
 
-	public static ArmorMaterial makeArmorMaterial(Jetpack jetpack) {
-		return new ArmorMaterial() {
-			@Override
-			public int getDurabilityForSlot(EquipmentSlot slot) {
-				return 0;
-			}
+	public static CompoundTag makeTag(Jetpack jetpack) {
+		var nbt = new CompoundTag();
+		nbt.putString("Id", jetpack.getId().toString());
+		return nbt;
+	}
 
-			@Override
-			public int getDefenseForSlot(EquipmentSlot slot) {
-				return jetpack.armorPoints;
-			}
+	public static ItemStack getItemForJetpack(Jetpack jetpack) {
+		var nbt = makeTag(jetpack);
+		var stack = new ItemStack(ModItems.JETPACK.get());
 
-			@Override
-			public int getEnchantmentValue() {
-				return jetpack.enchantablilty;
-			}
+		stack.setTag(nbt);
 
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_GENERIC;
-			}
+		return stack;
+	}
 
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.EMPTY;
-			}
+	public static ItemStack getItemForComponent(Item item, Jetpack jetpack) {
+		var nbt = new CompoundTag();
+		nbt.putString("Id", jetpack.getId().toString());
 
-			@Override
-			public String getName() {
-				return "ironjetpacks:jetpack";
-			}
+		var stack = new ItemStack(item);
+		stack.setTag(nbt);
 
-			@Override
-			public float getToughness() {
-				return jetpack.toughness;
-			}
+		return stack;
+	}
 
-			@Override
-			public float getKnockbackResistance() {
-				return jetpack.knockbackResistance;
-			}
-		};
+	public static Jetpack getJetpack(ItemStack stack) {
+		var id = NBTHelper.getString(stack, "Id");
+		if (!id.isEmpty()) {
+			return JetpackRegistry.getInstance().getJetpackById(ResourceLocation.tryParse(id));
+		}
+
+		return Jetpack.UNDEFINED;
 	}
 }

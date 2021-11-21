@@ -2,6 +2,8 @@ package com.blakebr0.ironjetpacks.crafting.ingredient;
 
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,6 +15,7 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.NBTIngredient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +35,9 @@ public class JetpackIngredient extends Ingredient {
 
     @Override
     public ItemStack[] getItems() {
-        if (this.stacks == null)
-            this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
+        if (this.stacks == null) {
+            this.initMatchingStacks();
+        }
 
         return this.stacks;
     }
@@ -41,8 +45,9 @@ public class JetpackIngredient extends Ingredient {
     @Override
     public IntList getStackingIds() {
         if (this.stacksPacked == null) {
-            if (this.stacks == null)
-                this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
+            if (this.stacks == null) {
+                this.initMatchingStacks();
+            }
 
             this.stacksPacked = new IntArrayList(this.stacks.length);
             Arrays.stream(this.stacks).forEach(s -> this.stacksPacked.add(StackedContents.getStackingIndex(s)));
@@ -56,11 +61,12 @@ public class JetpackIngredient extends Ingredient {
     public boolean test(ItemStack stack) {
         if (stack == null) {
             return false;
-        } else if (ALL_JETPACKS.stream().noneMatch(j -> j.getJetpack().tier == this.tier)) {
+        } else if (JetpackRegistry.getInstance().getJetpacks().stream().noneMatch(j -> j.getTier() == this.tier)) {
             return stack.isEmpty();
         } else {
-            if (this.stacks == null)
-                this.stacks = ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).map(ItemStack::new).toArray(ItemStack[]::new);
+            if (this.stacks == null) {
+                this.initMatchingStacks();
+            }
 
             for (var itemstack : this.stacks) {
                 if (itemstack.getItem() == stack.getItem()) {
@@ -74,18 +80,24 @@ public class JetpackIngredient extends Ingredient {
 
     @Override
     public boolean isEmpty() {
-        return ALL_JETPACKS.stream().noneMatch(j -> j.getJetpack().tier == this.tier) && (this.stacks == null || this.stacks.length == 0) && (this.stacksPacked == null || this.stacksPacked.isEmpty());
+        return JetpackRegistry.getInstance().getJetpacks()
+                .stream()
+                .noneMatch(j -> j.getTier() == this.tier)
+                && (this.stacks == null || this.stacks.length == 0)
+                && (this.stacksPacked == null || this.stacksPacked.isEmpty());
     }
 
     @Override
     public JsonElement toJson() {
         var json = new JsonArray();
 
-        ALL_JETPACKS.stream().filter(j -> j.getJetpack().tier == this.tier).filter(h -> h.getRegistryName() != null).forEach(h -> {
-            var obj = new JsonObject();
-            obj.addProperty("item", h.getRegistryName().toString());
-            json.add(obj);
-        });
+        JetpackRegistry.getInstance().getJetpacks()
+                .stream()
+                .filter(j -> j.getTier() == this.tier)
+                .forEach(jetpack -> {
+                    var obj = new JsonObject();
+                    json.add(obj);
+                });
 
         return json;
     }
@@ -104,6 +116,14 @@ public class JetpackIngredient extends Ingredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return ModRecipeSerializers.JETPACK_INGREDIENT;
+    }
+
+    private void initMatchingStacks() {
+        this.stacks = JetpackRegistry.getInstance().getJetpacks()
+                .stream()
+                .filter(j -> j.getTier() == this.tier)
+                .map(JetpackUtils::getItemForJetpack)
+                .toArray(ItemStack[]::new);
     }
 
     public static class Serializer implements IIngredientSerializer<JetpackIngredient> {

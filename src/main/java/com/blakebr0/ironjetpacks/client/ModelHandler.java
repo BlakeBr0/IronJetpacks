@@ -36,7 +36,7 @@ public class ModelHandler {
         var thruster = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/thruster"));
         var jetpack = registry.get(new ResourceLocation(IronJetpacks.MOD_ID, "item/jetpack"));
 
-        for (var pack : JetpackRegistry.getInstance().getAllJetpacks()) {
+        for (var pack : JetpackRegistry.getInstance().getJetpacks()) {
             var cellLocation = pack.cell.getRegistryName();
             if (cellLocation != null) {
                 var location = new ModelResourceLocation(cellLocation, "inventory");

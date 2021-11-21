@@ -25,7 +25,6 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private static final String RIGHT_EXHAUST_1 = "right_exhaust_1";
 	private static final String RIGHT_EXHAUST_2 = "right_exhaust_2";
 
-	private final JetpackItem jetpack;
 	private final ModelPart middle;
 	private final ModelPart leftCanister;
 	private final ModelPart rightCanister;
@@ -40,9 +39,8 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private final ModelPart[] energyBarLeft = new ModelPart[6];
 	private final ModelPart[] energyBarRight = new ModelPart[6];
 
-	public JetpackModel(JetpackItem jetpack, ModelPart part) {
+	public JetpackModel(ModelPart part) {
 		super(part);
-		this.jetpack = jetpack;
 		this.middle = part.getChild(MIDDLE);
 		this.leftCanister = part.getChild(LEFT_CANISTER);
 		this.rightCanister = part.getChild(RIGHT_CANISTER);
@@ -65,12 +63,14 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 	public void setupAnim(LivingEntity entity, float f1, float f2, float f3, float netHeadYaw, float headPitch) {
 		super.setupAnim(entity, f1, f2, f3, netHeadYaw, headPitch);
 
-		if (this.jetpack.getJetpack().creative) {
+		var chest = entity.getItemBySlot(EquipmentSlot.CHEST);
+		var jetpack = JetpackUtils.getJetpack(chest);
+
+		if (jetpack.creative) {
 			this.resetEnergyBars();
 			this.energyBarLeft[5].visible = true;
 			this.energyBarRight[5].visible = true;
 		} else {
-			var chest = entity.getItemBySlot(EquipmentSlot.CHEST);
 			var energy = JetpackUtils.getEnergyStorage(chest);
 			double stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
 

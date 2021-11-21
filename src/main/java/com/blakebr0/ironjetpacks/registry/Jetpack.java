@@ -3,12 +3,19 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,9 +23,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Jetpack {
+	private static final UUID ATTRIBUTE_ID = UUID.fromString("7FBA2C56-DD5E-4071-8519-D2643E707E40");
+
+	public static final Jetpack UNDEFINED = new Jetpack("undefined", 0, 0xFFF, 0, 0, "null", 0F, 0F);
+
+	private final ResourceLocation id;
 	public String name;
 	public String displayName;
 	public int tier;
@@ -33,6 +46,7 @@ public class Jetpack {
 	public Rarity rarity = Rarity.COMMON;
 	public float toughness;
 	public float knockbackResistance;
+	public Multimap<Attribute, AttributeModifier> attributeModifiers;
 	public ComponentItem cell;
 	public ComponentItem thruster;
 	public ComponentItem capacitor;
@@ -48,6 +62,7 @@ public class Jetpack {
 	public double sprintFuel;
 	
 	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString, float toughness, float knockbackResistance) {
+		this.id = new ResourceLocation(IronJetpacks.MOD_ID, name);
 		this.name = name;
 		this.displayName = this.makeDisplayName();
 		this.tier = tier;
@@ -55,9 +70,17 @@ public class Jetpack {
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
-		this.item = new JetpackItem(name, p -> p.tab(IronJetpacks.CREATIVE_TAB));
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
+
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> attributeModifiers = ImmutableMultimap.builder();
+		attributeModifiers.put(Attributes.ARMOR, new AttributeModifier(ATTRIBUTE_ID, "Armor modifier", this.armorPoints, AttributeModifier.Operation.ADDITION));
+		attributeModifiers.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ATTRIBUTE_ID, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
+		if (this.knockbackResistance > 0) {
+			attributeModifiers.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTRIBUTE_ID, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
+		}
+
+		this.attributeModifiers = attributeModifiers.build();
 	}
 	
 	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
@@ -73,6 +96,10 @@ public class Jetpack {
 		this.sprintFuel = sprintFuel;
 		
 		return this;
+	}
+
+	public ResourceLocation getId() {
+		return this.id;
 	}
 	
 	public Jetpack setCreative() {

@@ -6,6 +6,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class JetpackRegistry implements ResourceManagerReloadListener {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
-	private final Map<String, Jetpack> jetpacks = new LinkedHashMap<>();
+	private final Map<ResourceLocation, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
@@ -39,7 +40,7 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 
 	@SubscribeEvent
 	public void onDatapackSync(OnDatapackSyncEvent event) {
-		var message = new SyncJetpacksMessage(this.getAllJetpacks());
+		var message = new SyncJetpacksMessage(this.getJetpacks());
 		var player = event.getPlayer();
 
 		if (player != null) {
@@ -50,12 +51,12 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 	}
 
 	public void register(Jetpack jetpack) {
-		if (this.jetpacks.containsKey(jetpack.name)) {
+		if (this.jetpacks.containsKey(jetpack.getId())) {
 			this.isErrored = true;
 			throw new RuntimeException(String.format("Tried to register multiple jetpacks with the same name: %s", jetpack.name));
 		}
 
-		this.jetpacks.put(jetpack.name, jetpack);
+		this.jetpacks.put(jetpack.getId(), jetpack);
 
 		if (jetpack.tier > -1 && !this.tiers.contains(jetpack.tier)) {
 			this.tiers.add(jetpack.tier);
@@ -67,7 +68,7 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 		}
 	}
 
-	public List<Jetpack> getAllJetpacks() {
+	public List<Jetpack> getJetpacks() {
 		return new ArrayList<>(this.jetpacks.values());
 	}
 
@@ -79,8 +80,8 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 		return this.lowestTier;
 	}
 
-	public Jetpack getJetpackByName(String name) {
-		return this.jetpacks.get(name);
+	public Jetpack getJetpackById(ResourceLocation id) {
+		return this.jetpacks.getOrDefault(id, Jetpack.UNDEFINED);
 	}
 
 	public Item getCoilForTier(int tier) {
@@ -106,7 +107,7 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 	public void writeToBuffer(FriendlyByteBuf buffer) {
 		buffer.writeVarInt(this.jetpacks.size());
 
-		this.jetpacks.forEach((name, jetpack) -> {
+		this.jetpacks.forEach((id, jetpack) -> {
 			jetpack.write(buffer);
 		});
 	}
@@ -129,10 +130,10 @@ public class JetpackRegistry implements ResourceManagerReloadListener {
 		this.jetpacks.clear();
 
 		for (Jetpack jetpack : message.getJetpacks()) {
-			this.jetpacks.put(jetpack.name, jetpack);
+			this.jetpacks.put(jetpack.getId(), jetpack);
 		}
 
-		IronJetpacks.LOGGER.info("Loaded {} singularities from the server", this.jetpacks.size());
+		IronJetpacks.LOGGER.info("Loaded {} jetpacks from the server", this.jetpacks.size());
 	}
 
 	public static JetpackRegistry getInstance() {

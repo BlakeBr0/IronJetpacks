@@ -12,7 +12,7 @@ public class IJCreativeTab extends CreativeModeTab {
 	
 	@Override
 	public ItemStack makeIcon() {
-		var jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+		var jetpacks = JetpackRegistry.getInstance().getJetpacks();
 
 		if (!jetpacks.isEmpty()) {
 			return new ItemStack(jetpacks.get(0).item);
