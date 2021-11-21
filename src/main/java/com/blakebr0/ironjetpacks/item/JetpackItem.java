@@ -15,6 +15,7 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
+import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -28,8 +29,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -41,21 +45,54 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeatherItem, IEnableable {
-	private final Jetpack jetpack;
+	private final String jetpackName;
+	private ArmorMaterial armorMaterial;
 
-	public JetpackItem(Jetpack jetpack, Function<Properties, Properties> properties) {
-		super(JetpackUtils.makeArmorMaterial(jetpack), EquipmentSlot.CHEST, properties.compose(p -> p.defaultDurability(0).rarity(jetpack.rarity)));
-		this.jetpack = jetpack;
+	public JetpackItem(String jetpackName, Function<Properties, Properties> properties) {
+		super(ArmorMaterials.LEATHER, EquipmentSlot.CHEST, properties.compose(p -> p.defaultDurability(0)));
+		this.jetpackName = jetpackName;
 	}
 	
 	@Override
 	public Component getName(ItemStack stack) {
-		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).build();
+		return Localizable.of("item.ironjetpacks.jetpack").args(this.getJetpack().displayName).build();
 	}
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
-		return Localizable.of("item.ironjetpacks.jetpack").args(this.jetpack.displayName).buildString();
+		return Localizable.of("item.ironjetpacks.jetpack").args(this.getJetpack().displayName).buildString();
+	}
+
+	@Override
+	public Rarity getRarity(ItemStack stack) {
+		if (!stack.isEnchanted()) {
+			return this.getJetpack().rarity;
+		} else {
+			return switch (this.getJetpack().rarity) {
+				case COMMON, UNCOMMON -> Rarity.RARE;
+				case RARE -> Rarity.EPIC;
+				case EPIC -> this.getJetpack().rarity;
+			};
+		}
+	}
+
+	@Override
+	public ArmorMaterial getMaterial() {
+		if (this.armorMaterial == null) {
+			this.armorMaterial = JetpackUtils.makeArmorMaterial(this.getJetpack());
+		}
+
+		return this.armorMaterial;
+	}
+
+	@Override
+	public int getEnchantmentValue() {
+		return this.getMaterial().getEnchantmentValue();
+	}
+
+	@Override
+	public boolean isValidRepairItem(ItemStack p_82789_1_, ItemStack p_82789_2_) {
+		return this.getMaterial().getRepairIngredient().test(p_82789_2_) || super.isValidRepairItem(p_82789_1_, p_82789_2_);
 	}
 
 	/*
@@ -141,12 +178,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
-		return ModConfigs.ENCHANTABLE_JETPACKS.get() && this.jetpack.enchantablilty > 0;
+		return ModConfigs.ENCHANTABLE_JETPACKS.get() && this.getJetpack().enchantablilty > 0;
 	}
 	
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return ModConfigs.ENCHANTABLE_JETPACKS.get() && this.jetpack.enchantablilty > 0;
+		return ModConfigs.ENCHANTABLE_JETPACKS.get() && this.getJetpack().enchantablilty > 0;
 	}
 	
 	@Override
@@ -159,19 +196,19 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		return !this.jetpack.creative;
+		return !this.getJetpack().creative;
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag advanced) {
-		if (!this.jetpack.creative) {
+		if (!this.getJetpack().creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);
 			tooltip.add(new TextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}
 
-		var tier = ModTooltips.TIER.color(this.jetpack.rarity.color).args(this.jetpack.creative ? "C" : this.jetpack.tier).build();
+		var tier = ModTooltips.TIER.color(this.getJetpack().rarity.color).args(this.getJetpack().creative ? "C" : this.getJetpack().tier).build();
 		var engine = ModTooltips.ENGINE.color(JetpackUtils.isEngineOn(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).build();
 		var hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).build();
 
@@ -187,15 +224,15 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
 			} else {
-				tooltip.add(ModTooltips.FUEL_USAGE.args(this.jetpack.usage + " FE/t").build());
-				tooltip.add(ModTooltips.VERTICAL_SPEED.args(this.jetpack.speedVert).build());
-				tooltip.add(ModTooltips.VERTICAL_ACCELERATION.args(this.jetpack.accelVert).build());
-				tooltip.add(ModTooltips.HORIZONTAL_SPEED.args(this.jetpack.speedSide).build());
-				tooltip.add(ModTooltips.HOVER_SPEED.args(this.jetpack.speedHoverSlow).build());
-				tooltip.add(ModTooltips.DESCEND_SPEED.args(this.jetpack.speedHover).build());
-				tooltip.add(ModTooltips.SPRINT_MODIFIER.args(this.jetpack.sprintSpeed).build());
-				tooltip.add(ModTooltips.SPRINT_VERTICAL_MODIFIER.args(this.jetpack.sprintSpeedVert).build());
-				tooltip.add(ModTooltips.SPRINT_FUEL_MODIFIER.args(this.jetpack.sprintFuel).build());
+				tooltip.add(ModTooltips.FUEL_USAGE.args(this.getJetpack().usage + " FE/t").build());
+				tooltip.add(ModTooltips.VERTICAL_SPEED.args(this.getJetpack().speedVert).build());
+				tooltip.add(ModTooltips.VERTICAL_ACCELERATION.args(this.getJetpack().accelVert).build());
+				tooltip.add(ModTooltips.HORIZONTAL_SPEED.args(this.getJetpack().speedSide).build());
+				tooltip.add(ModTooltips.HOVER_SPEED.args(this.getJetpack().speedHoverSlow).build());
+				tooltip.add(ModTooltips.DESCEND_SPEED.args(this.getJetpack().speedHover).build());
+				tooltip.add(ModTooltips.SPRINT_MODIFIER.args(this.getJetpack().sprintSpeed).build());
+				tooltip.add(ModTooltips.SPRINT_VERTICAL_MODIFIER.args(this.getJetpack().sprintSpeedVert).build());
+				tooltip.add(ModTooltips.SPRINT_FUEL_MODIFIER.args(this.getJetpack().sprintFuel).build());
 			}
 		}
 	}
@@ -212,12 +249,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
-		return new EnergyCapabilityProvider(new ItemEnergyStorage(stack, this.jetpack.capacity));
+		return new EnergyCapabilityProvider(new ItemEnergyStorage(stack, this.getJetpack().capacity));
 	}
 
 	@Override
 	public int getColor(int i) {
-		return i == 1 ? this.jetpack.color : -1;
+		return i == 1 ? this.getJetpack().color : -1;
 	}
 
 	@Override
@@ -227,7 +264,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 	@Override
 	public int getColor(ItemStack stack) {
-		return this.jetpack.color;
+		return this.getJetpack().color;
 	}
 
 	@Override
@@ -238,11 +275,11 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 	@Override
 	public boolean isEnabled() {
-		return !this.jetpack.disabled;
+		return !this.getJetpack().disabled;
 	}
 
 	public Jetpack getJetpack() {
-		return this.jetpack;
+		return JetpackRegistry.getInstance().getJetpackByName(this.jetpackName);
 	}
 
 	private static void fly(Player player, double y) {

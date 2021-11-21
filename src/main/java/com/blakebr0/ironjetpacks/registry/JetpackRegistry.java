@@ -1,6 +1,9 @@
 package com.blakebr0.ironjetpacks.registry;
 
+import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -41,7 +44,7 @@ public class JetpackRegistry {
 		return new ArrayList<>(this.jetpacks.values());
 	}
 	
-	public ArrayList<Integer> getAllTiers() {
+	public List<Integer> getAllTiers() {
 		return this.tiers;
 	}
 	
@@ -71,5 +74,37 @@ public class JetpackRegistry {
 
 	public boolean isErrored() {
 		return this.isErrored;
+	}
+
+	public void writeToBuffer(FriendlyByteBuf buffer) {
+		buffer.writeVarInt(this.jetpacks.size());
+
+		this.jetpacks.forEach((name, jetpack) -> {
+			jetpack.write(buffer);
+		});
+	}
+
+	public List<Jetpack> readFromBuffer(FriendlyByteBuf buffer) {
+		List<Jetpack> jetpacks = new ArrayList<>();
+
+		int size = buffer.readVarInt();
+
+		for (int i = 0; i < size; i++) {
+			Jetpack singularity = Jetpack.read(buffer);
+
+			jetpacks.add(singularity);
+		}
+
+		return jetpacks;
+	}
+
+	public void loadJetpacks(SyncJetpacksMessage message) {
+		this.jetpacks.clear();
+
+		for (Jetpack jetpack : message.getJetpacks()) {
+			this.jetpacks.put(jetpack.name, jetpack);
+		}
+
+		IronJetpacks.LOGGER.info("Loaded {} singularities from the server", this.jetpacks.size());
 	}
 }
