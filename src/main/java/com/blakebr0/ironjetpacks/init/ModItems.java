@@ -30,7 +30,6 @@ public final class ModItems {
 	@SubscribeEvent
 	public void onRegisterItems(RegistryEvent.Register<Item> event) {
 		var registry = event.getRegistry();
-		var jetpacks = JetpackRegistry.getInstance();
 
 		ENTRIES.forEach((reg, item) -> {
 			registry.register(item.get());
@@ -39,29 +38,31 @@ public final class ModItems {
 
 		ModJetpacks.loadJsons();
 
+		var jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
+
 		// Energy Cells
-		for (var jetpack : jetpacks.getAllJetpacks()) {
+		for (var jetpack : jetpacks) {
 			var item = new ComponentItem(jetpack, "cell", p -> p.tab(CREATIVE_TAB));
 			jetpack.setCellItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_cell"));
 		}
 		
 		// Thrusters
-		for (var jetpack : jetpacks.getAllJetpacks()) {
+		for (var jetpack : jetpacks) {
 			var item = new ComponentItem(jetpack, "thruster", p -> p.tab(CREATIVE_TAB));
 			jetpack.setThrusterItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_thruster"));
 		}
 		
 		// Capacitors
-		for (var jetpack : jetpacks.getAllJetpacks()) {
+		for (var jetpack : jetpacks) {
 			var item = new ComponentItem(jetpack, "capacitor", p -> p.tab(CREATIVE_TAB));
 			jetpack.setCapacitorItem(item);
 			registry.register(item.setRegistryName(jetpack.name + "_capacitor"));
 		}
 		
 		// Jetpacks
-		for (var jetpack : jetpacks.getAllJetpacks()) {
+		for (var jetpack : jetpacks) {
 			registry.register(jetpack.item.setRegistryName(jetpack.name + "_jetpack"));
 		}
 	}
