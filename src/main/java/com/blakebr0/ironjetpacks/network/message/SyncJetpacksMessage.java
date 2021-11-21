@@ -1,56 +1,41 @@
 package com.blakebr0.ironjetpacks.network.message;
 
-import com.blakebr0.ironjetpacks.network.NetworkHandler;
+import com.blakebr0.cucumber.network.message.Message;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class SyncJetpacksMessage implements IntSupplier {
-    private List<Jetpack> jetpacks = new ArrayList<>();
-    private int loginIndex;
+public class SyncJetpacksMessage extends Message<SyncJetpacksMessage> {
+    private final List<Jetpack> jetpacks;
 
-    public SyncJetpacksMessage() { }
-
-    @Override
-    public int getAsInt() {
-        return this.loginIndex;
+    public SyncJetpacksMessage() {
+        this.jetpacks = List.of();
     }
 
-    public int getLoginIndex() {
-        return this.loginIndex;
+    public SyncJetpacksMessage(List<Jetpack> jetpacks) {
+        this.jetpacks = jetpacks;
     }
-
-    public void setLoginIndex(int loginIndex) {
-        this.loginIndex = loginIndex;
-    }
-
     public List<Jetpack> getJetpacks() {
         return this.jetpacks;
     }
 
-    public static SyncJetpacksMessage read(FriendlyByteBuf buffer) {
-        SyncJetpacksMessage message = new SyncJetpacksMessage();
+    public SyncJetpacksMessage read(FriendlyByteBuf buffer) {
+        var jetpacks = JetpackRegistry.getInstance().readFromBuffer(buffer);
 
-        message.jetpacks = JetpackRegistry.getInstance().readFromBuffer(buffer);
-
-        return message;
+        return new SyncJetpacksMessage(jetpacks);
     }
 
-    public static void write(SyncJetpacksMessage message, FriendlyByteBuf buffer) {
+    public void write(SyncJetpacksMessage message, FriendlyByteBuf buffer) {
         JetpackRegistry.getInstance().writeToBuffer(buffer);
     }
 
-    public static void onMessage(SyncJetpacksMessage message, Supplier<NetworkEvent.Context> context) {
+    public void onMessage(SyncJetpacksMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             JetpackRegistry.getInstance().loadJetpacks(message);
-
-            NetworkHandler.INSTANCE.reply(new AcknowledgeMessage(), context.get());
         });
 
         context.get().setPacketHandled(true);

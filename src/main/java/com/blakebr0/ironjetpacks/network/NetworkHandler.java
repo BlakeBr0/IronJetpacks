@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.network.BaseNetworkHandler;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.network.message.DecrementThrottleMessage;
 import com.blakebr0.ironjetpacks.network.message.IncrementThrottleMessage;
+import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
 import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
 import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
@@ -18,5 +19,6 @@ public class NetworkHandler {
 		INSTANCE.register(ToggleEngineMessage.class, new ToggleEngineMessage());
 		INSTANCE.register(IncrementThrottleMessage.class, new IncrementThrottleMessage());
 		INSTANCE.register(DecrementThrottleMessage.class, new DecrementThrottleMessage());
+		INSTANCE.register(SyncJetpacksMessage.class, new SyncJetpacksMessage());
 	}
 }

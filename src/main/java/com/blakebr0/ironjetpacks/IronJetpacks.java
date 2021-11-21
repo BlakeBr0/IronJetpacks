@@ -12,6 +12,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
+import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +56,7 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new DynamicRecipeManager());
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
+		MinecraftForge.EVENT_BUS.register(JetpackRegistry.getInstance());
 
 		ModRecipeSerializers.onCommonSetup();
 

@@ -1,27 +1,54 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.config.ModJetpacks;
 import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JetpackRegistry {
+public class JetpackRegistry implements ResourceManagerReloadListener {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
 	private final Map<String, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
-	
-	public static JetpackRegistry getInstance() {
-		return INSTANCE;
+
+	@Override
+	public void onResourceManagerReload(ResourceManager manager) {
+		this.jetpacks.clear();
+		ModJetpacks.loadJsons();
 	}
-	
+
+	@SubscribeEvent
+	public void onAddReloadListeners(AddReloadListenerEvent event) {
+		event.addListener(this);
+	}
+
+	@SubscribeEvent
+	public void onDatapackSync(OnDatapackSyncEvent event) {
+		var message = new SyncJetpacksMessage(this.getAllJetpacks());
+		var player = event.getPlayer();
+
+		if (player != null) {
+			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+		} else {
+			NetworkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+		}
+	}
+
 	public void register(Jetpack jetpack) {
 		if (this.jetpacks.containsKey(jetpack.name)) {
 			this.isErrored = true;
@@ -29,33 +56,33 @@ public class JetpackRegistry {
 		}
 
 		this.jetpacks.put(jetpack.name, jetpack);
-		
+
 		if (jetpack.tier > -1 && !this.tiers.contains(jetpack.tier)) {
 			this.tiers.add(jetpack.tier);
 			this.tiers.sort(Integer::compareTo);
 		}
-		
+
 		if (jetpack.tier > -1 && jetpack.tier < this.lowestTier) {
 			this.lowestTier = jetpack.tier;
 		}
 	}
-	
+
 	public List<Jetpack> getAllJetpacks() {
 		return new ArrayList<>(this.jetpacks.values());
 	}
-	
+
 	public List<Integer> getAllTiers() {
 		return this.tiers;
 	}
-	
+
 	public Integer getLowestTier() {
 		return this.lowestTier;
 	}
-	
+
 	public Jetpack getJetpackByName(String name) {
 		return this.jetpacks.get(name);
 	}
-	
+
 	public Item getCoilForTier(int tier) {
 		float tiers = this.tiers.size();
 		float index = this.tiers.indexOf(tier);
@@ -90,9 +117,9 @@ public class JetpackRegistry {
 		int size = buffer.readVarInt();
 
 		for (int i = 0; i < size; i++) {
-			Jetpack singularity = Jetpack.read(buffer);
+			Jetpack jetpack = Jetpack.read(buffer);
 
-			jetpacks.add(singularity);
+			jetpacks.add(jetpack);
 		}
 
 		return jetpacks;
@@ -106,5 +133,9 @@ public class JetpackRegistry {
 		}
 
 		IronJetpacks.LOGGER.info("Loaded {} singularities from the server", this.jetpacks.size());
+	}
+
+	public static JetpackRegistry getInstance() {
+		return INSTANCE;
 	}
 }

@@ -36,8 +36,6 @@ public final class ModItems {
 			reg.updateReference(registry);
 		});
 
-		ModJetpacks.loadJsons();
-
 		var jetpacks = JetpackRegistry.getInstance().getAllJetpacks();
 
 		// Energy Cells
