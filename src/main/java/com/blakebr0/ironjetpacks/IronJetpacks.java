@@ -59,8 +59,6 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 		MinecraftForge.EVENT_BUS.register(JetpackRegistry.getInstance());
 
-		ModRecipeSerializers.onCommonSetup();
-
 		event.enqueueWork(() -> {
 			NetworkHandler.onCommonSetup();
 		});

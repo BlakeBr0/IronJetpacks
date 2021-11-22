@@ -1,7 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting.ingredient;
 
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
-import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.gson.JsonArray;
@@ -15,15 +14,11 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.NBTIngredient;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class JetpackIngredient extends Ingredient {
-    public static final List<JetpackItem> ALL_JETPACKS = new ArrayList<>();
     private final int tier;
     private ItemStack[] stacks;
     private IntList stacksPacked;
