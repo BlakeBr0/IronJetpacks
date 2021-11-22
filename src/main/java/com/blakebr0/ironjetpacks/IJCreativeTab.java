@@ -2,6 +2,7 @@ package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,10 +13,13 @@ public class IJCreativeTab extends CreativeModeTab {
 	
 	@Override
 	public ItemStack makeIcon() {
-		var jetpacks = JetpackRegistry.getInstance().getJetpacks();
+		var jetpack = JetpackRegistry.getInstance().getJetpacks()
+				.stream()
+				.findFirst()
+				.orElse(null);
 
-		if (!jetpacks.isEmpty()) {
-			return new ItemStack(jetpacks.get(0).item);
+		if (jetpack != null) {
+			return JetpackUtils.getItemForJetpack(jetpack);
 		}
 
 		return new ItemStack(ModItems.STRAP.get());
