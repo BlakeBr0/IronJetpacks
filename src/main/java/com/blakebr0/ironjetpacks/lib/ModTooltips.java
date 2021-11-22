@@ -23,4 +23,5 @@ public final class ModTooltips {
 	public static final Tooltip TOGGLE_HOVER = new Tooltip("tooltip.ironjetpacks.toggle_hover");
 	public static final Tooltip CHANGE_THROTTLE = new Tooltip("tooltip.ironjetpacks.change_throttle");
 	public static final Tooltip STATE_TOOLTIP_LAYOUT = new Tooltip("tooltip.ironjetpacks.state_tooltip_layout");
+	public static final Tooltip JETPACK_ID = new Tooltip("tooltip.ironjetpacks.jetpack_id");
 }

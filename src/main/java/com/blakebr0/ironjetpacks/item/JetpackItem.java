@@ -203,8 +203,13 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
 		var jetpack = JetpackUtils.getJetpack(stack);
+
+		if (flag.isAdvanced()) {
+			tooltip.add(ModTooltips.JETPACK_ID.args(jetpack.getId()).color(ChatFormatting.DARK_GRAY).build());
+			tooltip.add(new TextComponent(""));
+		}
 
 		if (!jetpack.creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);

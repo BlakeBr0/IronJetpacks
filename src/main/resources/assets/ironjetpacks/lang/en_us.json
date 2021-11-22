@@ -39,5 +39,6 @@
   "tooltip.ironjetpacks.toggle_engine": "Toggled Engine %s",
   "tooltip.ironjetpacks.toggle_hover": "Toggled Hover %s",
   "tooltip.ironjetpacks.change_throttle": "Throttle set to %s",
-  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.jetpack_id": "Jetpack ID: %s"
 }
