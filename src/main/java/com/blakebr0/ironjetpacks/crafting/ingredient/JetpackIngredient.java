@@ -13,7 +13,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.NBTIngredient;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -56,7 +58,7 @@ public class JetpackIngredient extends Ingredient {
     public boolean test(ItemStack stack) {
         if (stack == null) {
             return false;
-        } else if (JetpackRegistry.getInstance().getJetpacks().stream().noneMatch(j -> j.getTier() == this.tier)) {
+        } else if (!JetpackRegistry.getInstance().getAllTiers().contains(this.tier)) {
             return stack.isEmpty();
         } else {
             if (this.stacks == null) {
@@ -91,6 +93,14 @@ public class JetpackIngredient extends Ingredient {
                 .filter(j -> j.getTier() == this.tier)
                 .forEach(jetpack -> {
                     var obj = new JsonObject();
+                    var stack = JetpackUtils.getItemForJetpack(jetpack);
+
+                    obj.addProperty("type", CraftingHelper.getID(NBTIngredient.Serializer.INSTANCE).toString());
+                    obj.addProperty("item", stack.getItem().getRegistryName().toString());
+                    obj.addProperty("count", stack.getCount());
+                    if (stack.hasTag())
+                        obj.addProperty("nbt", stack.getTag().toString());
+
                     json.add(obj);
                 });
 
