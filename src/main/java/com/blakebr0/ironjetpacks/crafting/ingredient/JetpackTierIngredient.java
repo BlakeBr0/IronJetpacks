@@ -20,12 +20,12 @@ import net.minecraftforge.common.crafting.NBTIngredient;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class JetpackIngredient extends Ingredient {
+public class JetpackTierIngredient extends Ingredient {
     private final int tier;
     private ItemStack[] stacks;
     private IntList stacksPacked;
 
-    public JetpackIngredient(int tier) {
+    public JetpackTierIngredient(int tier) {
         super(Stream.of());
         this.tier = tier;
     }
@@ -120,7 +120,7 @@ public class JetpackIngredient extends Ingredient {
 
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ModRecipeSerializers.JETPACK_INGREDIENT;
+        return ModRecipeSerializers.JETPACK_TIER_INGREDIENT;
     }
 
     private void initMatchingStacks() {
@@ -131,19 +131,19 @@ public class JetpackIngredient extends Ingredient {
                 .toArray(ItemStack[]::new);
     }
 
-    public static class Serializer implements IIngredientSerializer<JetpackIngredient> {
+    public static class Serializer implements IIngredientSerializer<JetpackTierIngredient> {
         @Override
-        public JetpackIngredient parse(FriendlyByteBuf buffer) {
-            return new JetpackIngredient(buffer.readInt());
+        public JetpackTierIngredient parse(FriendlyByteBuf buffer) {
+            return new JetpackTierIngredient(buffer.readInt());
         }
 
         @Override
-        public JetpackIngredient parse(JsonObject json) {
-            return new JetpackIngredient(json.get("tier").getAsInt());
+        public JetpackTierIngredient parse(JsonObject json) {
+            return new JetpackTierIngredient(json.get("tier").getAsInt());
         }
 
         @Override
-        public void write(FriendlyByteBuf buffer, JetpackIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, JetpackTierIngredient ingredient) {
             buffer.writeInt(ingredient.tier);
         }
     }

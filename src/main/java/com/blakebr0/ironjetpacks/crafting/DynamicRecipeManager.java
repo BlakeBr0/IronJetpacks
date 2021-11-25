@@ -3,7 +3,7 @@ package com.blakebr0.ironjetpacks.crafting;
 import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackIngredient;
+import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackTierIngredient;
 import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
@@ -162,7 +162,7 @@ public class DynamicRecipeManager {
 
         var capacitor = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
         var thruster = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
-        var jetpackTier = new JetpackIngredient(jetpack.tier - 1);
+        var jetpackTier = new JetpackTierIngredient(jetpack.tier - 1);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
                 material, jetpackTier, material,
