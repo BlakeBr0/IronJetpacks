@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.init;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
+import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackComponentIngredient;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackIngredient;
 import com.blakebr0.ironjetpacks.crafting.recipe.JetpackUpgradeRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,7 @@ public final class ModRecipeSerializers {
     public static final RecipeSerializer<JetpackUpgradeRecipe> CRAFTING_JETPACK_UPGRADE = new JetpackUpgradeRecipe.Serializer();
 
     public static final IIngredientSerializer<JetpackIngredient> JETPACK_INGREDIENT = new JetpackIngredient.Serializer();
+    public static final IIngredientSerializer<JetpackComponentIngredient> JETPACK_COMPONENT_INGREDIENT = new JetpackComponentIngredient.Serializer();
 
     @SubscribeEvent
     public void onRegisterSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
@@ -22,5 +24,6 @@ public final class ModRecipeSerializers {
         registry.register(CRAFTING_JETPACK_UPGRADE.setRegistryName(new ResourceLocation(IronJetpacks.MOD_ID, "crafting_jetpack_upgrade")));
 
         CraftingHelper.register(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"), JETPACK_INGREDIENT);
+        CraftingHelper.register(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack_component"), JETPACK_COMPONENT_INGREDIENT);
     }
 }
