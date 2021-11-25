@@ -2,7 +2,6 @@ package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
@@ -10,6 +9,7 @@ import com.blakebr0.ironjetpacks.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.handler.KeybindHandler;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
+import com.blakebr0.ironjetpacks.init.ModReloadListeners;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
@@ -55,7 +55,7 @@ public final class IronJetpacks {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new DynamicRecipeManager());
+		MinecraftForge.EVENT_BUS.register(new ModReloadListeners());
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 		MinecraftForge.EVENT_BUS.register(JetpackRegistry.getInstance());
 

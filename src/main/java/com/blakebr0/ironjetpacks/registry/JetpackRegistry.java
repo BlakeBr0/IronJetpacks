@@ -8,9 +8,7 @@ import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
@@ -20,22 +18,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JetpackRegistry implements ResourceManagerReloadListener {
+public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
 	private final Map<ResourceLocation, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
 
-	@Override
 	public void onResourceManagerReload(ResourceManager manager) {
 		this.jetpacks.clear();
 		ModJetpacks.loadJsons();
-	}
-
-	@SubscribeEvent
-	public void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(this);
 	}
 
 	@SubscribeEvent

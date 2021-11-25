@@ -13,19 +13,16 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.tags.SerializationTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class DynamicRecipeManager implements ResourceManagerReloadListener {
-    @Override
-    public void onResourceManagerReload(ResourceManager resourceManager) {
+public class DynamicRecipeManager {
+    private static final DynamicRecipeManager INSTANCE = new DynamicRecipeManager();
+
+    public void onResourceManagerReload(ResourceManager manager) {
         JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
             var cell = makeCellRecipe(jetpack);
             var thruster = makeThrusterRecipe(jetpack);
@@ -46,9 +43,8 @@ public class DynamicRecipeManager implements ResourceManagerReloadListener {
         });
     }
 
-    @SubscribeEvent
-    public void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(this);
+    public static DynamicRecipeManager getInstance() {
+        return INSTANCE;
     }
 
     private static ShapedRecipe makeCellRecipe(Jetpack jetpack) {
