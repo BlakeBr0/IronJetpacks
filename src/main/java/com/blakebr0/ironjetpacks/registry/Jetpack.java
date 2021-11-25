@@ -1,9 +1,7 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.item.ComponentItem;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
@@ -11,12 +9,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.SerializationTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -47,9 +42,7 @@ public class Jetpack {
 	public float toughness;
 	public float knockbackResistance;
 	public Multimap<Attribute, AttributeModifier> attributeModifiers;
-	public ComponentItem cell;
-	public ComponentItem thruster;
-	public ComponentItem capacitor;
+
 	public int capacity;
 	public int usage;
 	public double speedVert;
@@ -72,18 +65,10 @@ public class Jetpack {
 		this.craftingMaterialString = craftingMaterialString;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> attributeModifiers = ImmutableMultimap.builder();
-		attributeModifiers.put(Attributes.ARMOR, new AttributeModifier(ATTRIBUTE_ID, "Armor modifier", this.armorPoints, AttributeModifier.Operation.ADDITION));
-		attributeModifiers.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ATTRIBUTE_ID, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
-		if (this.knockbackResistance > 0) {
-			attributeModifiers.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTRIBUTE_ID, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
-		}
-
-		this.attributeModifiers = attributeModifiers.build();
+		this.attributeModifiers = this.createAttributeModifiers();
 	}
-	
-	public Jetpack setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
+
+	public void setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
 		this.capacity = capacity;
 		this.usage = usage;
 		this.speedVert = speedVert;
@@ -94,57 +79,40 @@ public class Jetpack {
 		this.sprintSpeed = sprintSpeed;
 		this.sprintSpeedVert = sprintSpeedVert;
 		this.sprintFuel = sprintFuel;
-		
-		return this;
 	}
 
 	public ResourceLocation getId() {
 		return this.id;
 	}
-	
+
 	public Jetpack setCreative() {
 		this.creative = true;
 		this.tier = -1;
 		this.rarity = Rarity.EPIC;
-		
+
 		return this;
 	}
-	
+
 	public Jetpack setCreative(boolean set) {
 		if (set) this.setCreative();
 		return this;
 	}
-	
+
 	public Jetpack setDisabled() {
 		this.disabled = true;
 		return this;
 	}
-	
+
 	public Jetpack setDisabled(boolean set) {
 		if (set) this.setDisabled();
 		return this;
 	}
-	
+
 	public Jetpack setRarity(Rarity rarity) {
 		this.rarity = rarity;
 		return this;
 	}
-	
-	public Jetpack setCellItem(ComponentItem item) {
-		this.cell = item;
-		return this;
-	}
-	
-	public Jetpack setThrusterItem(ComponentItem item) {
-		this.thruster = item;
-		return this;
-	}
-	
-	public Jetpack setCapacitorItem(ComponentItem item) {
-		this.capacitor = item;
-		return this;
-	}
-	
+
 	public int getTier() {
 		return this.tier;
 	}
@@ -152,14 +120,15 @@ public class Jetpack {
 	public Ingredient getCraftingMaterial() {
 		if (this.craftingMaterial == null) {
 			this.craftingMaterial = Ingredient.EMPTY;
+
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
-				String[] parts = craftingMaterialString.split(":");
+				var parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					Tag<Item> tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(parts[1], parts[2]));
+					var tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(parts[1], parts[2]));
 					if (tag != null && !tag.getValues().isEmpty())
 						this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {
-					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
+					var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
 					if (item != null)
 						this.craftingMaterial = Ingredient.of(item);
 				}
@@ -172,6 +141,19 @@ public class Jetpack {
 	private String makeDisplayName() {
 		var parts = this.name.replaceAll(" ", "_").split("_");
 		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
+	}
+
+	private ImmutableMultimap<Attribute, AttributeModifier> createAttributeModifiers() {
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifiers = ImmutableMultimap.builder();
+
+		modifiers.put(Attributes.ARMOR, new AttributeModifier(ATTRIBUTE_ID, "Armor modifier", this.armorPoints, AttributeModifier.Operation.ADDITION));
+		modifiers.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ATTRIBUTE_ID, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
+
+		if (this.knockbackResistance > 0) {
+			modifiers.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTRIBUTE_ID, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
+		}
+
+		return modifiers.build();
 	}
 
 	public JsonObject toJson() {
@@ -205,32 +187,32 @@ public class Jetpack {
 
 	public static Jetpack fromJson(JsonObject json) {
 		var name = json.get("name").getAsString();
-		boolean disable = json.get("disable").getAsBoolean();
-		int tier = json.get("tier").getAsInt();
-		int color = Integer.parseInt(json.get("color").getAsString(), 16);
-		int armorPoints = json.get("armorPoints").getAsInt();
-		int enchantability = json.get("enchantability").getAsInt();
+		var disable = json.get("disable").getAsBoolean();
+		var tier = json.get("tier").getAsInt();
+		var color = Integer.parseInt(json.get("color").getAsString(), 16);
+		var armorPoints = json.get("armorPoints").getAsInt();
+		var enchantability = json.get("enchantability").getAsInt();
 		var craftingMaterialString = json.get("craftingMaterial").getAsString();
-		boolean creative = json.get("creative").getAsBoolean();
+		var creative = json.get("creative").getAsBoolean();
 		var rarity = Rarity.values()[json.get("rarity").getAsInt()];
-		float toughness = json.get("toughness").getAsFloat();
-		float knockbackResistance = json.get("knockbackResistance").getAsFloat();
+		var toughness = json.get("toughness").getAsFloat();
+		var knockbackResistance = json.get("knockbackResistance").getAsFloat();
 
 		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
 				.setDisabled(disable);
 
-		int capacity = json.get("capacity").getAsInt();
-		int usage = json.get("usage").getAsInt();
-		double speedVert = json.get("speedVertical").getAsDouble();
-		double accelVert = json.get("accelVertical").getAsDouble();
-		double speedSide = json.get("speedSideways").getAsDouble();
-		double speedHover = json.get("speedHoverDescend").getAsDouble();
-		double speedHoverSlow = json.get("speedHover").getAsDouble();
-		double sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
-		double sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
-		double sprintFuel = json.get("sprintFuelMulti").getAsDouble();
+		var capacity = json.get("capacity").getAsInt();
+		var usage = json.get("usage").getAsInt();
+		var speedVert = json.get("speedVertical").getAsDouble();
+		var accelVert = json.get("accelVertical").getAsDouble();
+		var speedSide = json.get("speedSideways").getAsDouble();
+		var speedHover = json.get("speedHoverDescend").getAsDouble();
+		var speedHoverSlow = json.get("speedHover").getAsDouble();
+		var sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
+		var sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
+		var sprintFuel = json.get("sprintFuelMulti").getAsDouble();
 
 		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
@@ -263,33 +245,33 @@ public class Jetpack {
 	}
 
 	public static Jetpack read(FriendlyByteBuf buffer) {
-		String name = buffer.readUtf();
-		boolean disabled = buffer.readBoolean();
-		int tier = buffer.readVarInt();
-		int color = buffer.readVarInt();
-		int armorPoints = buffer.readVarInt();
-		int enchantability = buffer.readVarInt();
-		String craftingMaterialString = buffer.readUtf();
-		boolean creative = buffer.readBoolean();
-		Rarity rarity = Rarity.values()[buffer.readVarInt()];
-		float toughness = buffer.readFloat();
-		float knockbackResistance = buffer.readFloat();
+		var name = buffer.readUtf();
+		var disabled = buffer.readBoolean();
+		var tier = buffer.readVarInt();
+		var color = buffer.readVarInt();
+		var armorPoints = buffer.readVarInt();
+		var enchantability = buffer.readVarInt();
+		var craftingMaterialString = buffer.readUtf();
+		var creative = buffer.readBoolean();
+		var rarity = Rarity.values()[buffer.readVarInt()];
+		var toughness = buffer.readFloat();
+		var knockbackResistance = buffer.readFloat();
 
-		Jetpack jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
+		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
 				.setDisabled(disabled);
 
-		int capacity = buffer.readVarInt();
-		int usage = buffer.readVarInt();
-		double speedVert = buffer.readDouble();
-		double accelVert = buffer.readDouble();
-		double speedSide = buffer.readDouble();
-		double speedHover = buffer.readDouble();
-		double speedHoverSlow = buffer.readDouble();
-		double sprintSpeed = buffer.readDouble();
-		double sprintSpeedVert = buffer.readDouble();
-		double sprintFuel = buffer.readDouble();
+		var capacity = buffer.readVarInt();
+		var usage = buffer.readVarInt();
+		var speedVert = buffer.readDouble();
+		var accelVert = buffer.readDouble();
+		var speedSide = buffer.readDouble();
+		var speedHover = buffer.readDouble();
+		var speedHoverSlow = buffer.readDouble();
+		var sprintSpeed = buffer.readDouble();
+		var sprintSpeedVert = buffer.readDouble();
+		var sprintFuel = buffer.readDouble();
 
 		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
