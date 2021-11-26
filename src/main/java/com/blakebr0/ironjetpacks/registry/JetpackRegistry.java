@@ -1,34 +1,46 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.config.ModJetpacks;
 import com.blakebr0.ironjetpacks.init.ModItems;
+import com.blakebr0.ironjetpacks.lib.ModJetpacks;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
+import com.google.common.base.Stopwatch;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	private final Map<ResourceLocation, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
-
-	public void onResourceManagerReload(ResourceManager manager) {
-		this.jetpacks.clear();
-		ModJetpacks.loadJsons();
-	}
 
 	@SubscribeEvent
 	public void onDatapackSync(OnDatapackSyncEvent event) {
@@ -40,6 +52,10 @@ public class JetpackRegistry {
 		} else {
 			NetworkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), message);
 		}
+	}
+
+	public void onResourceManagerReload(ResourceManager manager) {
+		this.loadJetpacks();
 	}
 
 	public void register(Jetpack jetpack) {
@@ -121,14 +137,124 @@ public class JetpackRegistry {
 	public void loadJetpacks(SyncJetpacksMessage message) {
 		this.jetpacks.clear();
 
-		for (Jetpack jetpack : message.getJetpacks()) {
+		for (var jetpack : message.getJetpacks()) {
 			this.jetpacks.put(jetpack.getId(), jetpack);
 		}
 
 		IronJetpacks.LOGGER.info("Loaded {} jetpacks from the server", this.jetpacks.size());
 	}
 
+	private void loadJetpacks() {
+		var stopwatch = Stopwatch.createStarted();
+		var dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
+
+		this.jetpacks.clear();
+
+		if (!dir.exists() && dir.mkdirs()) {
+			for (var jetpack : ModJetpacks.getDefaults()) {
+				var file = new File(dir, jetpack.name + ".json");
+
+				try (var writer = new FileWriter(file)) {
+					GSON.toJson(jetpack.toJson(), writer);
+				} catch (Exception e) {
+					IronJetpacks.LOGGER.error("An error occurred while generating jetpack jsons", e);
+				}
+			}
+		}
+
+		if (!dir.mkdirs() && dir.isDirectory()) {
+			this.loadFiles(dir);
+		}
+
+		stopwatch.stop();
+		IronJetpacks.LOGGER.info("Loaded {} singularity type(s) in {} ms", this.jetpacks.size(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+	}
+
+	private void loadFiles(File dir) {
+		var files = dir.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json"));
+
+		if (files == null)
+			return;
+
+		List<Jetpack> jetpacks = new ArrayList<>();
+
+		for (var file : files) {
+			Jetpack jetpack = null;
+			InputStreamReader reader = null;
+
+			try {
+				reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+
+				var parser = new JsonParser();
+				var json = parser.parse(reader).getAsJsonObject();
+
+				reader.close();
+
+				if (handleMigrations(json)) {
+					try (var writer = new FileWriter(file)) {
+						GSON.toJson(json, writer);
+					} catch (Exception e) {
+						IronJetpacks.LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
+						continue;
+					}
+				}
+
+				jetpack = Jetpack.fromJson(json);
+			} catch (Exception e) {
+				IronJetpacks.LOGGER.error("An error occurred while reading jetpack json {}", file.getName(), e);
+			} finally {
+				IOUtils.closeQuietly(reader);
+			}
+
+			if (jetpack != null && !jetpack.disabled) {
+				jetpacks.add(jetpack);
+			}
+		}
+
+		jetpacks.sort(Comparator.comparingInt(Jetpack::getTier));
+
+		for (var jetpack : jetpacks) {
+			this.register(jetpack);
+		}
+	}
+
 	public static JetpackRegistry getInstance() {
 		return INSTANCE;
+	}
+
+	private static boolean handleMigrations(JsonObject json) {
+		boolean changed = false;
+
+		// add creative flag
+		if (!json.has("creative")) {
+			json.addProperty("creative", false);
+			changed = true;
+		}
+
+		// add rarity field
+		if (!json.has("rarity")) {
+			json.addProperty("rarity", 0);
+			changed = true;
+		}
+
+		// add vertical sprint speed field
+		if (!json.has("sprintSpeedMultiVertical")) {
+			json.addProperty("sprintSpeedMultiVertical", 1.0D);
+			changed = true;
+		}
+
+		// add armor toughness field
+		if (!json.has("toughness")) {
+			json.addProperty("toughness", 0F);
+			changed = true;
+		}
+
+		// add knockback resistance field
+		if (!json.has("knockbackResistance")) {
+			json.addProperty("knockbackResistance", 0F);
+			changed = true;
+		}
+
+		return changed;
 	}
 }
