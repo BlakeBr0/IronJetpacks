@@ -187,17 +187,17 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		var jetpack = JetpackUtils.getJetpack(stack);
 		return ModConfigs.ENCHANTABLE_JETPACKS.get() && jetpack.enchantablilty > 0;
 	}
-	
-	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
-		var energy = JetpackUtils.getEnergyStorage(stack);
-		double stored = energy.getMaxEnergyStored() - energy.getEnergyStored();
 
-		return stored / energy.getMaxEnergyStored();
-	}
-	
 	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
+	public int getBarWidth(ItemStack stack) {
+		var energy = JetpackUtils.getEnergyStorage(stack);
+		var stored = energy.getMaxEnergyStored() - energy.getEnergyStored();
+
+		return Math.round(13.0F - stored * 13.0F / energy.getMaxEnergyStored());
+	}
+
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
 		var jetpack = JetpackUtils.getJetpack(stack);
 		return !jetpack.creative;
 	}

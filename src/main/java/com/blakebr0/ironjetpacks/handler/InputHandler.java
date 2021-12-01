@@ -2,8 +2,8 @@ package com.blakebr0.ironjetpacks.handler;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,7 +90,7 @@ public final class InputHandler {
 	}
 
 	@SubscribeEvent
-	public void onServerStopping(FMLServerStoppingEvent event) {
+	public void onServerStopping(ServerStoppingEvent event) {
 		InputHandler.clear();
 	}
 }
