@@ -32,7 +32,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeableLeatherItem;
@@ -113,7 +112,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 					var jetpack = JetpackUtils.getJetpack(stack);
 
 					double motionY = player.getDeltaMovement().y();
-					double hoverSpeed = InputHandler.isHoldingDown(player) ? jetpack.speedHover : jetpack.speedHoverSlow;
+					double hoverSpeed = InputHandler.isHoldingDown(player) ? jetpack.speedHoverDescend : jetpack.speedHoverSlow;
 					double currentAccel = jetpack.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = jetpack.speedVert * (player.isInWater() ? 0.4D : 1.0D);
 					
@@ -137,7 +136,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 								if (InputHandler.isHoldingDown(player)) {
 									fly(player, Math.min(motionY + currentAccel, -jetpack.speedHoverSlow) * throttle);
 								} else {
-									fly(player, Math.min(motionY + currentAccel, jetpack.speedHover) * throttle * verticalSprintMulti);
+									fly(player, Math.min(motionY + currentAccel, jetpack.speedHoverAscend) * throttle * verticalSprintMulti);
 								}
 							}
 						} else {
@@ -208,7 +207,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 		if (flag.isAdvanced()) {
 			tooltip.add(ModTooltips.JETPACK_ID.args(jetpack.getId()).color(ChatFormatting.DARK_GRAY).build());
-			tooltip.add(new TextComponent(""));
+			tooltip.add(new TextComponent(" "));
 		}
 
 		if (!jetpack.creative) {
@@ -229,7 +228,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		tooltip.add(ModTooltips.THROTTLE.args(throttle).build());
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
-			tooltip.add(new TextComponent(""));
+			tooltip.add(new TextComponent(" "));
 
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());
@@ -239,7 +238,8 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 				tooltip.add(ModTooltips.VERTICAL_ACCELERATION.args(jetpack.accelVert).build());
 				tooltip.add(ModTooltips.HORIZONTAL_SPEED.args(jetpack.speedSide).build());
 				tooltip.add(ModTooltips.HOVER_SPEED.args(jetpack.speedHoverSlow).build());
-				tooltip.add(ModTooltips.DESCEND_SPEED.args(jetpack.speedHover).build());
+				tooltip.add(ModTooltips.HOVER_ASCEND_SPEED.args(jetpack.speedHoverAscend).build());
+				tooltip.add(ModTooltips.HOVER_DESCEND_SPEED.args(jetpack.speedHoverDescend).build());
 				tooltip.add(ModTooltips.SPRINT_MODIFIER.args(jetpack.sprintSpeed).build());
 				tooltip.add(ModTooltips.SPRINT_VERTICAL_MODIFIER.args(jetpack.sprintSpeedVert).build());
 				tooltip.add(ModTooltips.SPRINT_FUEL_MODIFIER.args(jetpack.sprintFuel).build());

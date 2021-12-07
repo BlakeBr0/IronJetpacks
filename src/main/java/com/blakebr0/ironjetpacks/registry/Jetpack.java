@@ -48,7 +48,8 @@ public class Jetpack {
 	public double speedVert;
 	public double accelVert;
 	public double speedSide;
-	public double speedHover;
+	public double speedHoverAscend;
+	public double speedHoverDescend;
 	public double speedHoverSlow;
 	public double sprintSpeed;
 	public double sprintSpeedVert;
@@ -68,13 +69,14 @@ public class Jetpack {
 		this.attributeModifiers = this.createAttributeModifiers();
 	}
 
-	public void setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHover, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
+	public void setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHoverAscend, double speedHoverDescend, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
 		this.capacity = capacity;
 		this.usage = usage;
 		this.speedVert = speedVert;
 		this.accelVert = accelVert;
 		this.speedSide = speedSide;
-		this.speedHover = speedHover;
+		this.speedHoverAscend = speedHoverAscend;
+		this.speedHoverDescend = speedHoverDescend;
 		this.speedHoverSlow = speedHoverSlow;
 		this.sprintSpeed = sprintSpeed;
 		this.sprintSpeedVert = sprintSpeedVert;
@@ -176,7 +178,8 @@ public class Jetpack {
 		json.addProperty("speedVertical", this.speedVert);
 		json.addProperty("accelVertical", this.accelVert);
 		json.addProperty("speedSideways", this.speedSide);
-		json.addProperty("speedHoverDescend", this.speedHover);
+		json.addProperty("speedHoverAscend", this.speedHoverAscend);
+		json.addProperty("speedHoverDescend", this.speedHoverDescend);
 		json.addProperty("speedHover", this.speedHoverSlow);
 		json.addProperty("sprintSpeedMulti", this.sprintSpeed);
 		json.addProperty("sprintSpeedMultiVertical", this.sprintSpeedVert);
@@ -208,13 +211,14 @@ public class Jetpack {
 		var speedVert = json.get("speedVertical").getAsDouble();
 		var accelVert = json.get("accelVertical").getAsDouble();
 		var speedSide = json.get("speedSideways").getAsDouble();
-		var speedHover = json.get("speedHoverDescend").getAsDouble();
+		var speedHoverAscend = json.get("speedHoverAscend").getAsDouble();
+		var speedHoverDescend = json.get("speedHoverDescend").getAsDouble();
 		var speedHoverSlow = json.get("speedHover").getAsDouble();
 		var sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
 		var sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
 		var sprintFuel = json.get("sprintFuelMulti").getAsDouble();
 
-		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
+		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHoverAscend, speedHoverDescend, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
 		return jetpack;
 	}
@@ -237,7 +241,8 @@ public class Jetpack {
 		buffer.writeDouble(this.speedVert);
 		buffer.writeDouble(this.accelVert);
 		buffer.writeDouble(this.speedSide);
-		buffer.writeDouble(this.speedHover);
+		buffer.writeDouble(this.speedHoverAscend);
+		buffer.writeDouble(this.speedHoverDescend);
 		buffer.writeDouble(this.speedHoverSlow);
 		buffer.writeDouble(this.sprintSpeed);
 		buffer.writeDouble(this.sprintSpeedVert);
@@ -267,13 +272,14 @@ public class Jetpack {
 		var speedVert = buffer.readDouble();
 		var accelVert = buffer.readDouble();
 		var speedSide = buffer.readDouble();
-		var speedHover = buffer.readDouble();
+		var speedHoverAscend = buffer.readDouble();
+		var speedHoverDescend = buffer.readDouble();
 		var speedHoverSlow = buffer.readDouble();
 		var sprintSpeed = buffer.readDouble();
 		var sprintSpeedVert = buffer.readDouble();
 		var sprintFuel = buffer.readDouble();
 
-		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHover, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
+		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHoverAscend, speedHoverDescend, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
 		return jetpack;
 	}
