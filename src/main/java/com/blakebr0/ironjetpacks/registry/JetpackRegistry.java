@@ -144,11 +144,8 @@ public class JetpackRegistry {
 		IronJetpacks.LOGGER.info("Loaded {} jetpacks from the server", this.jetpacks.size());
 	}
 
-	private void loadJetpacks() {
-		var stopwatch = Stopwatch.createStarted();
+	public void writeDefaultJetpackFiles() {
 		var dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
-
-		this.jetpacks.clear();
 
 		if (!dir.exists() && dir.mkdirs()) {
 			for (var jetpack : ModJetpacks.getDefaults()) {
@@ -161,12 +158,22 @@ public class JetpackRegistry {
 				}
 			}
 		}
+	}
+
+	private void loadJetpacks() {
+		var stopwatch = Stopwatch.createStarted();
+		var dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
+
+		this.writeDefaultJetpackFiles();
+
+		this.jetpacks.clear();
 
 		if (!dir.mkdirs() && dir.isDirectory()) {
 			this.loadFiles(dir);
 		}
 
 		stopwatch.stop();
+
 		IronJetpacks.LOGGER.info("Loaded {} singularity type(s) in {} ms", this.jetpacks.size(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
 	}
 

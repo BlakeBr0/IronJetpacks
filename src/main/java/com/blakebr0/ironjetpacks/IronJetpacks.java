@@ -62,6 +62,8 @@ public final class IronJetpacks {
 		event.enqueueWork(() -> {
 			NetworkHandler.onCommonSetup();
 		});
+
+		JetpackRegistry.getInstance().writeDefaultJetpackFiles();
 	}
 
 	@SubscribeEvent
