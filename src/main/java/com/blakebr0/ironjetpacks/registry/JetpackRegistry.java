@@ -174,7 +174,7 @@ public class JetpackRegistry {
 
 		stopwatch.stop();
 
-		IronJetpacks.LOGGER.info("Loaded {} singularity type(s) in {} ms", this.jetpacks.size(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+		IronJetpacks.LOGGER.info("Loaded {} jetpack type(s) in {} ms", this.jetpacks.size(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
 	}
 
 	private void loadFiles(File dir) {

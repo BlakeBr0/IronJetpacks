@@ -9,7 +9,7 @@ import java.util.List;
 public final class ModJetpacks {
     private static final Jetpack WOOD = new Jetpack("wood", 0, 0x83663C, 1, 15, "tag:minecraft:planks", 0F, 0F);
     private static final Jetpack STONE = new Jetpack("stone", 1, 0x7F7F7F, 2, 12, "tag:forge:stone", 0F, 0F);
-    private static final Jetpack COPPER = new Jetpack("copper", 1, 0xEE825B, 2, 12, "tag:forge:ingots/copper", 0F, 0F);
+    private static final Jetpack COPPER = new Jetpack("copper", 1, 0xEE825B, 2, 12, "minecraft:copper_ingot", 0F, 0F);
     private static final Jetpack IRON = new Jetpack("iron", 2, 0xD8D8D8, 3, 9, "tag:forge:ingots/iron", 0F, 0F);
     private static final Jetpack GOLD = new Jetpack("gold", 3, 0xF9EB59, 2, 25, "tag:forge:ingots/gold", 0F, 0F);
     private static final Jetpack DIAMOND = new Jetpack("diamond", 4, 0x4CF4E0, 4, 10, "tag:forge:gems/diamond", 0F, 0F);
