@@ -21,6 +21,9 @@ public final class JetpackUtils {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
 
 	public static boolean isFlying(Player player) {
+		if (player.isSpectator())
+			return false;
+
 		var stack = player.getItemBySlot(EquipmentSlot.CHEST);
 
 		if (!stack.isEmpty()) {
