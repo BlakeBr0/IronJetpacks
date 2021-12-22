@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting.recipe;
 
+import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
@@ -20,14 +21,20 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv) {
-        var jetpack = inv.getItem(4);
+        var stack = inv.getItem(4);
         var result = this.getResultItem().copy();
 
-        if (!jetpack.isEmpty() && jetpack.getItem() instanceof JetpackItem) {
-            var tag = jetpack.getTag();
+        if (!stack.isEmpty() && stack.getItem() instanceof JetpackItem) {
+            var tag = stack.getTag();
 
             if (tag != null) {
+                var jetpack = NBTHelper.getString(result, "Id");
+
+                tag = tag.copy();
+                tag.putString("Id", jetpack);
+
                 result.setTag(tag);
+
                 return result;
             }
         }
