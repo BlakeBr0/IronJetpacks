@@ -14,10 +14,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.SerializationTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.NBTIngredient;
 
 public class DynamicRecipeManager {
     private static final DynamicRecipeManager INSTANCE = new DynamicRecipeManager();
@@ -86,7 +88,7 @@ public class DynamicRecipeManager {
             return null;
 
         var coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
-        var cell = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
         var furnace = Ingredient.of(Blocks.FURNACE);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, coil, material,
@@ -108,7 +110,7 @@ public class DynamicRecipeManager {
         if (material == Ingredient.EMPTY)
             return null;
 
-        var cell = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, cell, material,
                 material, cell, material,
@@ -133,8 +135,8 @@ public class DynamicRecipeManager {
         if (material == Ingredient.EMPTY)
             return null;
 
-        var capacitor = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
+        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var strap = Ingredient.of(ModItems.STRAP.get());
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
@@ -160,8 +162,8 @@ public class DynamicRecipeManager {
         if (material == Ingredient.EMPTY)
             return null;
 
-        var capacitor = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = Ingredient.of(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
+        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var jetpackTier = new JetpackTierIngredient(jetpack.tier - 1);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
@@ -173,5 +175,11 @@ public class DynamicRecipeManager {
         var output = JetpackUtils.getItemForJetpack(jetpack);
 
         return new JetpackUpgradeRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
+    }
+
+    private static class NBTIngredient extends net.minecraftforge.common.crafting.NBTIngredient {
+        protected NBTIngredient(ItemStack stack) {
+            super(stack);
+        }
     }
 }
