@@ -27,6 +27,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -193,6 +194,15 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		var stored = energy.getMaxEnergyStored() - energy.getEnergyStored();
 
 		return Math.round(13.0F - stored * 13.0F / energy.getMaxEnergyStored());
+	}
+
+	@Override
+	public int getBarColor(ItemStack stack) {
+		var energy = JetpackUtils.getEnergyStorage(stack);
+
+		float f = Math.max(0.0F, (float) energy.getEnergyStored() / (float) energy.getMaxEnergyStored());
+
+		return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
 	}
 
 	@Override
