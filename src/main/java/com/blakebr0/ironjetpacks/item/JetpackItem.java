@@ -12,6 +12,7 @@ import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
+import com.blakebr0.ironjetpacks.lib.ModArmorMaterial;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
@@ -32,7 +33,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +49,7 @@ import java.util.function.Function;
 
 public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeatherItem {
 	public JetpackItem(Function<Properties, Properties> properties) {
-		super(ArmorMaterials.LEATHER, EquipmentSlot.CHEST, properties.compose(p -> p.defaultDurability(0)));
+		super(ModArmorMaterial.JETPACK, EquipmentSlot.CHEST, properties.compose(Properties::setNoRepair));
 	}
 
 	@Override
