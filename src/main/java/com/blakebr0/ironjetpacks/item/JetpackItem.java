@@ -317,14 +317,14 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		private JetpackModel model;
 
 		@Override
-		public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, A _default) {
+		public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> _default) {
 			if (this.model == null) {
 				var layer = Minecraft.getInstance().getEntityModels().bakeLayer(ModelHandler.JETPACK_LAYER);
 
 				this.model = new JetpackModel(layer);
 			}
 
-			return (A) this.model;
+			return this.model;
 		}
 	}
 }
