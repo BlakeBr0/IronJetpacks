@@ -1,7 +1,5 @@
 package com.blakebr0.ironjetpacks.client.model;
 
-import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -9,7 +7,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 
 public class JetpackModel extends HumanoidModel<LivingEntity> {
@@ -24,6 +21,8 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private static final String LEFT_EXHAUST_2 = "left_exhaust_2";
 	private static final String RIGHT_EXHAUST_1 = "right_exhaust_1";
 	private static final String RIGHT_EXHAUST_2 = "right_exhaust_2";
+	private static final String LEFT_ENERGY_BAR = "left_energy_bar";
+	private static final String RIGHT_ENERGY_BAR = "right_energy_bar";
 
 	private final ModelPart middle;
 	private final ModelPart leftCanister;
@@ -39,7 +38,7 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 	private final ModelPart[] energyBarLeft = new ModelPart[6];
 	private final ModelPart[] energyBarRight = new ModelPart[6];
 
-	public JetpackModel(ModelPart part) {
+	public JetpackModel(ModelPart part, int energyBarState) {
 		super(part);
 		this.middle = part.getChild(MIDDLE);
 		this.leftCanister = part.getChild(LEFT_CANISTER);
@@ -54,42 +53,11 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 		this.rightExhaust2 = part.getChild(RIGHT_EXHAUST_2);
 
 		for (int i = 0; i < 6; i++) {
-			this.energyBarLeft[i] = part.getChild("left_energy_bar_" + i);
-			this.energyBarRight[i] = part.getChild("right_energy_bar_" + i);
-		}
-	}
+			this.energyBarLeft[i] = part.getChild(LEFT_ENERGY_BAR + "_" + i);
+			this.energyBarRight[i] = part.getChild(RIGHT_ENERGY_BAR + "_" + i);
 
-	@Override
-	public void setupAnim(LivingEntity entity, float f1, float f2, float f3, float netHeadYaw, float headPitch) {
-		super.setupAnim(entity, f1, f2, f3, netHeadYaw, headPitch);
-
-		var chest = entity.getItemBySlot(EquipmentSlot.CHEST);
-		var jetpack = JetpackUtils.getJetpack(chest);
-
-		if (jetpack.creative) {
-			this.resetEnergyBars();
-			this.energyBarLeft[5].visible = true;
-			this.energyBarRight[5].visible = true;
-		} else {
-			var energy = JetpackUtils.getEnergyStorage(chest);
-			double stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
-
-			int state = 0;
-			if (stored > 0.8) {
-				state = 5;
-			} else if (stored > 0.6) {
-				state = 4;
-			} else if (stored > 0.4) {
-				state = 3;
-			} else if (stored > 0.2) {
-				state = 2;
-			} else if (stored > 0) {
-				state = 1;
-			}
-
-			this.resetEnergyBars();
-			this.energyBarLeft[state].visible = true;
-			this.energyBarRight[state].visible = true;
+			this.energyBarLeft[i].visible = i == energyBarState;
+			this.energyBarRight[i].visible = i == energyBarState;
 		}
 	}
 
@@ -111,6 +79,11 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 		this.leftExhaust2.copyFrom(this.middle);
 		this.rightExhaust1.copyFrom(this.middle);
 		this.rightExhaust2.copyFrom(this.middle);
+
+		for (int i = 0; i < 6; i++) {
+			this.energyBarLeft[i].copyFrom(this.middle);
+			this.energyBarRight[i].copyFrom(this.middle);
+		}
 
 		ImmutableList.Builder<ModelPart> parts = ImmutableList.builder();
 
@@ -210,13 +183,13 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 		);
 
 		for (int i = 0; i < 6; i++) {
-			root.addOrReplaceChild("left_energy_bar_" + i, CubeListBuilder.create()
+			root.addOrReplaceChild(LEFT_ENERGY_BAR + "_" + i, CubeListBuilder.create()
 					.texOffs(16 + (i * 4), 55)
 					.addBox(2F, 3F, 5.8F, 1, 5, 1),
 					PartPose.ZERO
 			);
 
-			root.addOrReplaceChild("right_energy_bar_" + i, CubeListBuilder.create()
+			root.addOrReplaceChild(RIGHT_ENERGY_BAR + "_" + i, CubeListBuilder.create()
 					.texOffs(16 + (i * 4), 55)
 					.addBox(-3F, 3F, 5.8F, 1, 5, 1),
 					PartPose.ZERO
@@ -224,12 +197,5 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 		}
 
 		return LayerDefinition.create(mesh, 64, 64);
-	}
-
-	private void resetEnergyBars() {
-		for (int i = 0; i < 6; i++) {
-			this.energyBarLeft[i].visible = false;
-			this.energyBarRight[i].visible = false;
-		}
 	}
 }
