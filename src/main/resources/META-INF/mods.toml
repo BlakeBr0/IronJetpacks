@@ -31,6 +31,6 @@ license="MIT"
   [[dependencies.ironjetpacks]]
       modId="cucumber"
       mandatory=true
-      versionRange="[4.1.11,)"
+      versionRange="[5.0.0,)"
       ordering="NONE"
       side="BOTH"
