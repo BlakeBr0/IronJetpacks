@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting;
 
-import com.blakebr0.cucumber.helper.RecipeHelper;
+import com.blakebr0.cucumber.event.RegisterRecipesEvent;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackTierIngredient;
@@ -10,22 +10,20 @@ import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.tags.SerializationTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class DynamicRecipeManager {
     private static final DynamicRecipeManager INSTANCE = new DynamicRecipeManager();
 
-    public void onResourceManagerReload(ResourceManager manager) {
-        JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
+    @SubscribeEvent
+    public void onRegisterRecipes(RegisterRecipesEvent event) {
+        for (var jetpack : JetpackRegistry.getInstance().getJetpacks()) {
             var cell = makeCellRecipe(jetpack);
             var thruster = makeThrusterRecipe(jetpack);
             var capacitor = makeCapacitorRecipe(jetpack);
@@ -33,16 +31,16 @@ public class DynamicRecipeManager {
             var jetpackUpgrade = makeJetpackUpgradeRecipe(jetpack);
 
             if (cell != null)
-                RecipeHelper.addRecipe(cell);
+                event.register(cell);
             if (thruster != null)
-                RecipeHelper.addRecipe(thruster);
+                event.register(thruster);
             if (capacitor != null)
-                RecipeHelper.addRecipe(capacitor);
+                event.register(capacitor);
             if (jetpackSelf != null)
-                RecipeHelper.addRecipe(jetpackSelf);
+                event.register(jetpackSelf);
             if (jetpackUpgrade != null)
-                RecipeHelper.addRecipe(jetpackUpgrade);
-        });
+                event.register(jetpackUpgrade);
+        }
     }
 
     public static DynamicRecipeManager getInstance() {
@@ -53,18 +51,12 @@ public class DynamicRecipeManager {
         if (!ModConfigs.ENABLE_CELL_RECIPES.get())
             return null;
 
-        var jetpacks = JetpackRegistry.getInstance();
-
         var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        var redstoneTag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(Tags.Items.DUSTS_REDSTONE.getName());
-        if (redstoneTag == null)
-            return null;
-
-        var coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
-        var redstone = Ingredient.of(redstoneTag);
+        var coil = Ingredient.of(JetpackRegistry.getInstance().getCoilForTier(jetpack.tier));
+        var redstone = Ingredient.of(Tags.Items.DUSTS_REDSTONE);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 Ingredient.EMPTY, redstone, Ingredient.EMPTY,
                 material, coil, material,
@@ -81,14 +73,12 @@ public class DynamicRecipeManager {
         if (!ModConfigs.ENABLE_THRUSTER_RECIPES.get())
             return null;
 
-        var jetpacks = JetpackRegistry.getInstance();
-
         var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        var coil = Ingredient.of(jetpacks.getCoilForTier(jetpack.tier));
-        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var coil = Ingredient.of(JetpackRegistry.getInstance().getCoilForTier(jetpack.tier));
+        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack)) { };
         var furnace = Ingredient.of(Blocks.FURNACE);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, coil, material,
@@ -110,7 +100,7 @@ public class DynamicRecipeManager {
         if (material == Ingredient.EMPTY)
             return null;
 
-        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var cell = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack)) { };
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, cell, material,
                 material, cell, material,
@@ -127,16 +117,15 @@ public class DynamicRecipeManager {
         if (!ModConfigs.ENABLE_JETPACK_RECIPES.get())
             return null;
 
-        var jetpacks = JetpackRegistry.getInstance();
-        if (jetpack.tier != jetpacks.getLowestTier())
+        if (jetpack.tier != JetpackRegistry.getInstance().getLowestTier())
             return null;
 
         var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack)) { };
+        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack)) { };
         var strap = Ingredient.of(ModItems.STRAP.get());
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
@@ -154,16 +143,15 @@ public class DynamicRecipeManager {
         if (!ModConfigs.ENABLE_JETPACK_RECIPES.get())
             return null;
 
-        var jetpacks = JetpackRegistry.getInstance();
-        if (jetpack.tier == jetpacks.getLowestTier())
+        if (jetpack.tier == JetpackRegistry.getInstance().getLowestTier())
             return null;
 
         var material = jetpack.getCraftingMaterial();
         if (material == Ingredient.EMPTY)
             return null;
 
-        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack)) { };
+        var thruster = new NBTIngredient(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack)) { };
         var jetpackTier = new JetpackTierIngredient(jetpack.tier - 1);
         var inputs = NonNullList.of(Ingredient.EMPTY,
                 material, capacitor, material,
@@ -175,11 +163,5 @@ public class DynamicRecipeManager {
         var output = JetpackUtils.getItemForJetpack(jetpack);
 
         return new JetpackUpgradeRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
-    }
-
-    private static class NBTIngredient extends net.minecraftforge.common.crafting.NBTIngredient {
-        protected NBTIngredient(ItemStack stack) {
-            super(stack);
-        }
     }
 }

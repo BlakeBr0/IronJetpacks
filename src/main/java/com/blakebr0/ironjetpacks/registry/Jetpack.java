@@ -5,10 +5,9 @@ import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -126,9 +125,8 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				var parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					var tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(parts[1], parts[2]));
-					if (tag != null && !tag.getValues().isEmpty())
-						this.craftingMaterial = Ingredient.of(tag);
+					var tag = ItemTags.create(new ResourceLocation(parts[1], parts[2]));
+					this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {
 					var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
 					if (item != null)
