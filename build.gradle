@@ -76,14 +76,14 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.1'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.12'
 
     implementation project(':Cucumber')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.18.1:9.1.0.41:api')
+    compileOnly fg.deobf('mezz.jei:jei-1.18.2:9.4.1.117:api')
 
-    runtimeOnly fg.deobf('mezz.jei:jei-1.18.1:9.1.0.41')
-    runtimeOnly fg.deobf('curse.maven:jade-324717:3544015')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.18.2:9.4.1.117')
+    runtimeOnly fg.deobf('curse.maven:jade-324717:3671210')
 }
 
 jar {
