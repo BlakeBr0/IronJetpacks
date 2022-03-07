@@ -4,6 +4,7 @@ import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class ModReloadListeners implements ResourceManagerReloadListener {
@@ -12,7 +13,7 @@ public final class ModReloadListeners implements ResourceManagerReloadListener {
         JetpackRegistry.getInstance().onResourceManagerReload(manager);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
     }
