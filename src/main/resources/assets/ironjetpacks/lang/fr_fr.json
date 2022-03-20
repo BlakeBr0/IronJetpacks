@@ -1,0 +1,43 @@
+{
+  "itemGroup.ironjetpacks": "Jetpacks de fer",
+
+  "item.ironjetpacks.strap": "Lanière en cuir",
+  "item.ironjetpacks.basic_coil": "Bobine de base",
+  "item.ironjetpacks.advanced_coil": "Bobine avancée",
+  "item.ironjetpacks.elite_coil": "Bobine d'élite",
+  "item.ironjetpacks.ultimate_coil": "Bobine ultime",
+
+  "item.ironjetpacks.cell": "%s Cellule énergétique",
+  "item.ironjetpacks.thruster": "%s Propulseur",
+  "item.ironjetpacks.capacitor": "%s Condensateur",
+  "item.ironjetpacks.jetpack": "%s Jetpack",
+
+  "keybind.ironjetpacks.engine": "Basculer le moteur",
+  "keybind.ironjetpacks.hover": "Basculer le mode survol",
+  "keybind.ironjetpacks.descend": "Descendre",
+  "keybind.ironjetpacks.increment_throttle": "Augmenter les gaz",
+  "keybind.ironjetpacks.decrement_throttle": "Diminuer l'accélérateur",
+
+  "subtitle.ironjetpacks.jetpack": "Jetpack",
+
+  "tooltip.ironjetpacks.on": "ON",
+  "tooltip.ironjetpacks.off": "OFF",
+  "tooltip.ironjetpacks.infinite": "Infinit",
+  "tooltip.ironjetpacks.engine": "MOTEUR",
+  "tooltip.ironjetpacks.hover": "SURVOL",
+  "tooltip.ironjetpacks.tier": "NIVEAU %s",
+  "tooltip.ironjetpacks.throttle": "Manette de Gaz : %s",
+  "tooltip.ironjetpacks.fuel_usage": "Consommation de carburant : %s",
+  "tooltip.ironjetpacks.vertical_speed": "Vitesse verticale : %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Accélération verticale : %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Vitesse horizontale : %s",
+  "tooltip.ironjetpacks.hover_speed": "Vitesse de survol : %s",
+  "tooltip.ironjetpacks.descend_speed": "Vitesse de descente : %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Modificateur de sprint : %s",
+  "tooltip.ironjetpacks.sprint_vertical_modifier": "Multiplicateur vertical de sprint : %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Modificateur de carburant de sprint : %s",
+  "tooltip.ironjetpacks.toggle_engine": "Moteur basculé %s",
+  "tooltip.ironjetpacks.toggle_hover": "Survol basculé %s",
+  "tooltip.ironjetpacks.change_throttle": "Accélérateur réglé sur %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
+}
