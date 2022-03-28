@@ -7,10 +7,10 @@
   "item.ironjetpacks.elite_coil": "Bobine d'élite",
   "item.ironjetpacks.ultimate_coil": "Bobine ultime",
 
-  "item.ironjetpacks.cell": "%s Cellule énergétique",
-  "item.ironjetpacks.thruster": "%s Propulseur",
-  "item.ironjetpacks.capacitor": "%s Condensateur",
-  "item.ironjetpacks.jetpack": "%s Jetpack",
+  "item.ironjetpacks.cell": "Cellule énergétique en %s",
+  "item.ironjetpacks.thruster": "Propulseur en %s",
+  "item.ironjetpacks.capacitor": "Condensateur en %s",
+  "item.ironjetpacks.jetpack": "Jetpack en %s",
 
   "keybind.ironjetpacks.engine": "Basculer le moteur",
   "keybind.ironjetpacks.hover": "Basculer le mode survol",
