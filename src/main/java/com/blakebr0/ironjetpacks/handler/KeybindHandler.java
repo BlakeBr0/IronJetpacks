@@ -15,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ClientRegistry;
@@ -59,7 +58,7 @@ public final class KeybindHandler {
 		if (player == null)
 			return;
 
-		var chest = player.getItemBySlot(EquipmentSlot.CHEST);
+		var chest = JetpackUtils.getEquippedJetpack(player);
 		var item = chest.getItem();
 		
 		if (item instanceof JetpackItem) {
@@ -73,7 +72,7 @@ public final class KeybindHandler {
 		if (player == null)
 			return;
 
-		var chest = player.getItemBySlot(EquipmentSlot.CHEST);
+		var chest = JetpackUtils.getEquippedJetpack(player);
 		var item = chest.getItem();
 
 		if (item instanceof JetpackItem) {

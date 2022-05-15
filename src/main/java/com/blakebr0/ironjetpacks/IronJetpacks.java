@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModelHandler;
+import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.handler.ColorHandler;
@@ -19,11 +20,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +77,17 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(new HudHandler());
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
 
+		if (ModList.get().isLoaded("curios")) {
+			MinecraftForge.EVENT_BUS.register(new CuriosCompat());
+		}
+
 		KeybindHandler.onClientSetup();
+	}
+
+	@SubscribeEvent
+	public void onInterModEnqueue(InterModEnqueueEvent event) {
+		if (ModConfigs.isCuriosEnabled()) {
+			CuriosCompat.onInterModEnqueue(event);
+		}
 	}
 }

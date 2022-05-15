@@ -5,6 +5,7 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,28 +21,28 @@ public class JeiCompat implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         ModItems.JETPACK.ifPresent(item -> {
-            registration.registerSubtypeInterpreter(item, (stack, ctx) -> {
+            registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, item, (stack, ctx) -> {
                 var jetpack = JetpackUtils.getJetpack(stack);
                 return jetpack.getId().toString();
             });
         });
 
         ModItems.CELL.ifPresent(item -> {
-            registration.registerSubtypeInterpreter(item, (stack, ctx) -> {
+            registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, item, (stack, ctx) -> {
                 var jetpack = JetpackUtils.getJetpack(stack);
                 return jetpack.getId().toString();
             });
         });
 
         ModItems.THRUSTER.ifPresent(item -> {
-            registration.registerSubtypeInterpreter(item, (stack, ctx) -> {
+            registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, item, (stack, ctx) -> {
                 var jetpack = JetpackUtils.getJetpack(stack);
                 return jetpack.getId().toString();
             });
         });
 
         ModItems.CAPACITOR.ifPresent(item -> {
-            registration.registerSubtypeInterpreter(item, (stack, ctx) -> {
+            registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, item, (stack, ctx) -> {
                 var jetpack = JetpackUtils.getJetpack(stack);
                 return jetpack.getId().toString();
             });

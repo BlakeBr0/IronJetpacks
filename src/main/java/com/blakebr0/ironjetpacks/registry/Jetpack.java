@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class Jetpack {
 	private static final UUID ATTRIBUTE_ID = UUID.fromString("7FBA2C56-DD5E-4071-8519-D2643E707E40");
 
-	public static final Jetpack UNDEFINED = new Jetpack("undefined", 0, 0xFFF, 0, 0, "null", 0F, 0F);
+	public static final Jetpack UNDEFINED = new Jetpack("undefined", 0, 0xFFF, 0, 0, "null", 0F, 0F).setCurios(false);
 
 	private final ResourceLocation id;
 	public String name;
@@ -41,6 +41,7 @@ public class Jetpack {
 	public float toughness;
 	public float knockbackResistance;
 	public Multimap<Attribute, AttributeModifier> attributeModifiers;
+	public boolean curios = true;
 
 	public int capacity;
 	public int usage;
@@ -114,6 +115,11 @@ public class Jetpack {
 		return this;
 	}
 
+	public Jetpack setCurios(boolean curios) {
+		this.curios = curios;
+		return this;
+	}
+
 	public int getTier() {
 		return this.tier;
 	}
@@ -170,6 +176,7 @@ public class Jetpack {
 		json.addProperty("rarity", this.rarity.ordinal());
 		json.addProperty("toughness", this.toughness);
 		json.addProperty("knockbackResistance", this.knockbackResistance);
+		json.addProperty("curios", this.curios);
 
 		json.addProperty("capacity", this.capacity);
 		json.addProperty("usage", this.usage);
@@ -198,11 +205,13 @@ public class Jetpack {
 		var rarity = Rarity.values()[json.get("rarity").getAsInt()];
 		var toughness = json.get("toughness").getAsFloat();
 		var knockbackResistance = json.get("knockbackResistance").getAsFloat();
+		var curios = json.get("curios").getAsBoolean();
 
 		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
-				.setDisabled(disable);
+				.setDisabled(disable)
+				.setCurios(curios);
 
 		var capacity = json.get("capacity").getAsInt();
 		var usage = json.get("usage").getAsInt();
@@ -233,6 +242,7 @@ public class Jetpack {
 		buffer.writeVarInt(this.rarity.ordinal());
 		buffer.writeFloat(this.toughness);
 		buffer.writeFloat(this.knockbackResistance);
+		buffer.writeBoolean(this.curios);
 
 		buffer.writeVarInt(this.capacity);
 		buffer.writeVarInt(this.usage);
@@ -259,11 +269,13 @@ public class Jetpack {
 		var rarity = Rarity.values()[buffer.readVarInt()];
 		var toughness = buffer.readFloat();
 		var knockbackResistance = buffer.readFloat();
+		var curios = buffer.readBoolean();
 
 		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
 				.setRarity(rarity)
 				.setCreative(creative)
-				.setDisabled(disabled);
+				.setDisabled(disabled)
+				.setCurios(curios);
 
 		var capacity = buffer.readVarInt();
 		var usage = buffer.readVarInt();

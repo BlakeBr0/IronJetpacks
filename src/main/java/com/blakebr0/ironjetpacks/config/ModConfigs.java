@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
 
 public final class ModConfigs {
 	public static final ForgeConfigSpec CLIENT;
@@ -54,6 +55,7 @@ public final class ModConfigs {
 	}
 
 	public static final ForgeConfigSpec.BooleanValue ENCHANTABLE_JETPACKS;
+	public static final ForgeConfigSpec.BooleanValue ENABLE_CURIOS_INTEGRATION;
 
 	public static final ForgeConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
 	public static final ForgeConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
@@ -66,8 +68,11 @@ public final class ModConfigs {
 
 		common.comment("General configuration options.").push("General");
 		ENCHANTABLE_JETPACKS = common
-				.comment("Should jetpacks be enachantable?")
+				.comment("Should jetpacks be enchantable?")
 				.define("enchantableJetpacks", false);
+		ENABLE_CURIOS_INTEGRATION = common
+				.comment("Enable Curios integration.")
+				.define("curiosIntegration", true);
 		common.pop();
 
 		common.comment("Dynamic recipe options.").push("Recipe");
@@ -86,5 +91,9 @@ public final class ModConfigs {
 		common.pop();
 
 		COMMON = common.build();
+	}
+
+	public static boolean isCuriosEnabled() {
+		return ModList.get().isLoaded("curios") && ENABLE_CURIOS_INTEGRATION.get();
 	}
 }

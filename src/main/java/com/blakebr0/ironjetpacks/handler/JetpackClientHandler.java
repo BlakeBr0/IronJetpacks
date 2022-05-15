@@ -9,7 +9,6 @@ import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +21,7 @@ public final class JetpackClientHandler {
 
         var mc = Minecraft.getInstance();
         if (mc.player != null && mc.level != null && !mc.isPaused()) {
-            var chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
+            var chest = JetpackUtils.getEquippedJetpack(mc.player);
             var item = chest.getItem();
 
             if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {

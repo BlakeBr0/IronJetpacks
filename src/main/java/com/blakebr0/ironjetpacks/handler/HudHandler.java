@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -26,7 +25,7 @@ public final class HudHandler {
 
         var mc = Minecraft.getInstance();
         if (mc.player != null && isVisible(mc)) {
-            var chest = mc.player.getItemBySlot(EquipmentSlot.CHEST);
+            var chest = JetpackUtils.getEquippedJetpack(mc.player);
             var item = chest.getItem();
 
             if (!chest.isEmpty() && item instanceof JetpackItem) {

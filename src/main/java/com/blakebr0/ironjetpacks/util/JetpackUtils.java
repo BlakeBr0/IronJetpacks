@@ -1,6 +1,8 @@
 package com.blakebr0.ironjetpacks.util;
 
 import com.blakebr0.cucumber.helper.NBTHelper;
+import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
+import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
@@ -23,28 +25,34 @@ public final class JetpackUtils {
 		if (player.isSpectator())
 			return false;
 
-		var stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		var stack = getEquippedJetpack(player);
 
-		if (!stack.isEmpty()) {
-			var item = stack.getItem();
+		if (!stack.isEmpty() && isEngineOn(stack)) {
+			var jetpack = getJetpack(stack);
+			var energy = getEnergyStorage(stack);
 
-			if (item instanceof JetpackItem) {
-				if (!isEngineOn(stack))
-					return false;
-
-				var jetpack = JetpackUtils.getJetpack(stack);
-
-				if (getEnergyStorage(stack).getEnergyStored() > 0 || player.isCreative() || jetpack.creative) {
-					if (isHovering(stack)) {
-						return !player.isOnGround();
-					} else {
-						return InputHandler.isHoldingUp(player);
-					}
+			if (energy.getEnergyStored() > 0 || player.isCreative() || jetpack.creative) {
+				if (isHovering(stack)) {
+					return !player.isOnGround();
+				} else {
+					return InputHandler.isHoldingUp(player);
 				}
 			}
 		}
 
 		return false;
+	}
+
+	public static ItemStack getEquippedJetpack(Player player) {
+		var stack = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (!stack.isEmpty() && stack.getItem() instanceof JetpackItem)
+			return stack;
+
+		if (ModConfigs.isCuriosEnabled()) {
+			return CuriosCompat.findJetpackCurio(player).orElse(ItemStack.EMPTY);
+		}
+
+		return ItemStack.EMPTY;
 	}
 
 	public static IEnergyStorage getEnergyStorage(ItemStack stack) {

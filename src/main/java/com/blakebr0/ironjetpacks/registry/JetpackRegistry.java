@@ -262,7 +262,7 @@ public class JetpackRegistry {
 			changed = true;
 		}
 
-		// add hover ascend speed
+		// add hover ascend speed field
 		if (!json.has("speedHoverAscend")) {
 			if (json.has("speedHoverDescend")) {
 				json.addProperty("speedHoverAscend", json.get("speedHoverDescend").getAsDouble());
@@ -270,6 +270,12 @@ public class JetpackRegistry {
 				json.addProperty("speedHoverAscend", 0.25D);
 			}
 
+			changed = true;
+		}
+
+		// add curios field
+		if (!json.has("curios")) {
+			json.addProperty("curios", true);
 			changed = true;
 		}
 

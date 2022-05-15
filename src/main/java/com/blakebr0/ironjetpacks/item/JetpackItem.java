@@ -102,7 +102,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	 */
 	@Override
 	public void onArmorTick(ItemStack stack, Level level, Player player) {
-		var chest = player.getItemBySlot(EquipmentSlot.CHEST);
+		var chest = JetpackUtils.getEquippedJetpack(player);
 		var item = chest.getItem();
 
 		if (!chest.isEmpty() && item instanceof JetpackItem) {

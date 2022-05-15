@@ -21,6 +21,7 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 
 repositories {
     maven { url 'https://dvs1.progwml6.com/files/maven/' }
+    maven { url 'https://maven.theillusivec4.top/' }
     maven {
         url 'https://cursemaven.com'
         content {
@@ -81,8 +82,10 @@ dependencies {
     implementation project(':Cucumber')
 
     compileOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.193:api')
+    compileOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api')
 
     runtimeOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.193')
+    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0')
     runtimeOnly fg.deobf('curse.maven:jade-324717:3761542')
 }
 
