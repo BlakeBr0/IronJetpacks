@@ -93,7 +93,11 @@ public final class ModConfigs {
 		COMMON = common.build();
 	}
 
+	public static boolean isCuriosInstalled() {
+		return ModList.get().isLoaded("curios");
+	}
+
 	public static boolean isCuriosEnabled() {
-		return ModList.get().isLoaded("curios") && ENABLE_CURIOS_INTEGRATION.get();
+		return isCuriosInstalled() && ENABLE_CURIOS_INTEGRATION.get();
 	}
 }

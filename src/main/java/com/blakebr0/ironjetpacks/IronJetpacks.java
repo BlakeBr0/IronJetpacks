@@ -20,7 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -64,6 +63,10 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(DynamicRecipeManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(JetpackRegistry.getInstance());
 
+		if (ModConfigs.isCuriosInstalled()) {
+			MinecraftForge.EVENT_BUS.register(new CuriosCompat());
+		}
+
 		event.enqueueWork(() -> {
 			NetworkHandler.onCommonSetup();
 		});
@@ -76,10 +79,6 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(new KeybindHandler());
 		MinecraftForge.EVENT_BUS.register(new HudHandler());
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
-
-		if (ModList.get().isLoaded("curios")) {
-			MinecraftForge.EVENT_BUS.register(new CuriosCompat());
-		}
 
 		KeybindHandler.onClientSetup();
 	}
