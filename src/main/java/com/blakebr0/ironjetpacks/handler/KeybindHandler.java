@@ -14,7 +14,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ClientRegistry;
@@ -133,14 +133,14 @@ public final class KeybindHandler {
 
 		if (keyIncrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.incrementThrottle(stack);
-			var throttleText = new TextComponent((int) (throttle * 100) + "%").withStyle(ChatFormatting.GREEN);
+			var throttleText = Component.literal((int) (throttle * 100) + "%").withStyle(ChatFormatting.GREEN);
 			NetworkHandler.INSTANCE.sendToServer(new IncrementThrottleMessage());
 			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}
 
 		if (keyDecrementThrottle.consumeClick()) {
 			double throttle = JetpackUtils.decrementThrottle(stack);
-			var throttleText = new TextComponent((int) (throttle * 100) + "%").withStyle(ChatFormatting.RED);
+			var throttleText = Component.literal((int) (throttle * 100) + "%").withStyle(ChatFormatting.RED);
 			NetworkHandler.INSTANCE.sendToServer(new DecrementThrottleMessage());
 			player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
 		}

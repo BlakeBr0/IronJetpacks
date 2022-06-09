@@ -25,7 +25,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -55,7 +54,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 	@Override
 	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-		if (this.allowdedIn(group)) {
+		if (this.allowedIn(group)) {
 			JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
 				items.add(JetpackUtils.getItemForJetpack(jetpack));
 			});
@@ -217,12 +216,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 		if (flag.isAdvanced()) {
 			tooltip.add(ModTooltips.JETPACK_ID.args(jetpack.getId()).color(ChatFormatting.DARK_GRAY).build());
-			tooltip.add(new TextComponent(" "));
+			tooltip.add(Component.literal(" "));
 		}
 
 		if (!jetpack.creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);
-			tooltip.add(new TextComponent(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.literal(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}
@@ -233,12 +232,12 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 		tooltip.add(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover).build());
 
-		var throttle = new TextComponent((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
+		var throttle = Component.literal((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
 
 		tooltip.add(ModTooltips.THROTTLE.args(throttle).build());
 		
 		if (ModConfigs.ENABLE_ADVANCED_INFO_TOOLTIPS.get()) {
-			tooltip.add(new TextComponent(" "));
+			tooltip.add(Component.literal(" "));
 
 			if (!Screen.hasShiftDown()) {
 				tooltip.add(Tooltips.HOLD_SHIFT_FOR_INFO.build());

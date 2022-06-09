@@ -18,7 +18,7 @@ public class JetpackSound extends AbstractTickableSoundInstance {
 	private final Player player;
 	
 	public JetpackSound(Player player) {
-		super(ModSounds.JETPACK, SoundSource.PLAYERS);
+		super(ModSounds.JETPACK, SoundSource.PLAYERS, player.getRandom());
 		this.player = player;
 		this.looping = true;
 		PLAYING_FOR.put(player.getId(), this);

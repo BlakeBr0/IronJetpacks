@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -96,7 +97,7 @@ public class JetpackTierIngredient extends Ingredient {
                     var stack = JetpackUtils.getItemForJetpack(jetpack);
 
                     obj.addProperty("type", CraftingHelper.getID(NBTIngredient.Serializer.INSTANCE).toString());
-                    obj.addProperty("item", stack.getItem().getRegistryName().toString());
+                    obj.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
                     obj.addProperty("count", stack.getCount());
                     if (stack.hasTag())
                         obj.addProperty("nbt", stack.getTag().toString());

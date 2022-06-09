@@ -38,7 +38,7 @@ public final class HudHandler {
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     RenderSystem.setShaderTexture(0, HUD_TEXTURE);
 
-                    var stack = event.getMatrixStack();
+                    var stack = event.getPoseStack();
 
                     stack.pushPose();
                     stack.scale(0.33F, 0.33F, 1.0F);
