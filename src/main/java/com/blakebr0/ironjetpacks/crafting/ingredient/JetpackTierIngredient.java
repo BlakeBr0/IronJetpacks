@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.crafting.ingredient;
 
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
+import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.gson.JsonArray;
@@ -67,7 +68,8 @@ public class JetpackTierIngredient extends Ingredient {
 
             for (var itemstack : this.stacks) {
                 if (itemstack.getItem() == stack.getItem()) {
-                    return true;
+                    var jetpack = JetpackUtils.getJetpack(stack);
+                    return jetpack != Jetpack.UNDEFINED && jetpack.tier == this.tier;
                 }
             }
 
