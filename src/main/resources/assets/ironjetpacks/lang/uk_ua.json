@@ -1,0 +1,45 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "Шкіряний ремінь",
+  "item.ironjetpacks.basic_coil": "Базова котушка",
+  "item.ironjetpacks.advanced_coil": "Просунута котушка",
+  "item.ironjetpacks.elite_coil": "Елітна котушка",
+  "item.ironjetpacks.ultimate_coil": "Ультимативна котушка",
+
+  "item.ironjetpacks.cell": "%s батарея",
+  "item.ironjetpacks.thruster": "%s рушій",
+  "item.ironjetpacks.capacitor": "%s конденсатор",
+  "item.ironjetpacks.jetpack": "%s реактивний ранець",
+
+  "keybind.ironjetpacks.engine": "Перемкнути рушій",
+  "keybind.ironjetpacks.hover": "Перемкнути режим планерування",
+  "keybind.ironjetpacks.descend": "Спуститися",
+  "keybind.ironjetpacks.increment_throttle": "Збільшити газ",
+  "keybind.ironjetpacks.decrement_throttle": "Зменшити газ",
+
+  "subtitle.ironjetpacks.jetpack": "Реактивний ранець",
+
+  "tooltip.ironjetpacks.on": "УВІМК.",
+  "tooltip.ironjetpacks.off": "ВИМК.",
+  "tooltip.ironjetpacks.infinite": "Нескінченність",
+  "tooltip.ironjetpacks.engine": "РУШІЙ",
+  "tooltip.ironjetpacks.hover": "ПЛАНЕРУВАННЯ",
+  "tooltip.ironjetpacks.tier": "РІВЕНЬ %s",
+  "tooltip.ironjetpacks.throttle": "Газ: %s",
+  "tooltip.ironjetpacks.fuel_usage": "Використання палива: %s",
+  "tooltip.ironjetpacks.vertical_speed": "Вертикальна швидкість: %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Вертикальне прискорення: %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Горизонтальна швидкість: %s",
+  "tooltip.ironjetpacks.hover_speed": "Швидкість планерування: %s",
+  "tooltip.ironjetpacks.hover_ascend_speed": "Швидкість підйому при планеруванні: %s",
+  "tooltip.ironjetpacks.hover_descend_speed": "Швидкість спуску при планеруванні: %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Модифікатор пришвидшення: %s",
+  "tooltip.ironjetpacks.sprint_vertical_modifier": "Множник вертикального пришвидшення: %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Модифікатор палива пришвидшення: %s",
+  "tooltip.ironjetpacks.toggle_engine": "Перемк. рушій %s",
+  "tooltip.ironjetpacks.toggle_hover": "Перемк. планерування %s",
+  "tooltip.ironjetpacks.change_throttle": "Газ встановлено на %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.jetpack_id": "ID реактивного ранця: %s"
+}
