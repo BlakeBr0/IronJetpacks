@@ -49,6 +49,7 @@ public final class IronJetpacks {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
 			bus.register(new ModelHandler());
+			bus.register(new KeybindHandler());
 		});
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
@@ -79,8 +80,6 @@ public final class IronJetpacks {
 		MinecraftForge.EVENT_BUS.register(new KeybindHandler());
 		MinecraftForge.EVENT_BUS.register(new HudHandler());
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
-
-		KeybindHandler.onClientSetup();
 	}
 
 	@SubscribeEvent

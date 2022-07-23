@@ -40,7 +40,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import java.util.List;
@@ -89,7 +89,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	}
 
 	@Override
-	public int getItemEnchantability(ItemStack stack) {
+	public int getEnchantmentValue(ItemStack stack) {
 		var jetpack = JetpackUtils.getJetpack(stack);
 		return jetpack.enchantablilty;
 	}
@@ -267,7 +267,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	}
 
 	@Override
-	public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 		consumer.accept(ItemRenderProperties.INSTANCE);
 	}
 
@@ -310,13 +310,13 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 		player.setDeltaMovement(motion.x(), y, motion.z());
 	}
 
-	static class ItemRenderProperties implements IItemRenderProperties {
+	static class ItemRenderProperties implements IClientItemExtensions {
 		public static final ItemRenderProperties INSTANCE = new ItemRenderProperties();
 
 		private JetpackModel[] models;
 
 		@Override
-		public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> _default) {
+		public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> _default) {
 			if (this.models == null) {
 				this.models = new JetpackModel[6];
 

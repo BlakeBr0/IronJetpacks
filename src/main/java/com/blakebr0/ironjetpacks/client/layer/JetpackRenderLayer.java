@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class JetpackRenderLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/armor/jetpack.png");
@@ -34,7 +34,7 @@ public class JetpackRenderLayer<T extends LivingEntity, M extends HumanoidModel<
             return;
 
         CuriosCompat.findJetpackCurio(entity).ifPresent(curio -> {
-            var model = RenderProperties.get(curio).getArmorModel(entity, curio, EquipmentSlot.CHEST, null);
+            var model = IClientItemExtensions.of(curio).getHumanoidArmorModel(entity, curio, EquipmentSlot.CHEST, null);
 
             this.getParentModel().copyPropertiesTo((HumanoidModel<T>) model);
 

@@ -17,8 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
@@ -37,23 +37,24 @@ public final class KeybindHandler {
 	private static boolean left = false;
 	private static boolean right = false;
 	private static boolean sprint = false;
-	
-	public static void onClientSetup() {
+
+	@SubscribeEvent
+	public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
 		keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
 		keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
 		keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
 		keyDecrementThrottle = new KeyMapping("keybind.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
-		
-		ClientRegistry.registerKeyBinding(keyEngine);
-		ClientRegistry.registerKeyBinding(keyHover);
-		ClientRegistry.registerKeyBinding(keyDescend);
-		ClientRegistry.registerKeyBinding(keyIncrementThrottle);
-		ClientRegistry.registerKeyBinding(keyDecrementThrottle);
+
+		event.register(keyEngine);
+		event.register(keyHover);
+		event.register(keyDescend);
+		event.register(keyIncrementThrottle);
+		event.register(keyDecrementThrottle);
 	}
 	
 	@SubscribeEvent
-	public void onKeyInput(InputEvent.KeyInputEvent event) {
+	public void onKeyInput(InputEvent.Key event) {
 		var player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
@@ -67,7 +68,7 @@ public final class KeybindHandler {
 	}
 	
 	@SubscribeEvent
-	public void onMouseInput(InputEvent.MouseInputEvent event) {
+	public void onMouseInput(InputEvent.MouseButton event) {
 		var player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
