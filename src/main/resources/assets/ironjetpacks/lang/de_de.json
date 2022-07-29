@@ -1,0 +1,45 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "Lederriemen",
+  "item.ironjetpacks.basic_coil": "Einfache Spule",
+  "item.ironjetpacks.advanced_coil": "Verbesserte Spule",
+  "item.ironjetpacks.elite_coil": "Elite Spule",
+  "item.ironjetpacks.ultimate_coil": "Ultimative Spule",
+
+  "item.ironjetpacks.cell": "%s Energiezelle",
+  "item.ironjetpacks.thruster": "%s Triebwerk",
+  "item.ironjetpacks.capacitor": "%s Kondensator",
+  "item.ironjetpacks.jetpack": "%s Jetpack",
+
+  "keybind.ironjetpacks.engine": "Antrieb umschalten",
+  "keybind.ironjetpacks.hover": "Schwebeflug umschalten",
+  "keybind.ironjetpacks.descend": "Absinken",
+  "keybind.ironjetpacks.increment_throttle": "Schub erhöhen",
+  "keybind.ironjetpacks.decrement_throttle": "Schub verringern",
+
+  "subtitle.ironjetpacks.jetpack": "Jetpack",
+
+  "tooltip.ironjetpacks.on": "AN",
+  "tooltip.ironjetpacks.off": "AUS",
+  "tooltip.ironjetpacks.infinite": "Unendlich",
+  "tooltip.ironjetpacks.engine": "ANTRIEB",
+  "tooltip.ironjetpacks.hover": "SCHWEBEFLUG",
+  "tooltip.ironjetpacks.tier": "STUFE %s",
+  "tooltip.ironjetpacks.throttle": "Schub: %s",
+  "tooltip.ironjetpacks.fuel_usage": "Spritverbrauch: %s",
+  "tooltip.ironjetpacks.vertical_speed": "Vertikale Geschwindigkeit: %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Vertikale Beschleunigung: %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Horizontale Geschwindigkeit: %s",
+  "tooltip.ironjetpacks.hover_speed": "Schwebegeschwindigkeit: %s",
+  "tooltip.ironjetpacks.hover_ascend_speed": "Schwebeflug-Aufstiegsgeschwindigkeit: %s",
+  "tooltip.ironjetpacks.hover_descend_speed": "Schwebeflug Abstiegsgeschwindigkeit: %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Sprint-Modifikator: %s",
+  "tooltip.ironjetpacks.sprint_vertical_modifier": "Vertikaler Sprint-Multiplikator: %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Sprint-Kraftstoffmodifikator: %s",
+  "tooltip.ironjetpacks.toggle_engine": "Antrieb umgeschaltet %s",
+  "tooltip.ironjetpacks.toggle_hover": "Schwebeflug umgeschaltet %s",
+  "tooltip.ironjetpacks.change_throttle": "Schub gesetzt auf %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.jetpack_id": "Jetpack ID: %s"
+}
