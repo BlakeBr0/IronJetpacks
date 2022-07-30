@@ -43,7 +43,7 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_JETPACK_UPGRADE;
+        return ModRecipeSerializers.CRAFTING_JETPACK_UPGRADE.get();
     }
 
     public static class Serializer implements RecipeSerializer<JetpackUpgradeRecipe> {

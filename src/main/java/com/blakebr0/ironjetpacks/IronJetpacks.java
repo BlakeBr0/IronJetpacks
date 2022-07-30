@@ -45,6 +45,7 @@ public final class IronJetpacks {
 		bus.register(new ModRecipeSerializers());
 
 		ModItems.REGISTRY.register(bus);
+		ModRecipeSerializers.REGISTRY.register(bus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
