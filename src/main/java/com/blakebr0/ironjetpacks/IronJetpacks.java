@@ -50,7 +50,7 @@ public final class IronJetpacks {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
 			bus.register(new ModelHandler());
-			bus.register(new KeybindHandler());
+			bus.addListener(KeybindHandler::onRegisterKeyMappings);
 		});
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);

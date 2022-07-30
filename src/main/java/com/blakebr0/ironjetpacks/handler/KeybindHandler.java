@@ -38,8 +38,7 @@ public final class KeybindHandler {
 	private static boolean right = false;
 	private static boolean sprint = false;
 
-	@SubscribeEvent
-	public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+	public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
 		keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_G, IronJetpacks.NAME);
 		keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
