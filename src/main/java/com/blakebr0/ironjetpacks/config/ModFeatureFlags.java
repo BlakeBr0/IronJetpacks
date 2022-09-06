@@ -1,9 +1,11 @@
 package com.blakebr0.ironjetpacks.config;
 
 import com.blakebr0.cucumber.util.FeatureFlag;
+import com.blakebr0.cucumber.util.FeatureFlags;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import net.minecraft.resources.ResourceLocation;
 
+@FeatureFlags
 public final class ModFeatureFlags {
     public static final FeatureFlag CAPACITOR_RECIPES = FeatureFlag.create(new ResourceLocation(IronJetpacks.MOD_ID, "capacitor_recipes"), ModConfigs.ENABLE_CAPACITOR_RECIPES);
     public static final FeatureFlag CELL_RECIPES = FeatureFlag.create(new ResourceLocation(IronJetpacks.MOD_ID, "cell_recipes"), ModConfigs.ENABLE_CELL_RECIPES);
