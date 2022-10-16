@@ -64,13 +64,13 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 	@Override
 	public Component getName(ItemStack stack) {
 		var jetpack = JetpackUtils.getJetpack(stack);
-		return Localizable.of("item.ironjetpacks.jetpack").args(jetpack.displayName).build();
+		return Localizable.of("item.ironjetpacks.jetpack").args(jetpack.getDisplayName()).build();
 	}
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
 		var jetpack = JetpackUtils.getJetpack(stack);
-		return Localizable.of("item.ironjetpacks.jetpack").args(jetpack.displayName).buildString();
+		return Localizable.of("item.ironjetpacks.jetpack").args(jetpack.getDisplayName()).buildString();
 	}
 
 	@Override

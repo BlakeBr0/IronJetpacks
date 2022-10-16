@@ -5,7 +5,9 @@ import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
+import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -142,6 +144,15 @@ public class Jetpack {
 		}
 
 		return this.craftingMaterial;
+	}
+
+	public Component getDisplayName() {
+		var key = String.format("jetpack.%s.name", this.name.replaceAll(" ", "_"));
+		if (Language.getInstance().has(key)) {
+			return Component.translatable(key);
+		}
+
+		return Component.literal(this.displayName);
 	}
 
 	private String makeDisplayName() {
