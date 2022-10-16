@@ -22,6 +22,9 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.Optional;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
 
 public class CuriosCompat {
     public static void onInterModEnqueue(InterModEnqueueEvent event) {
@@ -29,8 +32,16 @@ public class CuriosCompat {
     }
 
     public static Optional<ItemStack> findJetpackCurio(LivingEntity entity) {
-        return CuriosApi.getCuriosHelper().findFirstCurio(entity, ModItems.JETPACK.get())
-                .map(SlotResult::stack)
+        return findJetpackCurio(entity, null);
+    }
+
+    public static Optional<ItemStack> findJetpackCurio(LivingEntity entity, @Nullable Predicate<SlotResult> predicate) {
+        var optional = CuriosApi.getCuriosHelper().findFirstCurio(entity, ModItems.JETPACK.get());
+        
+        if (predicate != null) {
+        	optional = optional.filter(predicate);
+        }
+        return optional.map(SlotResult::stack)
                 .filter(stack -> JetpackUtils.getJetpack(stack).curios);
     }
 

@@ -33,7 +33,7 @@ public class JetpackRenderLayer<T extends LivingEntity, M extends HumanoidModel<
         if (stack.getItem() instanceof JetpackItem)
             return;
 
-        CuriosCompat.findJetpackCurio(entity).ifPresent(curio -> {
+        CuriosCompat.findJetpackCurio(entity, slot -> slot.slotContext().visible()).ifPresent(curio -> {
             var model = IClientItemExtensions.of(curio).getHumanoidArmorModel(entity, curio, EquipmentSlot.CHEST, null);
 
             this.getParentModel().copyPropertiesTo((HumanoidModel<T>) model);
