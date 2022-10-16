@@ -12,16 +12,17 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class HudHandler {
     private static final ResourceLocation HUD_TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/gui/hud.png");
 
     @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL)
-            return;
+    public void onRenderGameOverlay(RenderGuiOverlayEvent.Post event) {
+        // TODO: 1.19: confirm
+//        if (event.getType() != RenderGuiOverlayEvent.ElementType.ALL)
+//            return;
 
         var mc = Minecraft.getInstance();
         if (mc.player != null && isVisible(mc)) {
@@ -38,7 +39,7 @@ public final class HudHandler {
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     RenderSystem.setShaderTexture(0, HUD_TEXTURE);
 
-                    var stack = event.getMatrixStack();
+                    var stack = event.getPoseStack();
 
                     stack.pushPose();
                     stack.scale(0.33F, 0.33F, 1.0F);

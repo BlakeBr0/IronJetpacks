@@ -25,7 +25,7 @@ public final class JetpackClientHandler {
             var item = chest.getItem();
 
             if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {
-                if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.options.particles != ParticleStatus.MINIMAL)) {
+                if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.options.particles().get() != ParticleStatus.MINIMAL)) {
                     var jetpack = JetpackUtils.getJetpack(chest);
                     var rand = Utils.RANDOM;
 

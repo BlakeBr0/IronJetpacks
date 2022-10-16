@@ -81,12 +81,12 @@ public final class InputHandler {
 	
 	@SubscribeEvent
 	public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-		remove(event.getPlayer());
+		remove(event.getEntity());
 	}
 	
 	@SubscribeEvent
 	public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-		remove(event.getPlayer());
+		remove(event.getEntity());
 	}
 
 	@SubscribeEvent

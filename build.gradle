@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.18.2-5.1.4'
+version = '1.19.1-6.0.0'
 group = 'com.blakebr0.ironjetpacks'
 archivesBaseName = 'IronJetpacks'
 
@@ -20,6 +20,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 repositories {
+    maven { url 'https://maven.blakesmods.com' }
     maven { url 'https://dvs1.progwml6.com/files/maven/' }
     maven { url 'https://maven.theillusivec4.top/' }
     maven {
@@ -31,7 +32,7 @@ repositories {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -49,8 +50,10 @@ minecraft {
                     source sourceSets.main
                 }
 
-                cucumber {
-                    source project(':Cucumber').sourceSets.main
+                if (findProject(':Cucumber') != null) {
+                    cucumber {
+                        source project(':Cucumber').sourceSets.main
+                    }
                 }
             }
         }
@@ -68,8 +71,10 @@ minecraft {
                     source sourceSets.main
                 }
 
-                cucumber {
-                    source project(':Cucumber').sourceSets.main
+                if (findProject(':Cucumber')) {
+                    cucumber {
+                        source project(':Cucumber').sourceSets.main
+                    }
                 }
             }
         }
@@ -77,28 +82,29 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.21'
+    minecraft "net.minecraftforge:forge:${forge_version}"
 
-    implementation project(':Cucumber')
+    implementation findProject(':Cucumber') ?: fg.deobf("com.blakebr0.cucumber:Cucumber:${cucumber_version}")
 
-    compileOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.193:api')
-    compileOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api')
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
-    runtimeOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.193')
-    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0')
-    runtimeOnly fg.deobf('curse.maven:jade-324717:3761542')
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
 }
 
 jar {
     manifest {
         attributes([
-                'Specification-Title': 'Iron Jetpacks',
-                'Specification-Vendor': 'BlakeBr0',
-                'Specification-Version': '1',
-                'Implementation-Title': project.name,
-                'Implementation-Version': "${version.split('-').last()}",
-                'Implementation-Vendor' : 'BlakeBr0',
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            'Specification-Title': 'Iron Jetpacks',
+            'Specification-Vendor': 'BlakeBr0',
+            'Specification-Version': '1',
+            'Implementation-Title': project.name,
+            'Implementation-Version': "${version.split('-').last()}",
+            'Implementation-Vendor' : 'BlakeBr0',
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }

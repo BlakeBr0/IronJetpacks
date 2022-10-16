@@ -23,7 +23,7 @@ public class ComponentItem extends BaseItem implements IColored {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-		if (this.allowdedIn(group)) {
+		if (this.allowedIn(group)) {
 			JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
 				items.add(JetpackUtils.getItemForComponent(this, jetpack));
 			});

@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class JetpackUpgradeRecipe extends ShapedRecipe {
     public JetpackUpgradeRecipe(ResourceLocation id, String group, int recipeWidth, int recipeHeight, NonNullList<Ingredient> inputs, ItemStack output) {
@@ -44,10 +43,10 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_JETPACK_UPGRADE;
+        return ModRecipeSerializers.CRAFTING_JETPACK_UPGRADE.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<JetpackUpgradeRecipe> {
+    public static class Serializer implements RecipeSerializer<JetpackUpgradeRecipe> {
         @Override
         public JetpackUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
