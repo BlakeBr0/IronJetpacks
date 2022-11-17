@@ -50,6 +50,7 @@ public final class IronJetpacks {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			bus.register(new ColorHandler());
 			bus.register(new ModelHandler());
+			bus.register(new HudHandler());
 			bus.addListener(KeybindHandler::onRegisterKeyMappings);
 		});
 
@@ -79,7 +80,6 @@ public final class IronJetpacks {
 	@SubscribeEvent
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new KeybindHandler());
-		MinecraftForge.EVENT_BUS.register(new HudHandler());
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
 	}
 
