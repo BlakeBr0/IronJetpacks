@@ -45,9 +45,13 @@ public final class HudHelper {
 
 		int number = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
 		if (number >= 1000000000) {
-			return number / 1000000000 + Colors.GRAY + "G FE";
+			int big = number / 1000000000;
+			int small = (number - (big * 1000000000)) / 100000000;
+			return big + ((small != 0) ? "." + small : "") + Colors.GRAY + "G FE";
 		} else if (number >= 1000000) {
-			return number / 1000000 + Colors.GRAY + "M FE";
+			int big = number / 1000000;
+			int small = (number - (big * 1000000)) / 100000;
+			return big + ((small != 0) ? "." + small : "") + Colors.GRAY + "M FE";
 		} else if (number >= 1000) {
 			return number / 1000 + Colors.GRAY + "k FE";
 		} else {
