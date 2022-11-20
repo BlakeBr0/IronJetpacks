@@ -115,16 +115,16 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 					double hoverSpeed = InputHandler.isHoldingDown(player) ? jetpack.speedHoverDescend : jetpack.speedHoverSlow;
 					double currentAccel = jetpack.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
 					double currentSpeedVertical = jetpack.speedVert * (player.isInWater() ? 0.4D : 1.0D);
-					
+
 					double usage = player.isSprinting() || InputHandler.isHoldingSprint(player) ? jetpack.usage * jetpack.sprintFuel : jetpack.usage;
-					
+
 					var creative = jetpack.creative;
-					
+
 					var energy = JetpackUtils.getEnergyStorage(chest);
 					if (!player.isCreative() && !creative) {
 						energy.extractEnergy((int) usage, false);
 					}
-					
+
 					if (energy.getEnergyStored() > 0 || player.isCreative() || creative) {
 						double throttle = JetpackUtils.getThrottle(stack);
 						double verticalSprintMulti = motionY >= 0 && InputHandler.isHoldingSprint(player) ? jetpack.sprintSpeedVert : 1.0D;
@@ -134,37 +134,37 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 								fly(player, Math.min(motionY + currentAccel, currentSpeedVertical) * throttle * verticalSprintMulti);
 							} else {
 								if (InputHandler.isHoldingDown(player)) {
-									fly(player, Math.min(motionY + currentAccel, -jetpack.speedHoverSlow) * throttle);
+									fly(player, Math.min(motionY + currentAccel, -jetpack.speedHoverSlow));
 								} else {
 									fly(player, Math.min(motionY + currentAccel, jetpack.speedHoverAscend) * throttle * verticalSprintMulti);
 								}
 							}
 						} else {
-							fly(player, Math.min(motionY + currentAccel, -hoverSpeed) * throttle);
+							fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
 						}
-						
+
 						double speedSideways = (player.isCrouching() ? jetpack.speedSide * 0.5F : jetpack.speedSide) * throttle;
 						double speedForward = (player.isSprinting() ? speedSideways * jetpack.sprintSpeed : speedSideways) * throttle;
-						
+
 						if (InputHandler.isHoldingForwards(player)) {
 							player.moveRelative(1, new Vec3(0, 0, speedForward));
 						}
-						
+
 						if (InputHandler.isHoldingBackwards(player)) {
 							player.moveRelative(1, new Vec3(0, 0, -speedSideways * 0.8F));
 						}
-						
+
 						if (InputHandler.isHoldingLeft(player)) {
 							player.moveRelative(1, new Vec3(speedSideways, 0, 0));
 						}
-						
+
 						if (InputHandler.isHoldingRight(player)) {
 							player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
 						}
-						
+
 						if (!level.isClientSide()) {
 							player.fallDistance = 0.0F;
-							
+
 							if (player instanceof ServerPlayer) {
 								((ServerPlayer) player).connection.aboveGroundTickCount = 0;
 							}
@@ -174,7 +174,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
 		var jetpack = JetpackUtils.getJetpack(stack);
