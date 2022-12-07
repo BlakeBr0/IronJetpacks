@@ -13,6 +13,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public final class JetpackClientHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -27,11 +29,10 @@ public final class JetpackClientHandler {
             if (!chest.isEmpty() && item instanceof JetpackItem && JetpackUtils.isFlying(mc.player)) {
                 if (ModConfigs.ENABLE_JETPACK_PARTICLES.get() && (mc.options.particles().get() != ParticleStatus.MINIMAL)) {
                     var jetpack = JetpackUtils.getJetpack(chest);
-                    var rand = Utils.RANDOM;
 
                     var playerPos = mc.player.position().add(0, 1.5, 0);
 
-                    float random = (rand.nextFloat() - 0.5F) * 0.1F;
+                    float random = (ThreadLocalRandom.current().nextFloat() - 0.5F) * 0.1F;
                     double[] sneakBonus = mc.player.isCrouching() ? new double[] { -0.30, -0.10 } : new double[] { 0, 0 };
 
                     var vLeft = VecHelper.rotate(new Vec3(-0.18, -0.90 + sneakBonus[1], -0.30 + sneakBonus[0]), mc.player.yBodyRot, 0, 0);
