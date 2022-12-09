@@ -1,7 +1,7 @@
 package com.blakebr0.ironjetpacks.network.message;
 
 import com.blakebr0.cucumber.network.message.Message;
-import com.blakebr0.ironjetpacks.handler.InputHandler;
+import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

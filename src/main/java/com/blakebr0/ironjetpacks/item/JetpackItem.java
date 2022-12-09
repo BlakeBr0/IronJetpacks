@@ -11,7 +11,7 @@ import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.handler.InputHandler;
+import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModArmorMaterial;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;

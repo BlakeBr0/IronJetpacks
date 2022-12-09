@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.handler;
+package com.blakebr0.ironjetpacks.client.handler;
 
 import com.blakebr0.cucumber.helper.VecHelper;
 import com.blakebr0.ironjetpacks.client.sound.JetpackSound;

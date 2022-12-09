@@ -1,4 +1,4 @@
-package com.blakebr0.ironjetpacks.handler;
+package com.blakebr0.ironjetpacks.client.handler;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
