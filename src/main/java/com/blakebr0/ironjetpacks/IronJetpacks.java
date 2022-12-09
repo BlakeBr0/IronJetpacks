@@ -9,13 +9,13 @@ import com.blakebr0.ironjetpacks.handler.HudHandler;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.handler.KeybindHandler;
+import com.blakebr0.ironjetpacks.init.ModCreativeMenuTabs;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModReloadListeners;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,12 +35,12 @@ public final class IronJetpacks {
 	public static final String MOD_ID = "ironjetpacks";
 	public static final String NAME = "Iron Jetpacks";
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-	public static final CreativeModeTab CREATIVE_TAB = new IJCreativeTab();
 
 	public IronJetpacks() {
 		var bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		bus.register(this);
+		bus.register(new ModCreativeMenuTabs());
 		bus.register(new ModSounds());
 		bus.register(new ModRecipeSerializers());
 

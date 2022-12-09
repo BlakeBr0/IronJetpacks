@@ -5,8 +5,8 @@ import com.blakebr0.cucumber.energy.ItemEnergyStorage;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.cucumber.item.BaseArmorItem;
 import com.blakebr0.cucumber.lib.Tooltips;
+import com.blakebr0.cucumber.util.Formatting;
 import com.blakebr0.cucumber.util.Localizable;
-import com.blakebr0.cucumber.util.Utils;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
@@ -14,7 +14,6 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModArmorMaterial;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
-import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -22,7 +21,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -45,20 +42,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeatherItem {
-	public JetpackItem(Function<Properties, Properties> properties) {
-		super(ModArmorMaterial.JETPACK, EquipmentSlot.CHEST, properties.compose(Properties::setNoRepair));
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-		if (this.allowedIn(group)) {
-			JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
-				items.add(JetpackUtils.getItemForJetpack(jetpack));
-			});
-		}
+	public JetpackItem() {
+		super(ModArmorMaterial.JETPACK, EquipmentSlot.CHEST, Properties::setNoRepair);
 	}
 
 	@Override
@@ -221,7 +208,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 		if (!jetpack.creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);
-			tooltip.add(Component.literal(Utils.format(energy.getEnergyStored()) + " / " + Utils.format(energy.getMaxEnergyStored()) + " FE").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.literal(Formatting.number(energy.getEnergyStored()) + " / " + Formatting.energy(energy.getMaxEnergyStored())).withStyle(ChatFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}

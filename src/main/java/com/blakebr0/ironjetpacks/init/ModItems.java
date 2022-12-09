@@ -11,8 +11,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-import static com.blakebr0.ironjetpacks.IronJetpacks.CREATIVE_TAB;
-
 public final class ModItems {
 	public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, IronJetpacks.MOD_ID);
 
@@ -22,13 +20,13 @@ public final class ModItems {
 	public static final RegistryObject<Item> ELITE_COIL = register("elite_coil");
 	public static final RegistryObject<Item> ULTIMATE_COIL = register("ultimate_coil");
 
-	public static final RegistryObject<Item> CELL = register("cell", () -> new ComponentItem("cell", p -> p.tab(CREATIVE_TAB)));
-	public static final RegistryObject<Item> THRUSTER = register("thruster", () -> new ComponentItem("thruster", p -> p.tab(CREATIVE_TAB)));
-	public static final RegistryObject<Item> CAPACITOR = register("capacitor", () -> new ComponentItem("capacitor", p -> p.tab(CREATIVE_TAB)));
-	public static final RegistryObject<Item> JETPACK = register("jetpack", () -> new JetpackItem(p -> p.tab(CREATIVE_TAB)));
+	public static final RegistryObject<Item> CELL = register("cell", () -> new ComponentItem("cell"));
+	public static final RegistryObject<Item> THRUSTER = register("thruster", () -> new ComponentItem("thruster"));
+	public static final RegistryObject<Item> CAPACITOR = register("capacitor", () -> new ComponentItem("capacitor"));
+	public static final RegistryObject<Item> JETPACK = register("jetpack", JetpackItem::new);
 
 	private static RegistryObject<Item> register(String name) {
-		return register(name, () -> new BaseItem(p -> p.tab(CREATIVE_TAB)));
+		return register(name, BaseItem::new);
 	}
 
 	private static RegistryObject<Item> register(String name, Supplier<? extends Item> item) {

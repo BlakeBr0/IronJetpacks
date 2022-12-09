@@ -21,10 +21,9 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
 
 public class CuriosCompat {
     public static void onInterModEnqueue(InterModEnqueueEvent event) {

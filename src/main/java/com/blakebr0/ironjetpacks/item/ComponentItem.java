@@ -3,31 +3,17 @@ package com.blakebr0.ironjetpacks.item;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.util.Localizable;
-import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-
-import java.util.function.Function;
 
 public class ComponentItem extends BaseItem implements IColored {
 	private final String type;
 	
-	public ComponentItem(String type, Function<Properties, Properties> properties) {
-		super(properties);
+	public ComponentItem(String type) {
+		super();
 		this.type = type;
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-		if (this.allowedIn(group)) {
-			JetpackRegistry.getInstance().getJetpacks().forEach(jetpack -> {
-				items.add(JetpackUtils.getItemForComponent(this, jetpack));
-			});
-		}
 	}
 
 	@Override

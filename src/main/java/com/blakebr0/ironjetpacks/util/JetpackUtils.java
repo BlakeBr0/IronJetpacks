@@ -14,7 +14,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -56,10 +56,10 @@ public final class JetpackUtils {
 	}
 
 	public static IEnergyStorage getEnergyStorage(ItemStack stack) {
-		if (CapabilityEnergy.ENERGY == null)
+		if (ForgeCapabilities.ENERGY == null)
 			return EMPTY_ENERGY_STORAGE;
 
-		return stack.getCapability(CapabilityEnergy.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
+		return stack.getCapability(ForgeCapabilities.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
 	}
 
 	public static boolean isEngineOn(ItemStack stack) {

@@ -8,7 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
 public final class ModSounds {
-	public static final SoundEvent JETPACK = new SoundEvent(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"));
+	public static final SoundEvent JETPACK = SoundEvent.createVariableRangeEvent(new ResourceLocation(IronJetpacks.MOD_ID, "jetpack"));
 	
 	@SubscribeEvent
 	public void onRegisterSounds(RegisterEvent event) {

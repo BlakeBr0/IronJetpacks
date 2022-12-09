@@ -11,6 +11,7 @@ import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.block.Blocks;
@@ -66,7 +67,7 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_cell");
         var output = JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack);
 
-        return new ShapedRecipe(name, "ironjetpacks:cells", 3, 3, inputs, output);
+        return new ShapedRecipe(name, "ironjetpacks:cells", CraftingBookCategory.MISC, 3, 3, inputs, output);
     }
 
     private static ShapedRecipe makeThrusterRecipe(Jetpack jetpack) {
@@ -89,7 +90,7 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_thruster");
         var output = JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack);
 
-        return new ShapedRecipe(name, "ironjetpacks:thrusters", 3, 3, inputs, output);
+        return new ShapedRecipe(name, "ironjetpacks:thrusters", CraftingBookCategory.MISC, 3, 3, inputs, output);
     }
 
     private static ShapedRecipe makeCapacitorRecipe(Jetpack jetpack) {
@@ -110,7 +111,7 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_capacitor");
         var output = JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack);
 
-        return new ShapedRecipe(name, "ironjetpacks:capacitors", 3, 3, inputs, output);
+        return new ShapedRecipe(name, "ironjetpacks:capacitors", CraftingBookCategory.MISC, 3, 3, inputs, output);
     }
 
     private static ShapedRecipe makeJetpackRecipe(Jetpack jetpack) {
@@ -136,7 +137,7 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
         var output = JetpackUtils.getItemForJetpack(jetpack);
 
-        return new ShapedRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
+        return new ShapedRecipe(name, "ironjetpacks:jetpacks", CraftingBookCategory.MISC, 3, 3, inputs, output);
     }
 
     private static JetpackUpgradeRecipe makeJetpackUpgradeRecipe(Jetpack jetpack) {
