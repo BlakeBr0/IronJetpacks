@@ -11,6 +11,7 @@ The official release builds can be downloaded from the following websites.
 
 - [Blake's Mods](https://blakesmods.com/iron-jetpacks/download)
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/iron-jetpacks)
+- [Modrinth](https://modrinth.com/mod/iron-jetpacks)
 
 ## Development
 
