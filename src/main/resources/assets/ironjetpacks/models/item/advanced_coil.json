@@ -1,6 +1,6 @@
 {
   "parent":"item/generated",
   "textures": {
-    "layer0":"ironjetpacks:items/advanced_coil"
+    "layer0":"ironjetpacks:item/advanced_coil"
   }
 }

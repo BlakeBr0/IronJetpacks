@@ -1,6 +1,6 @@
 {
   "parent":"item/generated",
   "textures": {
-    "layer0":"ironjetpacks:items/capacitor"
+    "layer0":"ironjetpacks:item/capacitor"
   }
 }

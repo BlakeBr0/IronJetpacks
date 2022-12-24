@@ -1,6 +1,6 @@
 {
   "parent":"item/generated",
   "textures": {
-    "layer0":"ironjetpacks:items/strap"
+    "layer0":"ironjetpacks:item/strap"
   }
 }
