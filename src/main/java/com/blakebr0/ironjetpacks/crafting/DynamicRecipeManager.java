@@ -137,7 +137,7 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
         var output = JetpackUtils.getItemForJetpack(jetpack);
 
-        return new ShapedRecipe(name, "ironjetpacks:jetpacks", CraftingBookCategory.MISC, 3, 3, inputs, output);
+        return new ShapedRecipe(name, "ironjetpacks:jetpacks", CraftingBookCategory.EQUIPMENT, 3, 3, inputs, output);
     }
 
     private static JetpackUpgradeRecipe makeJetpackUpgradeRecipe(Jetpack jetpack) {

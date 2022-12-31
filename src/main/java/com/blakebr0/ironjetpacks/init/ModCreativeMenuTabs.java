@@ -38,8 +38,7 @@ public final class ModCreativeMenuTabs {
 
             builder.title(Component.translatable("itemGroup.ironjetpacks"))
                     .icon(() -> icon)
-                    .displayItems(displayItems)
-                    .build();
+                    .displayItems(displayItems);
         });
     }
 }
