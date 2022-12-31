@@ -208,7 +208,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 
 		if (!jetpack.creative) {
 			var energy = JetpackUtils.getEnergyStorage(stack);
-			tooltip.add(Component.literal(Formatting.number(energy.getEnergyStored()) + " / " + Formatting.energy(energy.getMaxEnergyStored())).withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.literal(Formatting.number(energy.getEnergyStored()).getString() + " / " + Formatting.energy(energy.getMaxEnergyStored()).getString()).withStyle(ChatFormatting.GRAY));
 		} else {
 			tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
 		}
