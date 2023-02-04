@@ -1,9 +1,24 @@
-# Iron Jetpacks [![](http://cf.way2muchnoise.eu/full_284497_downloads.svg)](https://minecraft.curseforge.com/projects/iron-jetpacks)
+# Iron Jetpacks 
+
+<p align="left">
+    <a href="https://blakesmods.com/iron-jetpacks" alt="Downloads">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/ironjetpacks/downloads&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/iron-jetpacks" alt="Latest Version">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/ironjetpacks/version&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/iron-jetpacks" alt="Minecraft Version">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/ironjetpacks/mc_version&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/docs/ironjetpacks" alt="Docs">
+        <img src="https://img.shields.io/static/v1?label=docs&message=view&color=brightgreen&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/wiki/ironjetpacks" alt="Wiki">
+        <img src="https://img.shields.io/static/v1?label=wiki&message=view&color=brightgreen&style=for-the-badge" />
+    </a>
+</p>
+
 Adds fully customizable FE powered jetpacks!
-
-[Version 2.x+ Docs](https://blakesmods.com/docs/ironjetpacks)
-
-[Version 1.x Docs](https://github.com/BlakeBr0/IronJetpacks/wiki)
 
 ## Download
 
