@@ -14,7 +14,7 @@ public final class ModCreativeMenuTabs {
     @SubscribeEvent
     public void onRegisterCreativeModeTabs(CreativeModeTabEvent.Register event) {
         event.registerCreativeModeTab(new ResourceLocation(IronJetpacks.MOD_ID, "creative_mode_tab"), (builder) -> {
-            var displayItems = FeatureFlagDisplayItemGenerator.create((flagSet, output, hasPermission) -> {
+            var displayItems = FeatureFlagDisplayItemGenerator.create((parameters, output) -> {
                 output.accept(ModItems.STRAP.get());
                 output.accept(ModItems.BASIC_COIL.get());
                 output.accept(ModItems.ADVANCED_COIL.get());

@@ -9,9 +9,9 @@ import com.blakebr0.cucumber.util.Formatting;
 import com.blakebr0.cucumber.util.Localizable;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.client.ModelHandler;
+import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.lib.ModArmorMaterial;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
@@ -45,7 +45,7 @@ import java.util.function.Consumer;
 
 public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeatherItem {
 	public JetpackItem() {
-		super(ModArmorMaterial.JETPACK, EquipmentSlot.CHEST, Properties::setNoRepair);
+		super(ModArmorMaterial.JETPACK, Type.CHESTPLATE, Properties::setNoRepair);
 	}
 
 	@Override

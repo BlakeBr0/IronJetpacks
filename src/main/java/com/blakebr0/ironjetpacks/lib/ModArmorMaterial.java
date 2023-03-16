@@ -2,7 +2,7 @@ package com.blakebr0.ironjetpacks.lib;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -10,12 +10,12 @@ public enum ModArmorMaterial implements ArmorMaterial {
     JETPACK;
 
     @Override
-    public int getDurabilityForSlot(EquipmentSlot slot) {
+    public int getDurabilityForType(ArmorItem.Type type) {
         return 0;
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlot slot) {
+    public int getDefenseForType(ArmorItem.Type type) {
         return 0;
     }
 

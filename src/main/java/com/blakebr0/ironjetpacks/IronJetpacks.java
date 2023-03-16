@@ -1,14 +1,14 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModelHandler;
-import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
-import com.blakebr0.ironjetpacks.config.ModConfigs;
-import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.client.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.client.handler.HudHandler;
 import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.client.handler.JetpackClientHandler;
 import com.blakebr0.ironjetpacks.client.handler.KeybindHandler;
+import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
+import com.blakebr0.ironjetpacks.config.ModConfigs;
+import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.init.ModCreativeMenuTabs;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;

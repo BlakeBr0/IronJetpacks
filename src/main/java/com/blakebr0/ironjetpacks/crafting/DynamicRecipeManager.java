@@ -163,6 +163,6 @@ public class DynamicRecipeManager {
         var name = new ResourceLocation(IronJetpacks.MOD_ID, jetpack.name + "_jetpack");
         var output = JetpackUtils.getItemForJetpack(jetpack);
 
-        return new JetpackUpgradeRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output);
+        return new JetpackUpgradeRecipe(name, "ironjetpacks:jetpacks", 3, 3, inputs, output, false);
     }
 }

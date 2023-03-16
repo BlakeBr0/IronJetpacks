@@ -5,6 +5,7 @@ import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -15,14 +16,17 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class JetpackUpgradeRecipe extends ShapedRecipe {
-    public JetpackUpgradeRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
-        super(id, group, CraftingBookCategory.EQUIPMENT, width, height, inputs, output);
+    private final ItemStack result;
+
+    public JetpackUpgradeRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack result, boolean showNotification) {
+        super(id, group, CraftingBookCategory.EQUIPMENT, width, height, inputs, result, showNotification);
+        this.result = result;
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
-        var stack = inv.getItem(4);
-        var result = this.getResultItem().copy();
+    public ItemStack assemble(CraftingContainer inventory, RegistryAccess access) {
+        var stack = inventory.getItem(4);
+        var result = this.getResultItem(access).copy();
 
         if (!stack.isEmpty() && stack.getItem() instanceof JetpackItem) {
             var tag = stack.getTag();
@@ -50,8 +54,8 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     public static class Serializer implements RecipeSerializer<JetpackUpgradeRecipe> {
         @Override
         public JetpackUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            var recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
-            return new JetpackUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
+            var recipe = (JetpackUpgradeRecipe) RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
+            return new JetpackUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.result, recipe.showNotification());
         }
 
         @Override
@@ -66,8 +70,9 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
             }
 
             var output = buffer.readItem();
+            var showNotification = buffer.readBoolean();
 
-            return new JetpackUpgradeRecipe(recipeId, group, width, height, inputs, output);
+            return new JetpackUpgradeRecipe(recipeId, group, width, height, inputs, output, showNotification);
         }
 
         @Override
@@ -80,7 +85,8 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItem(recipe.getResultItem());
+            buffer.writeItem(recipe.result);
+            buffer.writeBoolean(recipe.showNotification());
         }
     }
 }
