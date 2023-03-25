@@ -38,7 +38,7 @@
   "tooltip.ironjetpacks.sprint_vertical_modifier": "Множитель вертикальной скорости рывка: %s",
   "tooltip.ironjetpacks.sprint_fuel_modifier": "Модификатор топлива рывка: %s",
   "tooltip.ironjetpacks.toggle_engine": "Двигатель переключен на состояние: %s",
-  "tooltip.ironjetpacks.toggle_hover": "Парение переключено на состояние: %s",
+  "tooltip.ironjetpacks.toggle_hover": "Зависание переключено на состояние: %s",
   "tooltip.ironjetpacks.change_throttle": "Регулятор газа установлен на %s",
   "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
   "tooltip.ironjetpacks.jetpack_id": "ID реактивного ранца: %s"
