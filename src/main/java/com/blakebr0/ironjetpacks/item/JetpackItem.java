@@ -95,7 +95,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 			if (JetpackUtils.isEngineOn(chest)) {
 				var hover = JetpackUtils.isHovering(chest);
 
-				if (InputHandler.isHoldingUp(player) || hover && !player.isOnGround()) {
+				if (InputHandler.isHoldingUp(player) || hover && !player.onGround()) {
 					var jetpack = JetpackUtils.getJetpack(stack);
 
 					double motionY = player.getDeltaMovement().y();

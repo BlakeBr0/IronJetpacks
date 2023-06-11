@@ -6,11 +6,8 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -21,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public final class HudHandler {
     private static final ResourceLocation HUD_TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/gui/hud.png");
 
-    private static final IGuiOverlay HUD_OVERLAY = (gui, matrix, partialTick, width, height) -> {
+    private static final IGuiOverlay HUD_OVERLAY = (gui, gfx, partialTick, width, height) -> {
         var mc = Minecraft.getInstance();
         if (mc.player != null && isVisible(mc)) {
             var chest = JetpackUtils.getEquippedJetpack(mc.player);
@@ -33,15 +30,13 @@ public final class HudHandler {
                     int xPos = (int) (pos.x / 0.33) - 18;
                     int yPos = (int) (pos.y / 0.33) - 78;
 
-                    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    RenderSystem.setShaderTexture(0, HUD_TEXTURE);
+                    var matrix = gfx.pose();
 
                     matrix.pushPose();
                     matrix.scale(0.33F, 0.33F, 1.0F);
-                    Screen.blit(matrix, xPos, yPos, 0, 0, 28, 156, 256, 256);
+                    gfx.blit(HUD_TEXTURE, xPos, yPos, 0, 0, 28, 156, 256, 256);
                     int i2 = getEnergyBarScaled(chest);
-                    Screen.blit(matrix, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
+                    gfx.blit(HUD_TEXTURE, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
                     matrix.popPose();
 
                     var fuel = Colors.GRAY + getFuelString(chest);
@@ -50,15 +45,15 @@ public final class HudHandler {
                     var hover = Colors.GRAY + "H: " + getStatusString(JetpackUtils.isHovering(chest));
 
                     if (pos.side == 1) {
-                        mc.font.drawShadow(matrix, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
-                        mc.font.drawShadow(matrix, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
-                        mc.font.drawShadow(matrix, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
-                        mc.font.drawShadow(matrix, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
+                        gfx.drawString(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
+                        gfx.drawString(mc.font, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
+                        gfx.drawString(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
+                        gfx.drawString(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
                     } else {
-                        mc.font.drawShadow(matrix, fuel, pos.x + 6, pos.y - 21, 16383998);
-                        mc.font.drawShadow(matrix, throttle, pos.x + 6, pos.y - 6, 16383998);
-                        mc.font.drawShadow(matrix, engine, pos.x + 6, pos.y + 4, 16383998);
-                        mc.font.drawShadow(matrix, hover, pos.x + 6, pos.y + 14, 16383998);
+                        gfx.drawString(mc.font, fuel, pos.x + 6, pos.y - 21, 16383998);
+                        gfx.drawString(mc.font, throttle, pos.x + 6, pos.y - 6, 16383998);
+                        gfx.drawString(mc.font, engine, pos.x + 6, pos.y + 4, 16383998);
+                        gfx.drawString(mc.font, hover, pos.x + 6, pos.y + 14, 16383998);
                     }
                 }
             }
@@ -80,8 +75,10 @@ public final class HudHandler {
             case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
             case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
             case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
-            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
-            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
+            case 4 ->
+                    new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
+            case 5 ->
+                    new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
             default -> null;
         };
 

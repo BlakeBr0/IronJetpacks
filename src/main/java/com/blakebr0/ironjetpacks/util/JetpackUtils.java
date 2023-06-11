@@ -33,10 +33,10 @@ public final class JetpackUtils {
 
 			if (energy.getEnergyStored() > 0 || player.isCreative() || jetpack.creative) {
 				if (isHovering(stack)) {
-					return !player.isOnGround();
-				} else {
-					return InputHandler.isHoldingUp(player);
+					return !player.onGround();
 				}
+
+				return InputHandler.isHoldingUp(player);
 			}
 		}
 

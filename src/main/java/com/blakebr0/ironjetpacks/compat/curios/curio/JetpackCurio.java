@@ -31,7 +31,7 @@ public record JetpackCurio(ItemStack stack) implements ICurio {
         if (this.isCurioJetpack()) {
             var entity = context.entity();
             if (entity instanceof Player player) {
-                this.stack.onArmorTick(player.level, player);
+                this.stack.onArmorTick(player.level(), player);
             }
         }
     }
