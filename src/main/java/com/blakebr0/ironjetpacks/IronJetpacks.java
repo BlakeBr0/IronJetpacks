@@ -9,7 +9,7 @@ import com.blakebr0.ironjetpacks.client.handler.KeybindHandler;
 import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
-import com.blakebr0.ironjetpacks.init.ModCreativeMenuTabs;
+import com.blakebr0.ironjetpacks.init.ModCreativeModeTabs;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModReloadListeners;
@@ -44,7 +44,7 @@ public final class IronJetpacks {
 		bus.register(new ModRecipeSerializers());
 
 		ModItems.REGISTRY.register(bus);
-		ModCreativeMenuTabs.REGISTRY.register(bus);
+		ModCreativeModeTabs.REGISTRY.register(bus);
 		ModRecipeSerializers.REGISTRY.register(bus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

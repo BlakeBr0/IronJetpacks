@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-public final class ModCreativeMenuTabs {
+public final class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, IronJetpacks.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = REGISTRY.register("creative_tab", () -> CreativeModeTab.builder()
@@ -22,9 +22,7 @@ public final class ModCreativeMenuTabs {
                         .findFirst()
                         .orElse(null);
 
-                var icon = jetpack != null ? JetpackUtils.getItemForJetpack(jetpack) : new ItemStack(ModItems.STRAP.get());
-
-                return icon;
+                return jetpack != null ? JetpackUtils.getItemForJetpack(jetpack) : new ItemStack(ModItems.STRAP.get());
             })
             .displayItems(FeatureFlagDisplayItemGenerator.create((parameters, output) -> {
                 output.accept(ModItems.STRAP.get());
