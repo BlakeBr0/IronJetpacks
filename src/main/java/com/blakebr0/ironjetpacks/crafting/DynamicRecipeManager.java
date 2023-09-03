@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks.crafting;
 
-import com.blakebr0.cucumber.event.RegisterRecipesEvent;
+import com.blakebr0.cucumber.event.RecipeManagerLoadingEvent;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.ingredient.JetpackTierIngredient;
@@ -22,7 +22,9 @@ public class DynamicRecipeManager {
     private static final DynamicRecipeManager INSTANCE = new DynamicRecipeManager();
 
     @SubscribeEvent
-    public void onRegisterRecipes(RegisterRecipesEvent event) {
+    public void onRecipeManagerLoading(RecipeManagerLoadingEvent event) {
+        JetpackRegistry.getInstance().loadJetpacks();
+
         for (var jetpack : JetpackRegistry.getInstance().getJetpacks()) {
             var cell = makeCellRecipe(jetpack);
             var thruster = makeThrusterRecipe(jetpack);
@@ -31,15 +33,15 @@ public class DynamicRecipeManager {
             var jetpackUpgrade = makeJetpackUpgradeRecipe(jetpack);
 
             if (cell != null)
-                event.register(cell);
+                event.addRecipe(cell);
             if (thruster != null)
-                event.register(thruster);
+                event.addRecipe(thruster);
             if (capacitor != null)
-                event.register(capacitor);
+                event.addRecipe(capacitor);
             if (jetpackSelf != null)
-                event.register(jetpackSelf);
+                event.addRecipe(jetpackSelf);
             if (jetpackUpgrade != null)
-                event.register(jetpackUpgrade);
+                event.addRecipe(jetpackUpgrade);
         }
     }
 
