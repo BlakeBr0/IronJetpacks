@@ -12,7 +12,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,10 +51,6 @@ public class JetpackRegistry {
 		} else {
 			NetworkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), message);
 		}
-	}
-
-	public void onResourceManagerReload(ResourceManager manager) {
-		this.loadJetpacks();
 	}
 
 	public void register(Jetpack jetpack) {
@@ -160,7 +155,7 @@ public class JetpackRegistry {
 		}
 	}
 
-	private void loadJetpacks() {
+	public void loadJetpacks() {
 		var stopwatch = Stopwatch.createStarted();
 		var dir = FMLPaths.CONFIGDIR.get().resolve("ironjetpacks/jetpacks").toFile();
 
