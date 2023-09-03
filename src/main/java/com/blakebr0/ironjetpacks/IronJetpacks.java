@@ -12,7 +12,6 @@ import com.blakebr0.ironjetpacks.client.handler.KeybindHandler;
 import com.blakebr0.ironjetpacks.init.ModCreativeMenuTabs;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
-import com.blakebr0.ironjetpacks.init.ModReloadListeners;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
@@ -61,7 +60,6 @@ public final class IronJetpacks {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new ModReloadListeners());
 		MinecraftForge.EVENT_BUS.register(new InputHandler());
 		MinecraftForge.EVENT_BUS.register(DynamicRecipeManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(JetpackRegistry.getInstance());
