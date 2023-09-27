@@ -26,6 +26,7 @@ import org.lwjgl.glfw.GLFW;
 public final class KeybindHandler {
 	private static KeyMapping keyEngine;
 	private static KeyMapping keyHover;
+	private static KeyMapping keyAscend;
 	private static KeyMapping keyDescend;
 	private static KeyMapping keyIncrementThrottle;
 	private static KeyMapping keyDecrementThrottle;
@@ -41,12 +42,14 @@ public final class KeybindHandler {
 	public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
 		keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, IronJetpacks.NAME);
+		keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);;
 		keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
 		keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
 		keyDecrementThrottle = new KeyMapping("keybind.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
 
 		event.register(keyEngine);
 		event.register(keyHover);
+		event.register(keyAscend);
 		event.register(keyDescend);
 		event.register(keyIncrementThrottle);
 		event.register(keyDecrementThrottle);
@@ -93,7 +96,7 @@ public final class KeybindHandler {
 			if (mc.getConnection() == null)
 				return;
 			
-			boolean upNow = settings.keyJump.isDown();
+			boolean upNow = keyAscend.isUnbound() ? settings.keyJump.isDown() : keyAscend.isDown();
 			boolean downNow = keyDescend.isUnbound() ? settings.keyShift.isDown() : keyDescend.isDown();
 			boolean forwardsNow = settings.keyUp.isDown();
 			boolean backwardsNow = settings.keyDown.isDown();
