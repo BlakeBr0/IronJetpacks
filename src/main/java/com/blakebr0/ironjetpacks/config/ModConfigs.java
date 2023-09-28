@@ -97,6 +97,10 @@ public final class ModConfigs {
 		return ModList.get().isLoaded("curios");
 	}
 
+	public static boolean isControllableInstalled() {
+		return ModList.get().isLoaded("controllable");
+	}
+
 	public static boolean isCuriosEnabled() {
 		return isCuriosInstalled() && ENABLE_CURIOS_INTEGRATION.get();
 	}

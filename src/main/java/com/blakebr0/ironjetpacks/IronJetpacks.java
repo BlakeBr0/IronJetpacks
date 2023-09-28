@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModelHandler;
+import com.blakebr0.ironjetpacks.compat.ControllableCompat;
 import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
@@ -66,6 +67,10 @@ public final class IronJetpacks {
 
 		if (ModConfigs.isCuriosInstalled()) {
 			MinecraftForge.EVENT_BUS.register(new CuriosCompat());
+		}
+
+		if (ModConfigs.isControllableInstalled()) {
+			MinecraftForge.EVENT_BUS.register(new ControllableCompat());
 		}
 
 		event.enqueueWork(() -> {
