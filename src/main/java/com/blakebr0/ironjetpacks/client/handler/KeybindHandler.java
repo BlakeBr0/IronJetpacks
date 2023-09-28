@@ -42,7 +42,7 @@ public final class KeybindHandler {
 	public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
 		keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
 		keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, IronJetpacks.NAME);
-		keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);;
+		keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
 		keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
 		keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
 		keyDecrementThrottle = new KeyMapping("keybind.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
@@ -113,10 +113,16 @@ public final class KeybindHandler {
 				right = rightNow;
 				sprint = sprintNow;
 
-				NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow, sprintNow));
-				InputHandler.update(mc.player, upNow, downNow, forwardsNow, backwardsNow, leftNow, rightNow, sprintNow);
+				update(up, down, forwards, backwards, left, right, sprint);
 			}
 		}
+	}
+
+	public static void update(boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right, boolean sprint) {
+		var player = Minecraft.getInstance().player;
+
+		NetworkHandler.INSTANCE.sendToServer(new UpdateInputMessage(up, down, forwards, backwards, left, right, sprint));
+		InputHandler.update(player, up, down, forwards, backwards, left, right, sprint);
 	}
 
 	private static void handleInput(Player player, ItemStack stack) {
