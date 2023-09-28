@@ -119,10 +119,14 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 					double usage = player.isSprinting() || InputHandler.isHoldingSprint(player) ? jetpack.usage * jetpack.sprintFuel : jetpack.usage;
 
 					var creative = jetpack.creative;
-
 					var energy = JetpackUtils.getEnergyStorage(chest);
+
 					if (!player.isCreative() && !creative) {
 						energy.extractEnergy((int) usage, false);
+					}
+
+					if (hover && player.isFallFlying()) {
+						player.stopFallFlying();
 					}
 
 					if (energy.getEnergyStored() > 0 || player.isCreative() || creative) {
@@ -146,20 +150,22 @@ public class JetpackItem extends BaseArmorItem implements IColored, DyeableLeath
 						double speedSideways = (player.isCrouching() ? jetpack.speedSide * 0.5F : jetpack.speedSide) * throttle;
 						double speedForward = (player.isSprinting() ? speedSideways * jetpack.sprintSpeed : speedSideways) * throttle;
 
-						if (InputHandler.isHoldingForwards(player)) {
-							player.moveRelative(1, new Vec3(0, 0, speedForward));
-						}
+						if (!player.isFallFlying()) {
+							if (InputHandler.isHoldingForwards(player)) {
+								player.moveRelative(1, new Vec3(0, 0, speedForward));
+							}
 
-						if (InputHandler.isHoldingBackwards(player)) {
-							player.moveRelative(1, new Vec3(0, 0, -speedSideways * 0.8F));
-						}
+							if (InputHandler.isHoldingBackwards(player)) {
+								player.moveRelative(1, new Vec3(0, 0, -speedSideways * 0.8F));
+							}
 
-						if (InputHandler.isHoldingLeft(player)) {
-							player.moveRelative(1, new Vec3(speedSideways, 0, 0));
-						}
+							if (InputHandler.isHoldingLeft(player)) {
+								player.moveRelative(1, new Vec3(speedSideways, 0, 0));
+							}
 
-						if (InputHandler.isHoldingRight(player)) {
-							player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
+							if (InputHandler.isHoldingRight(player)) {
+								player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
+							}
 						}
 
 						if (!level.isClientSide()) {
