@@ -24,3 +24,4 @@ Please add your logs and scripts (if applicable).
  - Forge:
  - Cucumber:
  - Iron Jetpacks:
+ - Singleplayer or Multiplayer:
