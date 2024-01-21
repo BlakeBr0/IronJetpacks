@@ -69,10 +69,6 @@ public final class IronJetpacks {
 			MinecraftForge.EVENT_BUS.register(new CuriosCompat());
 		}
 
-		if (ModConfigs.isControllableInstalled()) {
-			MinecraftForge.EVENT_BUS.register(new ControllableCompat());
-		}
-
 		event.enqueueWork(() -> {
 			NetworkHandler.onCommonSetup();
 		});
@@ -84,6 +80,10 @@ public final class IronJetpacks {
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new KeybindHandler());
 		MinecraftForge.EVENT_BUS.register(new JetpackClientHandler());
+
+		if (ModConfigs.isControllableInstalled()) {
+			MinecraftForge.EVENT_BUS.register(new ControllableCompat());
+		}
 	}
 
 	@SubscribeEvent
