@@ -1,25 +1,26 @@
 package com.blakebr0.ironjetpacks.client.handler;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /*
  * Keyboard handling system borrowed from Simply Jetpacks
  * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/handler/SyncHandler.java
  */
 public final class InputHandler {
-	private static final Map<Player, Boolean> HOLDING_UP = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_DOWN = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_FORWARDS = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_BACKWARDS = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_LEFT = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_RIGHT = new HashMap<>();
-	private static final Map<Player, Boolean> HOLDING_SPRINT = new HashMap<>();
+	private static final Map<Player, Boolean> HOLDING_UP = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_DOWN = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_FORWARDS = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_BACKWARDS = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_LEFT = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_RIGHT = new WeakHashMap<>();
+	private static final Map<Player, Boolean> HOLDING_SPRINT = new WeakHashMap<>();
 	
 	public static boolean isHoldingUp(Player player) {
 		return HOLDING_UP.containsKey(player) && HOLDING_UP.get(player);
@@ -91,6 +92,11 @@ public final class InputHandler {
 
 	@SubscribeEvent
 	public void onServerStopping(ServerStoppingEvent event) {
+		InputHandler.clear();
+	}
+
+	@SubscribeEvent
+	public void onClientLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
 		InputHandler.clear();
 	}
 }
