@@ -1,0 +1,46 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "レザーストラップ",
+  "item.ironjetpacks.basic_coil": "基本コイル",
+  "item.ironjetpacks.advanced_coil": "上級コイル",
+  "item.ironjetpacks.elite_coil": "精鋭コイル",
+  "item.ironjetpacks.ultimate_coil": "究極コイル",
+
+  "item.ironjetpacks.cell": "%sエネルギーセル",
+  "item.ironjetpacks.thruster": "%sスラスター",
+  "item.ironjetpacks.capacitor": "%sコンデンサー",
+  "item.ironjetpacks.jetpack": "%sジェットパック",
+
+  "keybind.ironjetpacks.engine": "エンジンの切り替え",
+  "keybind.ironjetpacks.hover": "ホバーモード",
+  "keybind.ironjetpacks.ascend": "上昇",
+  "keybind.ironjetpacks.descend": "下降",
+  "keybind.ironjetpacks.increment_throttle": "スロットルを上げる",
+  "keybind.ironjetpacks.decrement_throttle": "スロットルを下げる",
+
+  "subtitle.ironjetpacks.jetpack": "ジェットパック",
+
+  "tooltip.ironjetpacks.on": "オン",
+  "tooltip.ironjetpacks.off": "オフ",
+  "tooltip.ironjetpacks.infinite": "無限",
+  "tooltip.ironjetpacks.engine": "エンジン",
+  "tooltip.ironjetpacks.hover": "ホバー",
+  "tooltip.ironjetpacks.tier": "ティア%s",
+  "tooltip.ironjetpacks.throttle": "スロットル:%s",
+  "tooltip.ironjetpacks.fuel_usage": "消費電力:%s",
+  "tooltip.ironjetpacks.vertical_speed": "垂直速度:%s",
+  "tooltip.ironjetpacks.vertical_acceleration": "垂直加速度:%s",
+  "tooltip.ironjetpacks.horizontal_speed": "水平速度:%s",
+  "tooltip.ironjetpacks.hover_speed": "ホバースピード:%s",
+  "tooltip.ironjetpacks.hover_ascend_speed": "ホバリング上昇速度:%s",
+  "tooltip.ironjetpacks.hover_descend_speed": "ホバリング下降速度:%s",
+  "tooltip.ironjetpacks.sprint_modifier": "スプリントモディファイア:%s",
+  "tooltip.ironjetpacks.sprint_vertical_modifier": "スプリント垂直乗数:%s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "スプリント燃料調整器:%s",
+  "tooltip.ironjetpacks.toggle_engine": "トグルエンジン%s",
+  "tooltip.ironjetpacks.toggle_hover": "トグルホバー%s",
+  "tooltip.ironjetpacks.change_throttle": "スロットルを%sに設定",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.jetpack_id": "ジェットパックID:%s"
+}
