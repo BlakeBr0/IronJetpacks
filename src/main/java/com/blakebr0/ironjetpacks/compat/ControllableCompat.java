@@ -2,7 +2,6 @@ package com.blakebr0.ironjetpacks.compat;
 
 import com.blakebr0.ironjetpacks.client.handler.KeybindHandler;
 import com.mrcrayfish.controllable.Controllable;
-import com.mrcrayfish.controllable.client.binding.BindingRegistry;
 import com.mrcrayfish.controllable.client.binding.ButtonBindings;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -52,7 +51,7 @@ public final class ControllableCompat {
     }
 
     private static KeyMapping getKeyMapping(String key) {
-        var adapter = BindingRegistry.getInstance().getKeyAdapterByDescriptionKey(key);
+        var adapter = Controllable.getBindingRegistry().getKeyAdapterByDescriptionKey(key);
         return adapter != null ? adapter.getKeyMapping() : null;
     }
 }
