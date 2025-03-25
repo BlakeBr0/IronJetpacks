@@ -40,6 +40,6 @@
   "tooltip.ironjetpacks.toggle_engine": "Перемк. рушій %s",
   "tooltip.ironjetpacks.toggle_hover": "Перемк. планерування %s",
   "tooltip.ironjetpacks.change_throttle": "Газ встановлено на %s",
-  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s | %s",
   "tooltip.ironjetpacks.jetpack_id": "ID реактивного ранця: %s"
 }

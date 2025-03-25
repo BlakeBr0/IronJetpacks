@@ -25,22 +25,22 @@ public final class HudHandler {
     @SubscribeEvent
     public void onRegisterGuiOverlays(RenderGuiEvent.Pre event) {
         var mc = Minecraft.getInstance();
-        if (mc.player != null && isVisible(mc)) {
+        var player = mc.player;
+        if (player == null)
+            return;
+
+        if (isVisible(mc)) {
             var chest = JetpackUtils.getEquippedJetpack(mc.player);
             var item = chest.getItem();
 
             if (!chest.isEmpty() && item instanceof JetpackItem) {
-
-                // Check if hud should be hidden
-                if (ModConfigs.HIDE_HUD_ON_ENGINE_OFF.get() && JetpackUtils.isEngineOn(chest) && animationProgress > 0) {
+                var enabled = JetpackUtils.isHUDEnabled(chest);
+                if (enabled && animationProgress > 0) {
                     wasHidden = false;
-                } else if (!ModConfigs.HIDE_HUD_ON_ENGINE_OFF.get()) {
-                    wasHidden = false;
-                } else if (!JetpackUtils.isEngineOn(chest) && animationProgress < 1) {
+                } else if (!enabled && animationProgress < 1) {
                     wasHidden = true;
                 }
 
-                // Animate the hud
                 var animationStep = wasHidden ? ModConfigs.HUD_ANIMATION_SPEED.get() : -ModConfigs.HUD_ANIMATION_SPEED.get();
                 animationProgress = Math.clamp(0, animationStep + animationProgress, 1);
 
@@ -158,9 +158,7 @@ public final class HudHandler {
 
     private static boolean isVisible(Minecraft mc) {
         return ModConfigs.ENABLE_HUD.get()
-                && (ModConfigs.SHOW_HUD_OVER_CHAT.get()
-                || !ModConfigs.SHOW_HUD_OVER_CHAT.get()
-                && !(mc.screen instanceof ChatScreen))
+                && (ModConfigs.SHOW_HUD_OVER_CHAT.get() || !ModConfigs.SHOW_HUD_OVER_CHAT.get() && !(mc.screen instanceof ChatScreen))
                 && !mc.options.hideGui
                 && !mc.getDebugOverlay().showDebugScreen();
     }

@@ -102,6 +102,16 @@ public final class JetpackUtils {
 		return throttle;
 	}
 
+	public static boolean isHUDEnabled(ItemStack stack) {
+		return stack.getOrDefault(ModDataComponentTypes.JETPACK_HUD, true);
+	}
+
+	public static boolean toggleHUD(ItemStack stack) {
+		boolean current = stack.getOrDefault(ModDataComponentTypes.JETPACK_HUD, true);
+		stack.set(ModDataComponentTypes.JETPACK_HUD, !current);
+		return !current;
+	}
+
 	public static ItemStack getItemForJetpack(Jetpack jetpack) {
 		var stack = new ItemStack(ModItems.JETPACK.get());
 		stack.set(ModDataComponentTypes.JETPACK_ID, jetpack.getId());
