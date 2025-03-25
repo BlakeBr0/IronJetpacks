@@ -1,10 +1,12 @@
 package com.blakebr0.ironjetpacks.lib;
 
 import com.blakebr0.cucumber.util.Tooltip;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 public final class ModTooltips {
-	public static final Tooltip ON = new Tooltip("tooltip.ironjetpacks.on");
-	public static final Tooltip OFF = new Tooltip("tooltip.ironjetpacks.off");
+	public static final Tooltip ON = new Tooltip("tooltip.ironjetpacks.on", ChatFormatting.GREEN);
+	public static final Tooltip OFF = new Tooltip("tooltip.ironjetpacks.off", ChatFormatting.RED);
 	public static final Tooltip INFINITE = new Tooltip("tooltip.ironjetpacks.infinite");
 	public static final Tooltip ENGINE = new Tooltip("tooltip.ironjetpacks.engine");
 	public static final Tooltip HOVER = new Tooltip("tooltip.ironjetpacks.hover");
@@ -25,4 +27,12 @@ public final class ModTooltips {
 	public static final Tooltip CHANGE_THROTTLE = new Tooltip("tooltip.ironjetpacks.change_throttle");
 	public static final Tooltip STATE_TOOLTIP_LAYOUT = new Tooltip("tooltip.ironjetpacks.state_tooltip_layout");
 	public static final Tooltip JETPACK_ID = new Tooltip("tooltip.ironjetpacks.jetpack_id");
+
+	public static final Component INFINITE_STATIC = INFINITE.build();
+	public static final Component ON_STATIC = ON.build();
+	public static final Component OFF_STATIC = OFF.build();
+
+	public static Component getStatusComponent(boolean on) {
+		return on ? ON_STATIC : OFF_STATIC;
+	}
 }

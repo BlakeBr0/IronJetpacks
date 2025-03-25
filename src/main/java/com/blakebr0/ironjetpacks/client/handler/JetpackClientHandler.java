@@ -9,17 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class JetpackClientHandler {
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END)
-            return;
-
+    public void onClientTick(ClientTickEvent.Pre event) {
         var mc = Minecraft.getInstance();
         if (mc.player != null && mc.level != null && !mc.isPaused()) {
             var chest = JetpackUtils.getEquippedJetpack(mc.player);

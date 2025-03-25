@@ -1,28 +1,30 @@
 package com.blakebr0.ironjetpacks.client.handler;
 
-import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import org.joml.Math;
 
 public final class HudHandler {
-    private static final ResourceLocation HUD_TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/gui/hud.png");
+    private static final ResourceLocation HUD_TEXTURE = IronJetpacks.resource("textures/gui/hud.png");
 
     // Animation progress = 0 means that the hud is currently shown, 1 for hidden
     private static double animationProgress = 0;
     private static boolean wasHidden = false;
     private static final IGuiOverlay HUD_OVERLAY = (gui, gfx, partialTick, width, height) -> {
+
+    @SubscribeEvent
+    public void onRegisterGuiOverlays(RenderGuiEvent.Pre event) {
         var mc = Minecraft.getInstance();
         if (mc.player != null && isVisible(mc)) {
             var chest = JetpackUtils.getEquippedJetpack(mc.player);
@@ -51,6 +53,8 @@ public final class HudHandler {
                     int xPos = (int) (pos.x / 0.33) - 18;
                     int yPos = (int) (pos.y / 0.33) - 78;
 
+                    var gfx = event.getGuiGraphics();
+
                     var matrix = gfx.pose();
 
                     matrix.pushPose();
@@ -60,14 +64,14 @@ public final class HudHandler {
                     gfx.blit(HUD_TEXTURE, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
                     matrix.popPose();
 
-                    var fuel = Colors.GRAY + getFuelString(chest);
-                    var throttle = Colors.GRAY + "T: " + (int) (JetpackUtils.getThrottle(chest) * 100) + "%";
-                    var engine = Colors.GRAY + "E: " + getStatusString(JetpackUtils.isEngineOn(chest));
-                    var hover = Colors.GRAY + "H: " + getStatusString(JetpackUtils.isHovering(chest));
+                    var fuel = getFuelComponent(chest);
+                    var throttle = getThrottleComponent(chest);
+                    var engine = getEngineComponent(chest);
+                    var hover = getHoverComponent(chest);
 
                     if (pos.side == 1) {
                         gfx.drawString(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
-                        gfx.drawString(mc.font, fuel, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
+                        gfx.drawString(mc.font, throttle, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
                         gfx.drawString(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
                         gfx.drawString(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
                     } else {
@@ -82,11 +86,6 @@ public final class HudHandler {
                 animationProgress = 1;
             }
         }
-    };
-
-    @SubscribeEvent
-    public void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "jetpack_hud", HUD_OVERLAY);
     }
 
     private static HudPos getHudPos(double animationProgress) {
@@ -99,10 +98,8 @@ public final class HudHandler {
             case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
             case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
             case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
-            case 4 ->
-                    new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
-            case 5 ->
-                    new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
+            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
+            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
             default -> null;
         };
 
@@ -132,30 +129,38 @@ public final class HudHandler {
         return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
     }
 
-    private static String getFuelString(ItemStack stack) {
+    private static Component getFuelComponent(ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
         if (jetpack.creative) {
-            return ModTooltips.INFINITE.buildString() + Colors.GRAY + " FE";
+            return Component.literal(ModTooltips.INFINITE_STATIC.getString() + " FE");
         }
 
-        int number = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
-        if (number >= 1000000000) {
-            int big = number / 1000000000;
-            int small = (number - (big * 1000000000)) / 100000000;
-            return big + ((small != 0) ? "." + small : "") + Colors.GRAY + "G FE";
-        } else if (number >= 1000000) {
-            int big = number / 1000000;
-            int small = (number - (big * 1000000)) / 100000;
-            return big + ((small != 0) ? "." + small : "") + Colors.GRAY + "M FE";
-        } else if (number >= 1000) {
-            return number / 1000 + Colors.GRAY + "k FE";
+        int energy = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
+        if (energy >= 1000000000) {
+            int big = energy / 1000000000;
+            int small = (energy - (big * 1000000000)) / 100000000;
+            return Component.literal(big + ((small != 0) ? "." + small : "") + "G FE").withStyle(ChatFormatting.GRAY);
+        } else if (energy >= 1000000) {
+            int big = energy / 1000000;
+            int small = (energy - (big * 1000000)) / 100000;
+            return Component.literal(big + ((small != 0) ? "." + small : "") + "M FE").withStyle(ChatFormatting.GRAY);
+        } else if (energy >= 1000) {
+            return Component.literal(energy / 1000 + "k FE").withStyle(ChatFormatting.GRAY);
         } else {
-            return number + Colors.GRAY + " FE";
+            return Component.literal(energy + " FE").withStyle(ChatFormatting.GRAY);
         }
     }
 
-    private static String getStatusString(boolean on) {
-        return on ? Colors.GREEN + ModTooltips.ON.buildString() : Colors.RED + ModTooltips.OFF.buildString();
+    private static Component getThrottleComponent(ItemStack stack) {
+        return Component.literal("T: " + (int) (JetpackUtils.getThrottle(stack) * 100) + "%").withStyle(ChatFormatting.GRAY);
+    }
+
+    private static Component getEngineComponent(ItemStack stack) {
+        return Component.literal("E: ").append(ModTooltips.getStatusComponent(JetpackUtils.isEngineOn(stack))).withStyle(ChatFormatting.GRAY);
+    }
+
+    private static Component getHoverComponent(ItemStack stack) {
+        return Component.literal("H: ").append(ModTooltips.getStatusComponent(JetpackUtils.isHovering(stack))).withStyle(ChatFormatting.GRAY);
     }
 
     private static boolean isVisible(Minecraft mc) {
@@ -164,18 +169,8 @@ public final class HudHandler {
                 || !ModConfigs.SHOW_HUD_OVER_CHAT.get()
                 && !(mc.screen instanceof ChatScreen))
                 && !mc.options.hideGui
-                && !mc.options.renderDebug;
+                && !mc.getDebugOverlay().showDebugScreen();
     }
 
-    private static class HudPos {
-        public int x;
-        public int y;
-        public int side;
-
-        public HudPos(int x, int y, int side) {
-            this.x = x;
-            this.y = y;
-            this.side = side;
-        }
-    }
+    private record HudPos(int x, int y, int side) { }
 }

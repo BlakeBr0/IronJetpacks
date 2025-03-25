@@ -10,10 +10,10 @@
       "item": "minecraft:leather"
     },
     "I": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "result": {
-    "item": "ironjetpacks:strap"
+    "id": "ironjetpacks:strap"
   }
 }

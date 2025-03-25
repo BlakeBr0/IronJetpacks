@@ -3,8 +3,7 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.lib.ModJetpacks;
-import com.blakebr0.ironjetpacks.network.NetworkHandler;
-import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
+import com.blakebr0.ironjetpacks.network.payloads.SyncJetpacksPayload;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,10 +12,10 @@ import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
@@ -43,13 +42,13 @@ public class JetpackRegistry {
 
 	@SubscribeEvent
 	public void onDatapackSync(OnDatapackSyncEvent event) {
-		var message = new SyncJetpacksMessage(this.getJetpacks());
+		var payload = new SyncJetpacksPayload(this.getJetpacks());
 		var player = event.getPlayer();
 
 		if (player != null) {
-			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+			PacketDistributor.sendToPlayer(player, payload);
 		} else {
-			NetworkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+			PacketDistributor.sendToAllPlayers(payload);
 		}
 	}
 
@@ -129,10 +128,10 @@ public class JetpackRegistry {
 		return jetpacks;
 	}
 
-	public void loadJetpacks(SyncJetpacksMessage message) {
+	public void loadJetpacks(SyncJetpacksPayload payload) {
 		this.jetpacks.clear();
 
-		for (var jetpack : message.getJetpacks()) {
+		for (var jetpack : payload.jetpacks()) {
 			this.jetpacks.put(jetpack.getId(), jetpack);
 		}
 
@@ -187,8 +186,7 @@ public class JetpackRegistry {
 			try {
 				reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
 
-				var parser = new JsonParser();
-				var json = parser.parse(reader).getAsJsonObject();
+				var json = JsonParser.parseReader(reader).getAsJsonObject();
 
 				reader.close();
 

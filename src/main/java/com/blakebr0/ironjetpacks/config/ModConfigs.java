@@ -1,15 +1,15 @@
 package com.blakebr0.ironjetpacks.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class ModConfigs {
-	public static final ForgeConfigSpec CLIENT;
-	public static final ForgeConfigSpec COMMON;
+	public static final ModConfigSpec CLIENT;
+	public static final ModConfigSpec COMMON;
 
-	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_SOUNDS;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_PARTICLES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_ADVANCED_INFO_TOOLTIPS;
+	public static final ModConfigSpec.BooleanValue ENABLE_JETPACK_SOUNDS;
+	public static final ModConfigSpec.BooleanValue ENABLE_JETPACK_PARTICLES;
+	public static final ModConfigSpec.BooleanValue ENABLE_ADVANCED_INFO_TOOLTIPS;
 
 	public static final ForgeConfigSpec.BooleanValue ENABLE_HUD;
 	public static final ForgeConfigSpec.IntValue HUD_POSITION;
@@ -21,7 +21,7 @@ public final class ModConfigs {
 
 	// Client
 	static {
-		final var client = new ForgeConfigSpec.Builder();
+		final var client = new ModConfigSpec.Builder();
 
 		client.comment("General configuration options.").push("General");
 		ENABLE_JETPACK_SOUNDS = client
@@ -62,17 +62,17 @@ public final class ModConfigs {
 		CLIENT = client.build();
 	}
 
-	public static final ForgeConfigSpec.BooleanValue ENCHANTABLE_JETPACKS;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_CURIOS_INTEGRATION;
+	public static final ModConfigSpec.BooleanValue ENCHANTABLE_JETPACKS;
+	public static final ModConfigSpec.BooleanValue ENABLE_CURIOS_INTEGRATION;
 
-	public static final ForgeConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_CAPACITOR_RECIPES;
-	public static final ForgeConfigSpec.BooleanValue ENABLE_JETPACK_RECIPES;
+	public static final ModConfigSpec.BooleanValue ENABLE_CELL_RECIPES;
+	public static final ModConfigSpec.BooleanValue ENABLE_THRUSTER_RECIPES;
+	public static final ModConfigSpec.BooleanValue ENABLE_CAPACITOR_RECIPES;
+	public static final ModConfigSpec.BooleanValue ENABLE_JETPACK_RECIPES;
 
 	// Common
 	static {
-		final var common = new ForgeConfigSpec.Builder();
+		final var common = new ModConfigSpec.Builder();
 
 		common.comment("General configuration options.").push("General");
 		ENCHANTABLE_JETPACKS = common

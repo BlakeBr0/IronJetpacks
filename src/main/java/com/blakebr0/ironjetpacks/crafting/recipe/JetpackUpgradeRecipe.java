@@ -1,46 +1,37 @@
 package com.blakebr0.ironjetpacks.crafting.recipe;
 
-import com.blakebr0.cucumber.helper.NBTHelper;
+import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
+import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
-import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.google.gson.JsonObject;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 
 public class JetpackUpgradeRecipe extends ShapedRecipe {
     private final ItemStack result;
 
-    public JetpackUpgradeRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack result, boolean showNotification) {
-        super(id, group, CraftingBookCategory.EQUIPMENT, width, height, inputs, result, showNotification);
+    public JetpackUpgradeRecipe(String group, ShapedRecipePattern pattern, ItemStack result, boolean showNotification) {
+        super(group, CraftingBookCategory.EQUIPMENT, pattern, result, showNotification);
         this.result = result;
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inventory, RegistryAccess access) {
+    public ItemStack assemble(CraftingInput inventory, HolderLookup.Provider access) {
         var stack = inventory.getItem(4);
-        var result = this.getResultItem(access).copy();
+        var result = this.result.copy();
 
-        if (!stack.isEmpty() && stack.getItem() instanceof JetpackItem) {
-            var tag = stack.getTag();
-
-            if (tag != null) {
-                var jetpack = NBTHelper.getString(result, "Id");
-
-                tag = tag.copy();
-                tag.putString("Id", jetpack);
-
-                result.setTag(tag);
-
-                return result;
-            }
+        if (!stack.isEmpty() && stack.is(ModItems.JETPACK)) {
+            result.applyComponents(stack.getComponents());
+            result.set(ModDataComponentTypes.JETPACK_ID, this.result.get(ModDataComponentTypes.JETPACK_ID));
         }
 
         return result;
@@ -52,40 +43,40 @@ public class JetpackUpgradeRecipe extends ShapedRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<JetpackUpgradeRecipe> {
+        public static final MapCodec<JetpackUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(builder ->
+                builder.group(
+                        Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::getGroup),
+                        ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
+                        ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                        Codec.BOOL.optionalFieldOf("show_notification", Boolean.TRUE).forGetter(ShapedRecipe::showNotification)
+                ).apply(builder, JetpackUpgradeRecipe::new)
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, JetpackUpgradeRecipe> STREAM_CODEC = StreamCodec.of(
+                JetpackUpgradeRecipe.Serializer::toNetwork, JetpackUpgradeRecipe.Serializer::fromNetwork
+        );
+
         @Override
-        public JetpackUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            var recipe = (JetpackUpgradeRecipe) RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
-            return new JetpackUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.result, recipe.showNotification());
+        public MapCodec<JetpackUpgradeRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public JetpackUpgradeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            var group = buffer.readUtf(32767);
-            int width = buffer.readVarInt();
-            int height = buffer.readVarInt();
-            var inputs = NonNullList.withSize(width * height, Ingredient.EMPTY);
+        public StreamCodec<RegistryFriendlyByteBuf, JetpackUpgradeRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
 
-            for (int k = 0; k < inputs.size(); k++) {
-                inputs.set(k, Ingredient.fromNetwork(buffer));
-            }
-
-            var output = buffer.readItem();
+        private static JetpackUpgradeRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+            var group = buffer.readUtf();
+            var pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
+            var result = ItemStack.STREAM_CODEC.decode(buffer);
             var showNotification = buffer.readBoolean();
-
-            return new JetpackUpgradeRecipe(recipeId, group, width, height, inputs, output, showNotification);
+            return new JetpackUpgradeRecipe(group, pattern, result, showNotification);
         }
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, JetpackUpgradeRecipe recipe) {
+        private static void toNetwork(RegistryFriendlyByteBuf buffer, JetpackUpgradeRecipe recipe) {
             buffer.writeUtf(recipe.getGroup());
-            buffer.writeVarInt(recipe.getRecipeWidth());
-            buffer.writeVarInt(recipe.getRecipeHeight());
-
-            for (var ingredient : recipe.getIngredients()) {
-                ingredient.toNetwork(buffer);
-            }
-
-            buffer.writeItem(recipe.result);
+            ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
+            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
             buffer.writeBoolean(recipe.showNotification());
         }
     }

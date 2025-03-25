@@ -1,5 +1,6 @@
 package com.blakebr0.ironjetpacks.client.layer;
 
+import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
@@ -13,14 +14,14 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 public class JetpackRenderLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(IronJetpacks.MOD_ID, "textures/armor/jetpack.png");
-    private static final ResourceLocation TEXTURE_OVERLAY = new ResourceLocation(IronJetpacks.MOD_ID, "textures/armor/jetpack_overlay.png");
+    private static final ResourceLocation TEXTURE = IronJetpacks.resource("textures/models/armor/jetpack_layer_1.png");
+    private static final ResourceLocation TEXTURE_OVERLAY = IronJetpacks.resource("textures/models/armor/jetpack_layer_1_overlay.png");
 
     public JetpackRenderLayer(RenderLayerParent<T, M> parent) {
         super(parent);
@@ -38,22 +39,22 @@ public class JetpackRenderLayer<T extends LivingEntity, M extends HumanoidModel<
 
             this.getParentModel().copyPropertiesTo((HumanoidModel<T>) model);
 
-            if (curio.getItem() instanceof DyeableLeatherItem dyeable) {
-                int i = dyeable.getColor(curio);
-                float r = (float) (i >> 16 & 255) / 255.0F;
-                float g = (float) (i >> 8 & 255) / 255.0F;
-                float b = (float) (i & 255) / 255.0F;
+            if (curio.getItem() instanceof IColored colored) {
+                int color = colored.getColor(1, curio);
+                int r = color >> 16 & 255;
+                int g = color >> 8 & 255;
+                int b = color & 255;
 
                 this.renderModel(matrix, buffer, lightness, curio.hasFoil(), model, r, g, b, TEXTURE);
-                this.renderModel(matrix, buffer, lightness, curio.hasFoil(), model, 1.0F, 1.0F, 1.0F, TEXTURE_OVERLAY);
+                this.renderModel(matrix, buffer, lightness, curio.hasFoil(), model, 255, 255, 255, TEXTURE_OVERLAY);
             } else {
-                this.renderModel(matrix, buffer, lightness, curio.hasFoil(), model, 1.0F, 1.0F, 1.0F, TEXTURE);
+                this.renderModel(matrix, buffer, lightness, curio.hasFoil(), model, 255, 255, 255, TEXTURE);
             }
         });
     }
 
-    private void renderModel(PoseStack matrix, MultiBufferSource buffer, int lightness, boolean foil, Model model, float r, float g, float b, ResourceLocation armorResource) {
-        var vertex = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(armorResource), false, foil);
-        model.renderToBuffer(matrix, vertex, lightness, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+    private void renderModel(PoseStack matrix, MultiBufferSource buffer, int lightness, boolean foil, Model model, int r, int g, int b, ResourceLocation armorResource) {
+        var vertex = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(armorResource), foil);
+        model.renderToBuffer(matrix, vertex, lightness, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color(255, r, g, b));
     }
 }

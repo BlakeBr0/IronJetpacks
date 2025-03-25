@@ -1,22 +1,20 @@
 package com.blakebr0.ironjetpacks.util;
 
-import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
+import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 public final class JetpackUtils {
 	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
@@ -56,45 +54,39 @@ public final class JetpackUtils {
 	}
 
 	public static IEnergyStorage getEnergyStorage(ItemStack stack) {
-		if (ForgeCapabilities.ENERGY == null)
-			return EMPTY_ENERGY_STORAGE;
-
-		return stack.getCapability(ForgeCapabilities.ENERGY).orElse(EMPTY_ENERGY_STORAGE);
+		var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+		return energy == null ? EMPTY_ENERGY_STORAGE : energy;
 	}
 
 	public static boolean isEngineOn(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Engine");
+		return stack.getOrDefault(ModDataComponentTypes.JETPACK_ENGINE, false);
 	}
 
 	public static boolean toggleEngine(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Engine");
-		NBTHelper.flipBoolean(stack, "Engine");
+		boolean current = stack.getOrDefault(ModDataComponentTypes.JETPACK_ENGINE, false);
+		stack.set(ModDataComponentTypes.JETPACK_ENGINE, !current);
 		return !current;
 	}
 
 	public static boolean isHovering(ItemStack stack) {
-		return NBTHelper.getBoolean(stack, "Hover");
+		return stack.getOrDefault(ModDataComponentTypes.JETPACK_HOVER, false);
 	}
 
 	public static boolean toggleHover(ItemStack stack) {
-		boolean current = NBTHelper.getBoolean(stack, "Hover");
-		NBTHelper.flipBoolean(stack, "Hover");
+		boolean current = stack.getOrDefault(ModDataComponentTypes.JETPACK_HOVER, false);
+		stack.set(ModDataComponentTypes.JETPACK_HOVER, !current);
 		return !current;
 	}
 
 	public static double getThrottle(ItemStack stack) {
-		if (!NBTHelper.hasKey(stack, "Throttle")) {
-			NBTHelper.setDouble(stack, "Throttle", 1.0D);
-		}
-
-		return NBTHelper.getDouble(stack, "Throttle");
+		return stack.getOrDefault(ModDataComponentTypes.JETPACK_THROTTLE, 1.0D);
 	}
 
 	public static double incrementThrottle(ItemStack stack) {
 		double throttle = getThrottle(stack);
 		if (throttle < 1.0D) {
 			throttle = Math.min(throttle + 0.2D, 1.0D);
-			NBTHelper.setDouble(stack, "Throttle", throttle);
+			stack.set(ModDataComponentTypes.JETPACK_THROTTLE, throttle);
 		}
 
 		return throttle;
@@ -104,41 +96,28 @@ public final class JetpackUtils {
 		double throttle = getThrottle(stack);
 		if (throttle > 0.2D) {
 			throttle = Math.max(throttle - 0.2D, 0.2D);
-			NBTHelper.setDouble(stack, "Throttle", throttle);
+			stack.set(ModDataComponentTypes.JETPACK_THROTTLE, throttle);
 		}
 
 		return throttle;
 	}
 
-	public static CompoundTag makeTag(Jetpack jetpack) {
-		var nbt = new CompoundTag();
-		nbt.putString("Id", jetpack.getId().toString());
-		return nbt;
-	}
-
 	public static ItemStack getItemForJetpack(Jetpack jetpack) {
-		var nbt = makeTag(jetpack);
 		var stack = new ItemStack(ModItems.JETPACK.get());
-
-		stack.setTag(nbt);
-
+		stack.set(ModDataComponentTypes.JETPACK_ID, jetpack.getId());
 		return stack;
 	}
 
 	public static ItemStack getItemForComponent(Item item, Jetpack jetpack) {
-		var nbt = new CompoundTag();
-		nbt.putString("Id", jetpack.getId().toString());
-
 		var stack = new ItemStack(item);
-		stack.setTag(nbt);
-
+		stack.set(ModDataComponentTypes.JETPACK_ID, jetpack.getId());
 		return stack;
 	}
 
 	public static Jetpack getJetpack(ItemStack stack) {
-		var id = NBTHelper.getString(stack, "Id");
-		if (!id.isEmpty()) {
-			return JetpackRegistry.getInstance().getJetpackById(ResourceLocation.tryParse(id));
+		var id = stack.get(ModDataComponentTypes.JETPACK_ID);
+		if (id != null) {
+			return JetpackRegistry.getInstance().getJetpackById(id);
 		}
 
 		return Jetpack.UNDEFINED;

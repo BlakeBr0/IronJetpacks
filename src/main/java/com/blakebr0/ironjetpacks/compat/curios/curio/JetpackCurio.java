@@ -3,7 +3,6 @@ package com.blakebr0.ironjetpacks.compat.curios.curio;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -24,16 +23,6 @@ public record JetpackCurio(ItemStack stack) implements ICurio {
     @Override
     public boolean canEquipFromUse(SlotContext context) {
         return this.isCurioJetpack();
-    }
-
-    @Override
-    public void curioTick(SlotContext context) {
-        if (this.isCurioJetpack()) {
-            var entity = context.entity();
-            if (entity instanceof Player player) {
-                this.stack.onArmorTick(player.level(), player);
-            }
-        }
     }
 
     @Override

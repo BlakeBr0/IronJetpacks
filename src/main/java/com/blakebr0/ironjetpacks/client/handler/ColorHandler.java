@@ -3,14 +3,13 @@ package com.blakebr0.ironjetpacks.client.handler;
 import com.blakebr0.cucumber.iface.IColored;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 public final class ColorHandler {
 	@SubscribeEvent
 	public void onItemColors(RegisterColorHandlersEvent.Item event) {
 		var registry = JetpackRegistry.getInstance();
-
 		if (registry.isErrored())
 			return;
 

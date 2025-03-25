@@ -2,30 +2,32 @@ package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Jetpack {
-	private static final UUID ATTRIBUTE_ID = UUID.fromString("7FBA2C56-DD5E-4071-8519-D2643E707E40");
+	private static final ResourceLocation ATTRIBUTE_ID = IronJetpacks.resource("armor.jetpack");
 
 	public static final Jetpack UNDEFINED = new Jetpack("undefined", 0, 0xFFF, 0, 0, "null", 0F, 0F).setCurios(false);
+
+	public static final StreamCodec<FriendlyByteBuf, Jetpack> STREAM_CODEC = StreamCodec.of(Jetpack::encode, Jetpack::read);
 
 	private final ResourceLocation id;
 	public String name;
@@ -42,7 +44,6 @@ public class Jetpack {
 	public Rarity rarity = Rarity.COMMON;
 	public float toughness;
 	public float knockbackResistance;
-	public Multimap<Attribute, AttributeModifier> attributeModifiers;
 	public boolean curios = true;
 
 	public int capacity;
@@ -56,19 +57,18 @@ public class Jetpack {
 	public double sprintSpeed;
 	public double sprintSpeedVert;
 	public double sprintFuel;
-	
+
 	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString, float toughness, float knockbackResistance) {
-		this.id = new ResourceLocation(IronJetpacks.MOD_ID, name);
+		this.id = IronJetpacks.resource(name);
 		this.name = name;
 		this.displayName = this.makeDisplayName();
 		this.tier = tier;
-		this.color = color;
+		this.color = FastColor.ARGB32.color(255, color);
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-		this.attributeModifiers = this.createAttributeModifiers();
 	}
 
 	public void setStats(int capacity, int usage, double speedVert, double accelVert, double speedSide, double speedHoverAscend, double speedHoverDescend, double speedHoverSlow, double sprintSpeed, double sprintSpeedVert, double sprintFuel) {
@@ -133,12 +133,11 @@ public class Jetpack {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				var parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					var tag = ItemTags.create(new ResourceLocation(parts[1], parts[2]));
+					var tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath(parts[1], parts[2]));
 					this.craftingMaterial = Ingredient.of(tag);
 				} else if (parts.length >= 2) {
-					var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(parts[0], parts[1]));
-					if (item != null)
-						this.craftingMaterial = Ingredient.of(item);
+					BuiltInRegistries.ITEM.getOptional(ResourceLocation.fromNamespaceAndPath(parts[0], parts[1]))
+                            .ifPresent(value -> this.craftingMaterial = Ingredient.of(value));
 				}
 			}
 		}
@@ -155,22 +154,22 @@ public class Jetpack {
 		return Component.literal(this.displayName);
 	}
 
-	private String makeDisplayName() {
-		var parts = this.name.replaceAll(" ", "_").split("_");
-		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
-	}
+	public ItemAttributeModifiers createAttributeModifiers() {
+		var modifiers = ItemAttributeModifiers.builder();
 
-	private ImmutableMultimap<Attribute, AttributeModifier> createAttributeModifiers() {
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifiers = ImmutableMultimap.builder();
-
-		modifiers.put(Attributes.ARMOR, new AttributeModifier(ATTRIBUTE_ID, "Armor modifier", this.armorPoints, AttributeModifier.Operation.ADDITION));
-		modifiers.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ATTRIBUTE_ID, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
+		modifiers.add(Attributes.ARMOR, new AttributeModifier(ATTRIBUTE_ID, this.armorPoints, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
+		modifiers.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ATTRIBUTE_ID, this.toughness, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
 
 		if (this.knockbackResistance > 0) {
-			modifiers.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTRIBUTE_ID, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
+			modifiers.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ATTRIBUTE_ID, this.knockbackResistance, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
 		}
 
 		return modifiers.build();
+	}
+
+	private String makeDisplayName() {
+		var parts = this.name.replaceAll(" ", "_").split("_");
+		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
 	}
 
 	public JsonObject toJson() {
@@ -179,7 +178,7 @@ public class Jetpack {
 		json.addProperty("name", this.name);
 		json.addProperty("disable", this.disabled);
 		json.addProperty("tier", this.tier);
-		json.addProperty("color", Integer.toHexString(this.color));
+		json.addProperty("color", Integer.toHexString(this.color & 0x00FFFFFF));
 		json.addProperty("armorPoints", this.armorPoints);
 		json.addProperty("enchantability", this.enchantablilty);
 		json.addProperty("craftingMaterial", this.craftingMaterialString);
@@ -266,6 +265,10 @@ public class Jetpack {
 		buffer.writeDouble(this.sprintSpeed);
 		buffer.writeDouble(this.sprintSpeedVert);
 		buffer.writeDouble(this.sprintFuel);
+	}
+
+	public static void encode(FriendlyByteBuf buffer, Jetpack jetpack) {
+		jetpack.write(buffer);
 	}
 
 	public static Jetpack read(FriendlyByteBuf buffer) {

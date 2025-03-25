@@ -1,82 +1,48 @@
 package com.blakebr0.ironjetpacks.crafting.ingredient;
 
+import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
+import com.blakebr0.ironjetpacks.init.ModIngredientTypes;
 import com.blakebr0.ironjetpacks.init.ModItems;
-import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
-public class JetpackComponentIngredient extends Ingredient {
-    private final String jetpackId;
+public class JetpackComponentIngredient implements ICustomIngredient {
+    public static final MapCodec<JetpackComponentIngredient> CODEC = RecordCodecBuilder.mapCodec(builder ->
+            builder.group(
+                    ResourceLocation.CODEC.fieldOf("jetpack").forGetter(ingredient -> ingredient.jetpack),
+                    ComponentType.CODEC.fieldOf("component").forGetter(ingredient -> ingredient.type)
+            ).apply(builder, JetpackComponentIngredient::new)
+    );
+
+    private final ResourceLocation jetpack;
     private final ComponentType type;
+    private ItemStack[] stacks;
 
-    public JetpackComponentIngredient(String jetpackId, ComponentType type) {
-        super(Stream.empty());
-        this.jetpackId = jetpackId;
-        this.type = type;
-    }
-
-    public JetpackComponentIngredient(String jetpackId, ComponentType type, Stream<ItemValue> itemList) {
-        super(itemList);
-        this.jetpackId = jetpackId;
+    public JetpackComponentIngredient(ResourceLocation jetpack, ComponentType type) {
+        this.jetpack = jetpack;
         this.type = type;
     }
 
     @Override
-    public boolean test(ItemStack input) {
+    public boolean test(@Nullable ItemStack input) {
         if (input == null)
             return false;
 
-        if (!super.test(input))
-            return false;
-
-        return Arrays.stream(this.getItems()).anyMatch(s -> s.getDamageValue() == input.getDamageValue() && (!s.hasTag() || s.areShareTagsEqual(input)));
+        return this.getItems().anyMatch(s -> ItemStack.isSameItemSameComponents(s, input));
     }
 
     @Override
-    public JsonElement toJson() {
-        var json = new JsonObject();
-
-        json.addProperty("type", "ironjetpacks:jetpack_component");
-        json.addProperty("component", this.type.name);
-        json.addProperty("crop", this.jetpackId);
-
-        return json;
-    }
-
-    @Override
-    public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ModRecipeSerializers.JETPACK_COMPONENT_INGREDIENT;
-    }
-
-    public static class Serializer implements IIngredientSerializer<JetpackComponentIngredient> {
-        @Override
-        public JetpackComponentIngredient parse(FriendlyByteBuf buffer) {
-            var jetpackId = buffer.readUtf();
-            var type = ComponentType.fromName(buffer.readUtf());
-
-            var itemList = Stream.generate(buffer::readItem)
-                    .limit(buffer.readVarInt())
-                    .map(ItemValue::new);
-
-            return new JetpackComponentIngredient(jetpackId, type, itemList);
-        }
-
-        @Override
-        public JetpackComponentIngredient parse(JsonObject json) {
-            var jetpackId = GsonHelper.getAsString(json, "jetpack");
-            var typeName = GsonHelper.getAsString(json, "component");
-            var type = ComponentType.fromName(typeName);
+    public Stream<ItemStack> getItems() {
+        if (this.stacks == null) {
             var stack = switch (type) {
                 case CELL -> new ItemStack(ModItems.CELL.get());
                 case THRUSTER -> new ItemStack(ModItems.THRUSTER.get());
@@ -84,50 +50,41 @@ public class JetpackComponentIngredient extends Ingredient {
                 case JETPACK -> new ItemStack(ModItems.JETPACK.get());
             };
 
-            var nbt = new CompoundTag();
-            nbt.putString("Id", jetpackId);
+            stack.set(ModDataComponentTypes.JETPACK_ID, this.jetpack);
 
-            stack.setTag(nbt);
-
-            return new JetpackComponentIngredient(jetpackId, type, Stream.of(new ItemValue(stack)));
+            this.stacks = new ItemStack[] { stack };
         }
 
-        @Override
-        public void write(FriendlyByteBuf buffer, JetpackComponentIngredient ingredient) {
-            buffer.writeUtf(ingredient.jetpackId);
-            buffer.writeUtf(ingredient.type.name);
-
-            var items = ingredient.getItems();
-
-            buffer.writeVarInt(items.length);
-
-            for (var item : items) {
-                buffer.writeItem(item);
-            }
-        }
+        return Stream.of(this.stacks);
     }
 
-    public enum ComponentType {
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return ModIngredientTypes.JETPACK_COMPONENT_INGREDIENT.get();
+    }
+
+    public enum ComponentType implements StringRepresentable {
         CELL("cell"),
         THRUSTER("thruster"),
         CAPACITOR("capacitor"),
         JETPACK("jetpack");
 
-        private static final Map<String, ComponentType> LOOKUP = new HashMap<>();
-        public final String name;
+        public static final Codec<ComponentType> CODEC = StringRepresentable.fromEnum(ComponentType::values);
 
-        static {
-            for (var value : values()) {
-                LOOKUP.put(value.name, value);
-            }
-        }
+        public final String name;
 
         ComponentType(String name) {
             this.name = name;
         }
 
-        public static ComponentType fromName(String name) {
-            return LOOKUP.get(name);
+        @Override
+        public String getSerializedName() {
+            return this.name;
         }
     }
 }

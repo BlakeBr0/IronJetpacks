@@ -1,24 +1,25 @@
 package com.blakebr0.ironjetpacks.network;
 
-import com.blakebr0.cucumber.network.BaseNetworkHandler;
-import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.network.message.DecrementThrottleMessage;
-import com.blakebr0.ironjetpacks.network.message.IncrementThrottleMessage;
-import com.blakebr0.ironjetpacks.network.message.SyncJetpacksMessage;
-import com.blakebr0.ironjetpacks.network.message.ToggleEngineMessage;
-import com.blakebr0.ironjetpacks.network.message.ToggleHoverMessage;
-import com.blakebr0.ironjetpacks.network.message.UpdateInputMessage;
-import net.minecraft.resources.ResourceLocation;
+import com.blakebr0.ironjetpacks.network.payloads.DecrementThrottlePayload;
+import com.blakebr0.ironjetpacks.network.payloads.IncrementThrottlePayload;
+import com.blakebr0.ironjetpacks.network.payloads.SyncJetpacksPayload;
+import com.blakebr0.ironjetpacks.network.payloads.ToggleEnginePayload;
+import com.blakebr0.ironjetpacks.network.payloads.ToggleHoverPayload;
+import com.blakebr0.ironjetpacks.network.payloads.UpdateInputPayload;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
-public class NetworkHandler {
-	public static final BaseNetworkHandler INSTANCE = new BaseNetworkHandler(new ResourceLocation(IronJetpacks.MOD_ID, "main"));
+public final class NetworkHandler {
+	@SubscribeEvent
+	public void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
+		var registrar = event.registrar("1");
 
-	public static void onCommonSetup() {
-		INSTANCE.register(ToggleHoverMessage.class, new ToggleHoverMessage());
-		INSTANCE.register(UpdateInputMessage.class, new UpdateInputMessage());
-		INSTANCE.register(ToggleEngineMessage.class, new ToggleEngineMessage());
-		INSTANCE.register(IncrementThrottleMessage.class, new IncrementThrottleMessage());
-		INSTANCE.register(DecrementThrottleMessage.class, new DecrementThrottleMessage());
-		INSTANCE.register(SyncJetpacksMessage.class, new SyncJetpacksMessage());
+		registrar.playToServer(DecrementThrottlePayload.TYPE, DecrementThrottlePayload.STREAM_CODEC, DecrementThrottlePayload::handleServer);
+		registrar.playToServer(IncrementThrottlePayload.TYPE, IncrementThrottlePayload.STREAM_CODEC, IncrementThrottlePayload::handleServer);
+		registrar.playToServer(ToggleEnginePayload.TYPE, ToggleEnginePayload.STREAM_CODEC, ToggleEnginePayload::handleServer);
+		registrar.playToServer(ToggleHoverPayload.TYPE, ToggleHoverPayload.STREAM_CODEC, ToggleHoverPayload::handleServer);
+		registrar.playToServer(UpdateInputPayload.TYPE, UpdateInputPayload.STREAM_CODEC, UpdateInputPayload::handleServer);
+
+		registrar.playToClient(SyncJetpacksPayload.TYPE, SyncJetpacksPayload.STREAM_CODEC, SyncJetpacksPayload::handleClient);
 	}
 }

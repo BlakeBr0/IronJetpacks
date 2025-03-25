@@ -1,13 +1,13 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[4,)"
 license="MIT"
 
 [[mods]]
     issueTrackerURL="https://github.com/BlakeBr0/IronJetpacks/issues"
     modId="ironjetpacks"
-    version="${file.jarVersion}"
+    version="${mod_version}"
     displayName="Iron Jetpacks"
-    # updateJSONURL="http://myurl.me/"
+    updateJSONURL="https://api.blakesmods.com/v2/mods/ironjetpacks/1.21/updates"
     displayURL="https://blakesmods.com/iron-jetpacks"
     # logoFile="examplemod.png"
     authors="BlakeBr0"
@@ -17,20 +17,20 @@ license="MIT"
     '''
 
     [[dependencies.ironjetpacks]]
-        modId="forge"
+        modId="neoforge"
         mandatory=true
-        versionRange="[47.1.0,)"
+        versionRange="[21.0.0-beta,)"
         ordering="NONE"
         side="BOTH"
     [[dependencies.ironjetpacks]]
         modId="minecraft"
         mandatory=true
-        versionRange="[1.20.1]"
+        versionRange="[1.21,1.21.1)"
         ordering="NONE"
         side="BOTH"
     [[dependencies.ironjetpacks]]
         modId="cucumber"
         mandatory=true
-        versionRange="[7.0.1,)"
+        versionRange="[${cucumber_version},)"
         ordering="NONE"
         side="BOTH"

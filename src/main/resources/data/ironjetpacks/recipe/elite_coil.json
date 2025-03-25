@@ -7,16 +7,16 @@
   ],
   "key": {
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "D": {
-      "tag": "forge:gems/emerald"
+      "tag": "c:gems/diamond"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "ironjetpacks:ultimate_coil"
+    "id": "ironjetpacks:elite_coil"
   }
 }
