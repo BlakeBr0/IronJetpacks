@@ -15,6 +15,7 @@ public final class ModConfigs {
 	public static final ModConfigSpec.IntValue HUD_POSITION;
 	public static final ModConfigSpec.IntValue HUD_OFFSET_X;
 	public static final ModConfigSpec.IntValue HUD_OFFSET_Y;
+	public static final ModConfigSpec.DoubleValue HUD_ANIMATION_SPEED;
 	public static final ModConfigSpec.BooleanValue SHOW_HUD_OVER_CHAT;
 
 	// Client
@@ -46,6 +47,9 @@ public final class ModConfigs {
 		HUD_OFFSET_Y = client
 				.comment("The Y offset for the HUD.")
 				.defineInRange("offsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		HUD_ANIMATION_SPEED = client
+				.comment("The animation speed for the HUD. lower = slower, higher = faster. 1 is instant.")
+				.defineInRange("animationSpeed", 0.1d, 0d, 1d);
 		SHOW_HUD_OVER_CHAT = client
 				.comment("Show HUD over the chat?")
 				.define("showOverChat", false);

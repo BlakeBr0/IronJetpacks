@@ -20,6 +20,8 @@ public final class ModDataComponentTypes {
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Double>> JETPACK_THROTTLE = REGISTRY.register("jetpack_throttle",
             () -> DataComponentType.<Double>builder().persistent(Codec.DOUBLE).networkSynchronized(ByteBufCodecs.DOUBLE).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> JETPACK_HUD = REGISTRY.register("jetpack_hud",
+            () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> JETPACK_ENERGY = REGISTRY.register("jetpack_energy",
             () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 }

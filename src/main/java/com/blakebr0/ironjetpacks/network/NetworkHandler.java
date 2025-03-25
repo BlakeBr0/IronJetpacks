@@ -4,6 +4,7 @@ import com.blakebr0.ironjetpacks.network.payloads.DecrementThrottlePayload;
 import com.blakebr0.ironjetpacks.network.payloads.IncrementThrottlePayload;
 import com.blakebr0.ironjetpacks.network.payloads.SyncJetpacksPayload;
 import com.blakebr0.ironjetpacks.network.payloads.ToggleEnginePayload;
+import com.blakebr0.ironjetpacks.network.payloads.ToggleHUDPayload;
 import com.blakebr0.ironjetpacks.network.payloads.ToggleHoverPayload;
 import com.blakebr0.ironjetpacks.network.payloads.UpdateInputPayload;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,6 +19,7 @@ public final class NetworkHandler {
 		registrar.playToServer(IncrementThrottlePayload.TYPE, IncrementThrottlePayload.STREAM_CODEC, IncrementThrottlePayload::handleServer);
 		registrar.playToServer(ToggleEnginePayload.TYPE, ToggleEnginePayload.STREAM_CODEC, ToggleEnginePayload::handleServer);
 		registrar.playToServer(ToggleHoverPayload.TYPE, ToggleHoverPayload.STREAM_CODEC, ToggleHoverPayload::handleServer);
+		registrar.playToServer(ToggleHUDPayload.TYPE, ToggleHUDPayload.STREAM_CODEC, ToggleHUDPayload::handleServer);
 		registrar.playToServer(UpdateInputPayload.TYPE, UpdateInputPayload.STREAM_CODEC, UpdateInputPayload::handleServer);
 
 		registrar.playToClient(SyncJetpacksPayload.TYPE, SyncJetpacksPayload.STREAM_CODEC, SyncJetpacksPayload::handleClient);

@@ -39,5 +39,5 @@
   "tooltip.ironjetpacks.toggle_engine": "Moteur basculé %s",
   "tooltip.ironjetpacks.toggle_hover": "Survol basculé %s",
   "tooltip.ironjetpacks.change_throttle": "Accélérateur réglé sur %s",
-  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s"
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s | %s"
 }

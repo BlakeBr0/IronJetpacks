@@ -13,19 +13,41 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import org.joml.Math;
 
 public final class HudHandler {
     private static final ResourceLocation HUD_TEXTURE = IronJetpacks.resource("textures/gui/hud.png");
 
+    // Animation progress = 0 means that the hud is currently shown, 1 for hidden
+    private static double animationProgress = 0;
+    private static boolean wasHidden = false;
+
     @SubscribeEvent
     public void onRegisterGuiOverlays(RenderGuiEvent.Pre event) {
         var mc = Minecraft.getInstance();
-        if (mc.player != null && isVisible(mc)) {
+        var player = mc.player;
+        if (player == null)
+            return;
+
+        if (isVisible(mc)) {
             var chest = JetpackUtils.getEquippedJetpack(mc.player);
             var item = chest.getItem();
 
             if (!chest.isEmpty() && item instanceof JetpackItem) {
-                var pos = getHudPos();
+                var enabled = JetpackUtils.isHUDEnabled(chest);
+                if (enabled && animationProgress > 0) {
+                    wasHidden = false;
+                } else if (!enabled && animationProgress < 1) {
+                    wasHidden = true;
+                }
+
+                var animationStep = wasHidden ? ModConfigs.HUD_ANIMATION_SPEED.get() : -ModConfigs.HUD_ANIMATION_SPEED.get();
+                animationProgress = Math.clamp(0, animationStep + animationProgress, 1);
+
+                if (animationProgress == 1)
+                    return;
+
+                var pos = getHudPos(animationProgress);
                 if (pos != null) {
                     int xPos = (int) (pos.x / 0.33) - 18;
                     int yPos = (int) (pos.y / 0.33) - 78;
@@ -58,25 +80,34 @@ public final class HudHandler {
                         gfx.drawString(mc.font, hover, pos.x + 6, pos.y + 14, 16383998);
                     }
                 }
+            } else {
+                wasHidden = true;
+                animationProgress = 1;
             }
         }
     }
 
-    private static HudPos getHudPos() {
+    private static HudPos getHudPos(double animationProgress) {
         var window = Minecraft.getInstance().getWindow();
         int xOffset = ModConfigs.HUD_OFFSET_X.get();
         int yOffset = ModConfigs.HUD_OFFSET_Y.get();
 
         return switch (ModConfigs.HUD_POSITION.get()) {
-            case 0 -> new HudPos(10 + xOffset, 30 + yOffset, 0);
-            case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
-            case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
-            case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
-            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
-            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
+            case 0 -> new HudPos(10 + xOffset, 30 + yOffset, 0, animationProgress);
+            case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0, animationProgress);
+            case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0, animationProgress);
+            case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1, animationProgress);
+            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1, animationProgress);
+            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1, animationProgress);
             default -> null;
         };
+    }
 
+    private static int getOffset(int x, int side, double progress) {
+        if (side == 0)
+            return (int) (x - progress * 70);
+        else
+            return (int) (x + progress * 70);
     }
 
     private static int getEnergyBarScaled(ItemStack stack) {
@@ -127,12 +158,14 @@ public final class HudHandler {
 
     private static boolean isVisible(Minecraft mc) {
         return ModConfigs.ENABLE_HUD.get()
-                && (ModConfigs.SHOW_HUD_OVER_CHAT.get()
-                || !ModConfigs.SHOW_HUD_OVER_CHAT.get()
-                && !(mc.screen instanceof ChatScreen))
+                && (ModConfigs.SHOW_HUD_OVER_CHAT.get() || !ModConfigs.SHOW_HUD_OVER_CHAT.get() && !(mc.screen instanceof ChatScreen))
                 && !mc.options.hideGui
                 && !mc.getDebugOverlay().showDebugScreen();
     }
 
-    private record HudPos(int x, int y, int side) { }
+    private record HudPos(int x, int y, int side) {
+        HudPos(int x, int y, int side, double animationProgress) {
+            this(getOffset(x, side, animationProgress), y, side);
+        }
+    }
 }

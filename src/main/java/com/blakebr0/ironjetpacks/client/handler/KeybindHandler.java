@@ -6,6 +6,7 @@ import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.network.payloads.DecrementThrottlePayload;
 import com.blakebr0.ironjetpacks.network.payloads.IncrementThrottlePayload;
 import com.blakebr0.ironjetpacks.network.payloads.ToggleEnginePayload;
+import com.blakebr0.ironjetpacks.network.payloads.ToggleHUDPayload;
 import com.blakebr0.ironjetpacks.network.payloads.ToggleHoverPayload;
 import com.blakebr0.ironjetpacks.network.payloads.UpdateInputPayload;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
@@ -26,6 +27,7 @@ import org.lwjgl.glfw.GLFW;
 public final class KeybindHandler {
     private static KeyMapping keyEngine;
     private static KeyMapping keyHover;
+    private static KeyMapping keyHUD;
     private static KeyMapping keyAscend;
     private static KeyMapping keyDescend;
     private static KeyMapping keyIncrementThrottle;
@@ -42,6 +44,7 @@ public final class KeybindHandler {
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
         keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, IronJetpacks.NAME);
+        keyHUD = new KeyMapping("keybind.ironjetpacks.hud", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
         keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
         keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
         keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
@@ -49,6 +52,7 @@ public final class KeybindHandler {
 
         event.register(keyEngine);
         event.register(keyHover);
+        event.register(keyHUD);
         event.register(keyAscend);
         event.register(keyDescend);
         event.register(keyIncrementThrottle);
@@ -136,6 +140,13 @@ public final class KeybindHandler {
             var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
             PacketDistributor.sendToServer(new ToggleHoverPayload());
             player.displayClientMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
+        }
+
+        if (keyHUD.consumeClick()) {
+            boolean on = JetpackUtils.toggleHUD(stack);
+            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
+            PacketDistributor.sendToServer(new ToggleHUDPayload());
+            player.displayClientMessage(ModTooltips.TOGGLE_HUD.args(state).build(), true);
         }
 
         if (keyIncrementThrottle.consumeClick()) {
