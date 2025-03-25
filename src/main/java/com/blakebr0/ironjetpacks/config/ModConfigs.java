@@ -11,13 +11,13 @@ public final class ModConfigs {
 	public static final ModConfigSpec.BooleanValue ENABLE_JETPACK_PARTICLES;
 	public static final ModConfigSpec.BooleanValue ENABLE_ADVANCED_INFO_TOOLTIPS;
 
-	public static final ForgeConfigSpec.BooleanValue ENABLE_HUD;
-	public static final ForgeConfigSpec.IntValue HUD_POSITION;
-	public static final ForgeConfigSpec.IntValue HUD_OFFSET_X;
-	public static final ForgeConfigSpec.IntValue HUD_OFFSET_Y;
-	public static final ForgeConfigSpec.BooleanValue HIDE_HUD_ON_ENGINE_OFF;
-	public static final ForgeConfigSpec.DoubleValue HUD_ANIMATION_SPEED;
-	public static final ForgeConfigSpec.BooleanValue SHOW_HUD_OVER_CHAT;
+	public static final ModConfigSpec.BooleanValue ENABLE_HUD;
+	public static final ModConfigSpec.IntValue HUD_POSITION;
+	public static final ModConfigSpec.IntValue HUD_OFFSET_X;
+	public static final ModConfigSpec.IntValue HUD_OFFSET_Y;
+	public static final ModConfigSpec.BooleanValue HIDE_HUD_ON_ENGINE_OFF;
+	public static final ModConfigSpec.DoubleValue HUD_ANIMATION_SPEED;
+	public static final ModConfigSpec.BooleanValue SHOW_HUD_OVER_CHAT;
 
 	// Client
 	static {

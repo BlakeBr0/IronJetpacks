@@ -21,7 +21,6 @@ public final class HudHandler {
     // Animation progress = 0 means that the hud is currently shown, 1 for hidden
     private static double animationProgress = 0;
     private static boolean wasHidden = false;
-    private static final IGuiOverlay HUD_OVERLAY = (gui, gfx, partialTick, width, height) -> {
 
     @SubscribeEvent
     public void onRegisterGuiOverlays(RenderGuiEvent.Pre event) {
@@ -93,28 +92,22 @@ public final class HudHandler {
         int xOffset = ModConfigs.HUD_OFFSET_X.get();
         int yOffset = ModConfigs.HUD_OFFSET_Y.get();
 
-        var pos = switch (ModConfigs.HUD_POSITION.get()) {
-            case 0 -> new HudPos(10 + xOffset, 30 + yOffset, 0);
-            case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0);
-            case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0);
-            case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
-            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1);
-            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1);
+        return switch (ModConfigs.HUD_POSITION.get()) {
+            case 0 -> new HudPos(10 + xOffset, 30 + yOffset, 0, animationProgress);
+            case 1 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() / 2 + yOffset, 0, animationProgress);
+            case 2 -> new HudPos(10 + xOffset, window.getGuiScaledHeight() - 30 + yOffset, 0, animationProgress);
+            case 3 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, 30 + yOffset, 1, animationProgress);
+            case 4 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() / 2 + yOffset, 1, animationProgress);
+            case 5 -> new HudPos(window.getGuiScaledWidth() - 8 - xOffset, window.getGuiScaledHeight() - 30 + yOffset, 1, animationProgress);
             default -> null;
         };
-
-        if (pos == null)
-            return null;
-
-        pos.x = getOffset(pos, animationProgress);
-        return pos;
     }
 
-    private static int getOffset(HudPos pos, double progress) {
-        if (pos.side == 0)
-            return (int) (pos.x - progress * 70);
+    private static int getOffset(int x, int side, double progress) {
+        if (side == 0)
+            return (int) (x - progress * 70);
         else
-            return (int) (pos.x + progress * 70);
+            return (int) (x + progress * 70);
     }
 
     private static int getEnergyBarScaled(ItemStack stack) {
@@ -172,5 +165,9 @@ public final class HudHandler {
                 && !mc.getDebugOverlay().showDebugScreen();
     }
 
-    private record HudPos(int x, int y, int side) { }
+    private record HudPos(int x, int y, int side) {
+        HudPos(int x, int y, int side, double animationProgress) {
+            this(getOffset(x, side, animationProgress), y, side);
+        }
+    }
 }
