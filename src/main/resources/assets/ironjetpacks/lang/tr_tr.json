@@ -1,0 +1,46 @@
+{
+  "itemGroup.ironjetpacks": "Iron Jetpacks",
+
+  "item.ironjetpacks.strap": "Deri Kayış",
+  "item.ironjetpacks.basic_coil": "Temel Bobin",
+  "item.ironjetpacks.advanced_coil": "Gelişmiş Bobin",
+  "item.ironjetpacks.elite_coil": "Elit Bobin",
+  "item.ironjetpacks.ultimate_coil": "Nihai Bobin",
+
+  "item.ironjetpacks.cell": "%s Enerji Hücresi",
+  "item.ironjetpacks.thruster": "%s İtici",
+  "item.ironjetpacks.capacitor": "%s Kapasitör",
+  "item.ironjetpacks.jetpack": "%s Sırt Roketi",
+
+  "keybind.ironjetpacks.engine": "Motoru Aç/Kapat",
+  "keybind.ironjetpacks.hover": "Hover Modunu Aç/Kapat",
+  "keybind.ironjetpacks.ascend": "Yüksel",
+  "keybind.ironjetpacks.descend": "Alçal",
+  "keybind.ironjetpacks.increment_throttle": "Gazı Artır",
+  "keybind.ironjetpacks.decrement_throttle": "Gazı Azalt",
+
+  "subtitle.ironjetpacks.jetpack": "Sırt Roketi",
+
+  "tooltip.ironjetpacks.on": "AÇIK",
+  "tooltip.ironjetpacks.off": "KAPALI",
+  "tooltip.ironjetpacks.infinite": "Sonsuz",
+  "tooltip.ironjetpacks.engine": "MOTOR",
+  "tooltip.ironjetpacks.hover": "HOVER",
+  "tooltip.ironjetpacks.tier": "Kademe %s",
+  "tooltip.ironjetpacks.throttle": "Gaz: %s",
+  "tooltip.ironjetpacks.fuel_usage": "Yakıt Kullanımı: %s",
+  "tooltip.ironjetpacks.vertical_speed": "Dikey Hız: %s",
+  "tooltip.ironjetpacks.vertical_acceleration": "Dikey İvme: %s",
+  "tooltip.ironjetpacks.horizontal_speed": "Yatay Hız: %s",
+  "tooltip.ironjetpacks.hover_speed": "Hover Hızı: %s",
+  "tooltip.ironjetpacks.hover_ascend_speed": "Hover Yükselme Hızı: %s",
+  "tooltip.ironjetpacks.hover_descend_speed": "Hover Alçalma Hızı: %s",
+  "tooltip.ironjetpacks.sprint_modifier": "Koşu Değiştirici: %s",
+  "tooltip.ironjetpacks.sprint_vertical_modifier": "Koşu Dikey Çarpanı: %s",
+  "tooltip.ironjetpacks.sprint_fuel_modifier": "Koşu Yakıt Değiştirici: %s",
+  "tooltip.ironjetpacks.toggle_engine": "Motor %s",
+  "tooltip.ironjetpacks.toggle_hover": "Hover %s",
+  "tooltip.ironjetpacks.change_throttle": "Gaz şuna ayarlandı: %s",
+  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
+  "tooltip.ironjetpacks.jetpack_id": "Sırt Roketi ID'si: %s"
+}
