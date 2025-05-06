@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
@@ -50,5 +51,11 @@ public class JetpackClientItemExtensions implements IClientItemExtensions {
         }
 
         return this.models[state];
+    }
+
+    @Override
+    public int getArmorLayerTintColor(ItemStack stack, LivingEntity entity, ArmorMaterial.Layer layer, int layerIdx, int fallbackColor) {
+        var jetpack = JetpackUtils.getJetpack(stack);
+        return layer.dyeable() ? jetpack.color : fallbackColor;
     }
 }
