@@ -125,7 +125,7 @@ public final class HudHandler {
     private static Component getFuelComponent(ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
         if (jetpack.creative) {
-            return Component.literal(ModTooltips.INFINITE_STATIC.getString() + " FE");
+            return Component.literal(ModTooltips.INFINITE_STATIC.getString() + " FE").withStyle(ChatFormatting.GRAY);
         }
 
         int energy = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
