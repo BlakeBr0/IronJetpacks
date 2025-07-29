@@ -207,7 +207,7 @@ public class JetpackItem extends BaseArmorItem implements IColored {
 
         if (!jetpack.creative) {
             var energy = JetpackUtils.getEnergyStorage(stack);
-            tooltip.add(Formatting.number(energy.getEnergyStored()).append(" / ").append(Formatting.energy(energy.getMaxEnergyStored()).withStyle(ChatFormatting.GRAY)));
+            tooltip.add(Formatting.number(energy.getEnergyStored()).append(" / ").append(Formatting.energy(energy.getMaxEnergyStored())).withStyle(ChatFormatting.GRAY));
         } else {
             tooltip.add(ModTooltips.INFINITE.build().append(" FE"));
         }
