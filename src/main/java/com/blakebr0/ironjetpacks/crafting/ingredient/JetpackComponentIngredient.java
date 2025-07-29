@@ -1,13 +1,11 @@
 package com.blakebr0.ironjetpacks.crafting.ingredient;
 
-import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
 import com.blakebr0.ironjetpacks.init.ModIngredientTypes;
 import com.blakebr0.ironjetpacks.init.ModItems;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
@@ -39,19 +37,12 @@ public class JetpackComponentIngredient implements ICustomIngredient {
         if (input == null)
             return false;
 
-        DataComponentMap inputMap = input.getComponents();
-        ResourceLocation inputID = inputMap.get(ModDataComponentTypes.JETPACK_ID.get());
-        if(inputID == null)
+        var jetpackID = input.get(ModDataComponentTypes.JETPACK_ID.get());
+        if (jetpackID == null)
             return false;
 
-        return this.getItems().anyMatch(s -> {
-            DataComponentMap map = s.getComponents();
-            ResourceLocation itemID = map.get(ModDataComponentTypes.JETPACK_ID.get());
-            if(itemID == null)
-                return false;
-
-            return ItemStack.isSameItem(s, input) && itemID.getNamespace().equals(inputID.getNamespace()) && itemID.getPath().equals(inputID.getPath());
-        });
+        return this.getItems().anyMatch(s ->
+                ItemStack.isSameItem(s, input) && jetpackID.equals(s.get(ModDataComponentTypes.JETPACK_ID.get())));
     }
 
     @Override
