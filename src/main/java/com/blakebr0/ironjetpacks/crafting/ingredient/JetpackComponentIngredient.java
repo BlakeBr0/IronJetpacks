@@ -37,7 +37,12 @@ public class JetpackComponentIngredient implements ICustomIngredient {
         if (input == null)
             return false;
 
-        return this.getItems().anyMatch(s -> ItemStack.isSameItemSameComponents(s, input));
+        var jetpackID = input.get(ModDataComponentTypes.JETPACK_ID.get());
+        if (jetpackID == null)
+            return false;
+
+        return this.getItems().anyMatch(s ->
+                ItemStack.isSameItem(s, input) && jetpackID.equals(s.get(ModDataComponentTypes.JETPACK_ID.get())));
     }
 
     @Override
