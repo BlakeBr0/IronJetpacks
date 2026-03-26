@@ -23,7 +23,7 @@ license="MIT"
     [[dependencies.ironjetpacks]]
         modId="minecraft"
         mandatory=true
-        versionRange="[26.1)"
+        versionRange="[26.1,26.2)"
         ordering="NONE"
         side="BOTH"
     [[dependencies.ironjetpacks]]
