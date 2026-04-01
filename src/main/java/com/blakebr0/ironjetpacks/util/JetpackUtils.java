@@ -13,12 +13,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EmptyEnergyHandler;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 public final class JetpackUtils {
-	private static final IEnergyStorage EMPTY_ENERGY_STORAGE = new EnergyStorage(0);
-
 	public static boolean isFlying(Player player) {
 		if (player.isSpectator())
 			return false;
@@ -29,7 +28,7 @@ public final class JetpackUtils {
 			var jetpack = getJetpack(stack);
 			var energy = getEnergyStorage(stack);
 
-			if (energy.getEnergyStored() > 0 || player.isCreative() || jetpack.creative) {
+			if (energy.getAmountAsInt() > 0 || player.isCreative() || jetpack.creative) {
 				if (isHovering(stack)) {
 					return !player.onGround();
 				}
@@ -53,9 +52,9 @@ public final class JetpackUtils {
 		return ItemStack.EMPTY;
 	}
 
-	public static IEnergyStorage getEnergyStorage(ItemStack stack) {
-		var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
-		return energy == null ? EMPTY_ENERGY_STORAGE : energy;
+	public static EnergyHandler getEnergyStorage(ItemStack stack) {
+		var energy = ItemAccess.forStack(stack).getCapability(Capabilities.Energy.ITEM);
+		return energy == null ? EmptyEnergyHandler.INSTANCE : energy;
 	}
 
 	public static boolean isEngineOn(ItemStack stack) {

@@ -8,14 +8,14 @@ import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.energy.ComponentEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.ItemAccessEnergyHandler;
 
 public final class RegisterCapabilityHandler {
     @SubscribeEvent
     public void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerItem(Capabilities.EnergyStorage.ITEM, (stack, context) -> {
+        event.registerItem(Capabilities.Energy.ITEM, (stack, access) -> {
             var jetpack = JetpackUtils.getJetpack(stack);
-            return new ComponentEnergyStorage(stack, ModDataComponentTypes.JETPACK_ENERGY.get(), jetpack.capacity);
+            return new ItemAccessEnergyHandler(access, ModDataComponentTypes.JETPACK_ENERGY.get(), jetpack.capacity);
         }, ModItems.JETPACK.get());
 
         if (ModConfigs.isCuriosEnabled()) {

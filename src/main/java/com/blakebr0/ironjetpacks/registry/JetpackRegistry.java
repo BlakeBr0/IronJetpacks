@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.loading.FMLPaths;
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class JetpackRegistry {
 	private static final JetpackRegistry INSTANCE = new JetpackRegistry();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-	private final Map<ResourceLocation, Jetpack> jetpacks = new LinkedHashMap<>();
+	private final Map<Identifier, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
 	private boolean isErrored = false;
@@ -82,7 +82,7 @@ public class JetpackRegistry {
 		return this.lowestTier;
 	}
 
-	public Jetpack getJetpackById(ResourceLocation id) {
+	public Jetpack getJetpackById(Identifier id) {
 		return this.jetpacks.getOrDefault(id, Jetpack.UNDEFINED);
 	}
 

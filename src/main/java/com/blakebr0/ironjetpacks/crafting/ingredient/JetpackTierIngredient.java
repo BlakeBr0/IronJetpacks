@@ -7,12 +7,15 @@ import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class JetpackTierIngredient implements ICustomIngredient {
@@ -30,12 +33,12 @@ public class JetpackTierIngredient implements ICustomIngredient {
     }
 
     @Override
-    public Stream<ItemStack> getItems() {
+    public Stream<Holder<Item>> items() {
         if (this.stacks == null) {
             this.initMatchingStacks();
         }
 
-        return Stream.of(this.stacks);
+        return Arrays.stream(this.stacks).map(ItemStack::typeHolder);
     }
 
     @Override

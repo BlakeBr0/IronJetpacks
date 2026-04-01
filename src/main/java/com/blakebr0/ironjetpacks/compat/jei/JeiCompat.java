@@ -8,22 +8,22 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @JeiPlugin
 public class JeiCompat implements IModPlugin {
-    public static final ResourceLocation UID = IronJetpacks.resource("jei_plugin");
+    public static final Identifier UID = IronJetpacks.resource("jei_plugin");
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return UID;
     }
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.JETPACK.get(), (stack, ctx) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
-        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.CELL.get(), (stack, ctx) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
-        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.THRUSTER.get(), (stack, ctx) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
-        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.CAPACITOR.get(), (stack, ctx) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.JETPACK.get(), (stack, _) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.CELL.get(), (stack, _) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.THRUSTER.get(), (stack, _) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ModItems.CAPACITOR.get(), (stack, _) -> stack.getOrDefault(ModDataComponentTypes.JETPACK_ID, Jetpack.UNDEFINED.getId()).toString());
     }
 }

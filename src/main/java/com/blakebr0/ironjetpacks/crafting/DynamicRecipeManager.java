@@ -9,9 +9,14 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
@@ -20,7 +25,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Map;
 
 public class DynamicRecipeManager {
     private static final DynamicRecipeManager INSTANCE = new DynamicRecipeManager();
@@ -58,22 +64,36 @@ public class DynamicRecipeManager {
             return null;
 
         var material = jetpack.getCraftingMaterial();
-        if (material == Ingredient.EMPTY)
+        if (material == null)
             return null;
 
         var coil = Ingredient.of(JetpackRegistry.getInstance().getCoilForTier(jetpack.tier));
-        var redstone = Ingredient.of(Tags.Items.DUSTS_REDSTONE);
-        var inputs = NonNullList.of(Ingredient.EMPTY,
-                Ingredient.EMPTY, redstone, Ingredient.EMPTY,
-                material, coil, material,
-                Ingredient.EMPTY, redstone, Ingredient.EMPTY
+        var redstone = Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(Tags.Items.DUSTS_REDSTONE));
+
+        var keys = Map.of(
+                'M', material,
+                'C', coil,
+                'R', redstone
+        );
+        var shape = List.of(
+                " R ",
+                "MCM",
+                " R "
         );
 
         var id = IronJetpacks.resource(jetpack.name + "_cell");
-        var pattern = new ShapedRecipePattern(3, 3, inputs, Optional.empty());
+        var pattern = ShapedRecipePattern.of(keys, shape);
         var result = JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack);
 
-        return new RecipeHolder<>(id, new ShapedRecipe("ironjetpacks:cells", CraftingBookCategory.MISC, pattern, result));
+        return new RecipeHolder<>(
+                ResourceKey.create(Registries.RECIPE, id),
+                new ShapedRecipe(
+                        new Recipe.CommonInfo(false),
+                        new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "ironjetpacks:cells"),
+                        pattern,
+                        ItemStackTemplate.fromNonEmptyStack(result)
+                )
+        );
     }
 
     private static RecipeHolder<ShapedRecipe> makeThrusterRecipe(Jetpack jetpack) {
@@ -81,23 +101,37 @@ public class DynamicRecipeManager {
             return null;
 
         var material = jetpack.getCraftingMaterial();
-        if (material == Ingredient.EMPTY)
+        if (material == null)
             return null;
 
         var coil = Ingredient.of(JetpackRegistry.getInstance().getCoilForTier(jetpack.tier));
         var cell = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
         var furnace = Ingredient.of(Blocks.FURNACE);
-        var inputs = NonNullList.of(Ingredient.EMPTY,
-                material, coil, material,
-                coil, cell, coil,
-                material, furnace, material
+
+        var keys = Map.of(
+                'M', material,
+                'C', coil,
+                'E', cell,
+                'R', furnace
+        );
+        var shape = List.of(
+                "MCM",
+                "CEC",
+                "CFC"
         );
 
         var id = IronJetpacks.resource(jetpack.name + "_thruster");
-        var pattern = new ShapedRecipePattern(3, 3, inputs, Optional.empty());
+        var pattern = ShapedRecipePattern.of(keys, shape);
         var result = JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack);
 
-        return new RecipeHolder<>(id, new ShapedRecipe("ironjetpacks:thrusters", CraftingBookCategory.MISC, pattern, result));
+        return new RecipeHolder<>(
+                ResourceKey.create(Registries.RECIPE, id),
+                new ShapedRecipe(
+                        new Recipe.CommonInfo(false),
+                        new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "ironjetpacks:thrusters"),
+                        pattern,
+                        ItemStackTemplate.fromNonEmptyStack(result)
+                ));
     }
 
     private static RecipeHolder<ShapedRecipe> makeCapacitorRecipe(Jetpack jetpack) {
@@ -105,21 +139,33 @@ public class DynamicRecipeManager {
             return null;
 
         var material = jetpack.getCraftingMaterial();
-        if (material == Ingredient.EMPTY)
+        if (material == null)
             return null;
 
         var cell = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
-        var inputs = NonNullList.of(Ingredient.EMPTY,
-                material, cell, material,
-                material, cell, material,
-                material, cell, material
+
+        var keys = Map.of(
+                'M', material,
+                'E', cell
+        );
+        var shape = List.of(
+                "MEM",
+                "MEM",
+                "MEM"
         );
 
         var id = IronJetpacks.resource(jetpack.name + "_capacitor");
-        var pattern = new ShapedRecipePattern(3, 3, inputs, Optional.empty());
+        var pattern = ShapedRecipePattern.of(keys, shape);
         var result = JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack);
 
-        return new RecipeHolder<>(id, new ShapedRecipe("ironjetpacks:capacitors", CraftingBookCategory.MISC, pattern, result));
+        return new RecipeHolder<>(
+                ResourceKey.create(Registries.RECIPE, id),
+                new ShapedRecipe(
+                        new Recipe.CommonInfo(false),
+                        new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.MISC, "ironjetpacks:capacitors"),
+                        pattern,
+                        ItemStackTemplate.fromNonEmptyStack(result)
+                ));
     }
 
     private static RecipeHolder<ShapedRecipe> makeJetpackRecipe(Jetpack jetpack) {
@@ -130,23 +176,38 @@ public class DynamicRecipeManager {
             return null;
 
         var material = jetpack.getCraftingMaterial();
-        if (material == Ingredient.EMPTY)
+        if (material == null)
             return null;
 
         var capacitor = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
         var thruster = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var strap = Ingredient.of(ModItems.STRAP.get());
-        var inputs = NonNullList.of(Ingredient.EMPTY,
-                material, capacitor, material,
-                material, strap, material,
-                thruster, Ingredient.EMPTY, thruster
+
+        var keys = Map.of(
+                'M', material,
+                'C', capacitor,
+                'S', strap,
+                'T', thruster
+        );
+        var shape = List.of(
+                "MCM",
+                "MSM",
+                "T T"
         );
 
         var id = IronJetpacks.resource(jetpack.name + "_jetpack");
-        var pattern = new ShapedRecipePattern(3, 3, inputs, Optional.empty());
+        var pattern = ShapedRecipePattern.of(keys, shape);
         var result = JetpackUtils.getItemForJetpack(jetpack);
 
-        return new RecipeHolder<>(id, new ShapedRecipe("ironjetpacks:jetpacks", CraftingBookCategory.EQUIPMENT, pattern, result));
+        return new RecipeHolder<>(
+                ResourceKey.create(Registries.RECIPE, id),
+                new ShapedRecipe(
+                        new Recipe.CommonInfo(false),
+                        new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.EQUIPMENT, "ironjetpacks:jetpacks"),
+                        pattern,
+                        ItemStackTemplate.fromNonEmptyStack(result)
+                )
+        );
     }
 
     private static RecipeHolder<JetpackUpgradeRecipe> makeJetpackUpgradeRecipe(Jetpack jetpack) {
@@ -157,22 +218,37 @@ public class DynamicRecipeManager {
             return null;
 
         var material = jetpack.getCraftingMaterial();
-        if (material == Ingredient.EMPTY)
+        if (material == null)
             return null;
 
         var capacitor = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
         var thruster = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var jetpackTier = JetpackTierIngredient.of(jetpack.tier - 1);
-        var inputs = NonNullList.of(Ingredient.EMPTY,
-                material, capacitor, material,
-                material, jetpackTier, material,
-                thruster, Ingredient.EMPTY, thruster
+
+        var keys = Map.of(
+                'M', material,
+                'C', capacitor,
+                'J', jetpackTier,
+                'T', thruster
+        );
+        var shape = List.of(
+                "MCM",
+                "CEC",
+                "CFC"
         );
 
         var id = IronJetpacks.resource(jetpack.name + "_jetpack");
-        var pattern = new ShapedRecipePattern(3, 3, inputs, Optional.empty());
+        var pattern = ShapedRecipePattern.of(keys, shape);
         var result = JetpackUtils.getItemForJetpack(jetpack);
 
-        return new RecipeHolder<>(id, new JetpackUpgradeRecipe("ironjetpacks:jetpacks", pattern, result, false));
+        return new RecipeHolder<>(
+                ResourceKey.create(Registries.RECIPE, id),
+                new JetpackUpgradeRecipe(
+                        new Recipe.CommonInfo(false),
+                        new CraftingRecipe.CraftingBookInfo(CraftingBookCategory.EQUIPMENT, "ironjetpacks:jetpacks"),
+                        pattern,
+                        ItemStackTemplate.fromNonEmptyStack(result)
+                )
+        );
     }
 }

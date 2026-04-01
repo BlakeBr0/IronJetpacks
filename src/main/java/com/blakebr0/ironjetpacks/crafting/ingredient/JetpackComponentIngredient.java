@@ -6,8 +6,10 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -18,18 +20,27 @@ import java.util.stream.Stream;
 public class JetpackComponentIngredient implements ICustomIngredient {
     public static final MapCodec<JetpackComponentIngredient> CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    ResourceLocation.CODEC.fieldOf("jetpack").forGetter(ingredient -> ingredient.jetpack),
+                    Identifier.CODEC.fieldOf("jetpack").forGetter(ingredient -> ingredient.jetpack),
                     ComponentType.CODEC.fieldOf("component").forGetter(ingredient -> ingredient.type)
             ).apply(builder, JetpackComponentIngredient::new)
     );
 
-    private final ResourceLocation jetpack;
+    private final Identifier jetpack;
     private final ComponentType type;
-    private ItemStack[] stacks;
+    private final ItemStack stack;
 
-    public JetpackComponentIngredient(ResourceLocation jetpack, ComponentType type) {
+    public JetpackComponentIngredient(Identifier jetpack, ComponentType type) {
         this.jetpack = jetpack;
         this.type = type;
+
+        this.stack = switch (type) {
+            case CELL -> new ItemStack(ModItems.CELL.get());
+            case THRUSTER -> new ItemStack(ModItems.THRUSTER.get());
+            case CAPACITOR -> new ItemStack(ModItems.CAPACITOR.get());
+            case JETPACK -> new ItemStack(ModItems.JETPACK.get());
+        };
+
+        this.stack.set(ModDataComponentTypes.JETPACK_ID, this.jetpack);
     }
 
     @Override
@@ -41,26 +52,12 @@ public class JetpackComponentIngredient implements ICustomIngredient {
         if (jetpackID == null)
             return false;
 
-        return this.getItems().anyMatch(s ->
-                ItemStack.isSameItem(s, input) && jetpackID.equals(s.get(ModDataComponentTypes.JETPACK_ID.get())));
+        return ItemStack.isSameItem(this.stack, input) && jetpackID.equals(this.stack.get(ModDataComponentTypes.JETPACK_ID.get()));
     }
 
     @Override
-    public Stream<ItemStack> getItems() {
-        if (this.stacks == null) {
-            var stack = switch (type) {
-                case CELL -> new ItemStack(ModItems.CELL.get());
-                case THRUSTER -> new ItemStack(ModItems.THRUSTER.get());
-                case CAPACITOR -> new ItemStack(ModItems.CAPACITOR.get());
-                case JETPACK -> new ItemStack(ModItems.JETPACK.get());
-            };
-
-            stack.set(ModDataComponentTypes.JETPACK_ID, this.jetpack);
-
-            this.stacks = new ItemStack[] { stack };
-        }
-
-        return Stream.of(this.stacks);
+    public Stream<Holder<Item>> items() {
+        return Stream.of(this.stack.typeHolder());
     }
 
     @Override

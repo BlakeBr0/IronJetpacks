@@ -3,6 +3,7 @@ package com.blakebr0.ironjetpacks.compat.curios.curio;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -26,7 +27,7 @@ public record JetpackCurio(ItemStack stack) implements ICurio {
     }
 
     @Override
-    public List<Component> getSlotsTooltip(List<Component> tooltips) {
+    public List<Component> getSlotsTooltip(List<Component> tooltips, Item.TooltipContext context) {
         return this.isCurioJetpack() ? tooltips : List.of();
     }
 

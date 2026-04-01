@@ -7,9 +7,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 
-public class JetpackModel extends HumanoidModel<LivingEntity> {
+public class JetpackModel extends HumanoidModel<HumanoidRenderState> {
 	private static final String MIDDLE = "middle";
 	private static final String LEFT_CANISTER = "left_canister";
 	private static final String RIGHT_CANISTER = "right_canister";
@@ -59,57 +61,6 @@ public class JetpackModel extends HumanoidModel<LivingEntity> {
 			this.energyBarLeft[i].visible = i == energyBarState;
 			this.energyBarRight[i].visible = i == energyBarState;
 		}
-	}
-
-	@Override
-	protected Iterable<ModelPart> headParts() {
-		return ImmutableList.of();
-	}
-
-	@Override
-	protected Iterable<ModelPart> bodyParts() {
-		this.middle.copyFrom(this.body);
-		this.leftCanister.copyFrom(this.middle);
-		this.rightCanister.copyFrom(this.middle);
-		this.leftTip1.copyFrom(this.middle);
-		this.leftTip2.copyFrom(this.middle);
-		this.rightTip1.copyFrom(this.middle);
-		this.rightTip2.copyFrom(this.middle);
-		this.leftExhaust1.copyFrom(this.middle);
-		this.leftExhaust2.copyFrom(this.middle);
-		this.rightExhaust1.copyFrom(this.middle);
-		this.rightExhaust2.copyFrom(this.middle);
-
-		for (int i = 0; i < 6; i++) {
-			this.energyBarLeft[i].copyFrom(this.middle);
-			this.energyBarRight[i].copyFrom(this.middle);
-		}
-
-		ImmutableList.Builder<ModelPart> parts = ImmutableList.builder();
-
-		parts.add(
-				this.body,
-				this.middle,
-				this.leftCanister,
-				this.rightCanister,
-				this.leftTip1,
-				this.leftTip2,
-				this.rightTip1,
-				this.rightTip2,
-				this.leftExhaust1,
-				this.leftExhaust2,
-				this.rightExhaust1,
-				this.rightExhaust2,
-				this.leftArm,
-				this.rightArm
-		);
-
-		for (int i = 0; i < 6; i++) {
-			parts.add(this.energyBarLeft[i]);
-			parts.add(this.energyBarRight[i]);
-		}
-
-		return parts.build();
 	}
 
 	public static LayerDefinition createBodyLayer() {

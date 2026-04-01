@@ -30,9 +30,9 @@ public final class ModTooltips {
 	public static final Tooltip STATE_TOOLTIP_LAYOUT = new Tooltip("tooltip.ironjetpacks.state_tooltip_layout");
 	public static final Tooltip JETPACK_ID = new Tooltip("tooltip.ironjetpacks.jetpack_id");
 
-	public static final Component INFINITE_STATIC = INFINITE.build();
-	public static final Component ON_STATIC = ON.build();
-	public static final Component OFF_STATIC = OFF.build();
+	public static final Component INFINITE_STATIC = INFINITE.toComponent();
+	public static final Component ON_STATIC = ON.toComponent();
+	public static final Component OFF_STATIC = OFF.toComponent();
 
 	public static Component getStatusComponent(boolean on) {
 		return on ? ON_STATIC : OFF_STATIC;

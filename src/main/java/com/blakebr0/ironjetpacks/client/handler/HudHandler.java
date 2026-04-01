@@ -9,14 +9,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import org.joml.Math;
 
 public final class HudHandler {
-    private static final ResourceLocation HUD_TEXTURE = IronJetpacks.resource("textures/gui/hud.png");
+    private static final Identifier HUD_TEXTURE = IronJetpacks.resource("textures/gui/hud.png");
 
     // Animation progress = 0 means that the hud is currently shown, 1 for hidden
     private static double animationProgress = 0;
@@ -56,12 +56,12 @@ public final class HudHandler {
 
                     var matrix = gfx.pose();
 
-                    matrix.pushPose();
-                    matrix.scale(0.33F, 0.33F, 1.0F);
+                    matrix.pushMatrix();
+                    matrix.scale(0.33F, 0.33F);
                     gfx.blit(HUD_TEXTURE, xPos, yPos, 0, 0, 28, 156, 256, 256);
                     int i2 = getEnergyBarScaled(chest);
                     gfx.blit(HUD_TEXTURE, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
-                    matrix.popPose();
+                    matrix.popMatrix();
 
                     var fuel = getFuelComponent(chest);
                     var throttle = getThrottleComponent(chest);
@@ -69,15 +69,15 @@ public final class HudHandler {
                     var hover = getHoverComponent(chest);
 
                     if (pos.side == 1) {
-                        gfx.drawString(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
-                        gfx.drawString(mc.font, throttle, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
-                        gfx.drawString(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
-                        gfx.drawString(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
+                        gfx.text(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
+                        gfx.text(mc.font, throttle, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
+                        gfx.text(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
+                        gfx.text(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
                     } else {
-                        gfx.drawString(mc.font, fuel, pos.x + 6, pos.y - 21, 16383998);
-                        gfx.drawString(mc.font, throttle, pos.x + 6, pos.y - 6, 16383998);
-                        gfx.drawString(mc.font, engine, pos.x + 6, pos.y + 4, 16383998);
-                        gfx.drawString(mc.font, hover, pos.x + 6, pos.y + 14, 16383998);
+                        gfx.text(mc.font, fuel, pos.x + 6, pos.y - 21, 16383998);
+                        gfx.text(mc.font, throttle, pos.x + 6, pos.y - 6, 16383998);
+                        gfx.text(mc.font, engine, pos.x + 6, pos.y + 4, 16383998);
+                        gfx.text(mc.font, hover, pos.x + 6, pos.y + 14, 16383998);
                     }
                 }
             } else {
@@ -116,8 +116,8 @@ public final class HudHandler {
             return 156;
 
         var energy = JetpackUtils.getEnergyStorage(stack);
-        int i = energy.getEnergyStored();
-        int j = energy.getMaxEnergyStored();
+        int i = energy.getAmountAsInt();
+        int j = energy.getCapacityAsInt();
 
         return (int) (j != 0 && i != 0 ? (long) i * 156 / j : 0);
     }
@@ -128,7 +128,7 @@ public final class HudHandler {
             return Component.literal(ModTooltips.INFINITE_STATIC.getString() + " FE").withStyle(ChatFormatting.GRAY);
         }
 
-        int energy = JetpackUtils.getEnergyStorage(stack).getEnergyStored();
+        int energy = JetpackUtils.getEnergyStorage(stack).getAmountAsInt();
         if (energy >= 1000000000) {
             int big = energy / 1000000000;
             int small = (energy - (big * 1000000000)) / 100000000;

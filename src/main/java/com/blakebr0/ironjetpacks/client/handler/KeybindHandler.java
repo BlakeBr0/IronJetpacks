@@ -21,7 +21,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 public final class KeybindHandler {
@@ -42,13 +42,15 @@ public final class KeybindHandler {
     private static boolean sprint = false;
 
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, IronJetpacks.NAME);
-        keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, IronJetpacks.NAME);
-        keyHUD = new KeyMapping("keybind.ironjetpacks.hud", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
-        keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
-        keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), IronJetpacks.NAME);
-        keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, IronJetpacks.NAME);
-        keyDecrementThrottle = new KeyMapping("keybind.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, IronJetpacks.NAME);
+        var category = KeyMapping.Category.register(IronJetpacks.resource("keybindings"));
+
+        keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, category);
+        keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, category);
+        keyHUD = new KeyMapping("keybind.ironjetpacks.hud", InputConstants.UNKNOWN.getValue(), category);
+        keyAscend = new KeyMapping("keybind.ironjetpacks.ascend", InputConstants.UNKNOWN.getValue(), category);
+        keyDescend = new KeyMapping("keybind.ironjetpacks.descend", InputConstants.UNKNOWN.getValue(), category);
+        keyIncrementThrottle = new KeyMapping("keybind.ironjetpacks.increment_throttle", GLFW.GLFW_KEY_PERIOD, category);
+        keyDecrementThrottle = new KeyMapping("keybind.ironjetpacks.decrement_throttle", GLFW.GLFW_KEY_COMMA, category);
 
         event.register(keyEngine);
         event.register(keyHover);
@@ -123,44 +125,44 @@ public final class KeybindHandler {
     public static void update(boolean up, boolean down, boolean forwards, boolean backwards, boolean left, boolean right, boolean sprint) {
         var player = Minecraft.getInstance().player;
 
-        PacketDistributor.sendToServer(new UpdateInputPayload(up, down, forwards, backwards, left, right, sprint));
+        ClientPacketDistributor.sendToServer(new UpdateInputPayload(up, down, forwards, backwards, left, right, sprint));
         InputHandler.update(player, up, down, forwards, backwards, left, right, sprint);
     }
 
     private static void handleInput(Player player, ItemStack stack) {
         if (keyEngine.consumeClick()) {
             boolean on = JetpackUtils.toggleEngine(stack);
-            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
-            PacketDistributor.sendToServer(new ToggleEnginePayload());
-            player.displayClientMessage(ModTooltips.TOGGLE_ENGINE.args(state).build(), true);
+            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).toComponent() : ModTooltips.OFF.color(ChatFormatting.RED).toComponent();
+            ClientPacketDistributor.sendToServer(new ToggleEnginePayload());
+            player.sendOverlayMessage(ModTooltips.TOGGLE_ENGINE.args(state).toComponent());
         }
 
         if (keyHover.consumeClick()) {
             boolean on = JetpackUtils.toggleHover(stack);
-            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
-            PacketDistributor.sendToServer(new ToggleHoverPayload());
-            player.displayClientMessage(ModTooltips.TOGGLE_HOVER.args(state).build(), true);
+            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).toComponent() : ModTooltips.OFF.color(ChatFormatting.RED).toComponent();
+            ClientPacketDistributor.sendToServer(new ToggleHoverPayload());
+            player.sendOverlayMessage(ModTooltips.TOGGLE_HOVER.args(state).toComponent());
         }
 
         if (keyHUD.consumeClick()) {
             boolean on = JetpackUtils.toggleHUD(stack);
-            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).build() : ModTooltips.OFF.color(ChatFormatting.RED).build();
-            PacketDistributor.sendToServer(new ToggleHUDPayload());
-            player.displayClientMessage(ModTooltips.TOGGLE_HUD.args(state).build(), true);
+            var state = on ? ModTooltips.ON.color(ChatFormatting.GREEN).toComponent() : ModTooltips.OFF.color(ChatFormatting.RED).toComponent();
+            ClientPacketDistributor.sendToServer(new ToggleHUDPayload());
+            player.sendOverlayMessage(ModTooltips.TOGGLE_HUD.args(state).toComponent());
         }
 
         if (keyIncrementThrottle.consumeClick()) {
             double throttle = JetpackUtils.incrementThrottle(stack);
             var throttleText = Component.literal((int) (throttle * 100) + "%").withStyle(ChatFormatting.GREEN);
-            PacketDistributor.sendToServer(new IncrementThrottlePayload());
-            player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
+            ClientPacketDistributor.sendToServer(new IncrementThrottlePayload());
+            player.sendOverlayMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).toComponent());
         }
 
         if (keyDecrementThrottle.consumeClick()) {
             double throttle = JetpackUtils.decrementThrottle(stack);
             var throttleText = Component.literal((int) (throttle * 100) + "%").withStyle(ChatFormatting.RED);
-            PacketDistributor.sendToServer(new DecrementThrottlePayload());
-            player.displayClientMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).build(), true);
+            ClientPacketDistributor.sendToServer(new DecrementThrottlePayload());
+            player.sendOverlayMessage(ModTooltips.CHANGE_THROTTLE.args(throttleText).toComponent());
         }
     }
 }

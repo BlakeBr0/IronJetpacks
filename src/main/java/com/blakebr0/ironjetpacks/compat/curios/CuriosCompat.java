@@ -20,16 +20,16 @@ public class CuriosCompat {
     }
 
     public static Optional<ItemStack> findJetpackCurio(LivingEntity entity, @Nullable Predicate<SlotResult> predicate) {
-        var optional = CuriosApi.getCuriosHelper().findFirstCurio(entity, ModItems.JETPACK.get());
-        
+        var optional = CuriosApi.getCuriosInventory(entity).flatMap(i -> i.findFirstCurio(ModItems.JETPACK.get()));
+
         if (predicate != null) {
         	optional = optional.filter(predicate);
         }
-        return optional.map(SlotResult::stack)
-                .filter(stack -> JetpackUtils.getJetpack(stack).curios);
+
+        return optional.map(SlotResult::stack).filter(stack -> JetpackUtils.getJetpack(stack).curios);
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerItem(CuriosCapability.ITEM, (stack, context) -> new JetpackCurio(stack), ModItems.JETPACK.get());
+        event.registerItem(CuriosCapability.ITEM, (stack, _) -> new JetpackCurio(stack), ModItems.JETPACK.get());
     }
 }

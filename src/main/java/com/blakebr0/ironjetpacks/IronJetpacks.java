@@ -2,7 +2,6 @@ package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModClientExtensions;
 import com.blakebr0.ironjetpacks.client.ModelHandler;
-import com.blakebr0.ironjetpacks.client.handler.ColorHandler;
 import com.blakebr0.ironjetpacks.client.handler.HudHandler;
 import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.client.handler.JetpackClientHandler;
@@ -11,7 +10,6 @@ import com.blakebr0.ironjetpacks.compat.ControllableCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
 import com.blakebr0.ironjetpacks.handler.RegisterCapabilityHandler;
-import com.blakebr0.ironjetpacks.init.ModArmorMaterials;
 import com.blakebr0.ironjetpacks.init.ModCreativeModeTabs;
 import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
 import com.blakebr0.ironjetpacks.init.ModIngredientTypes;
@@ -20,7 +18,7 @@ import com.blakebr0.ironjetpacks.init.ModRecipeSerializers;
 import com.blakebr0.ironjetpacks.init.ModSounds;
 import com.blakebr0.ironjetpacks.network.NetworkHandler;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -43,7 +41,6 @@ public final class IronJetpacks {
 	public IronJetpacks(IEventBus bus, ModContainer mod) {
 		bus.register(this);
 
-		ModArmorMaterials.REGISTRY.register(bus);
 		ModDataComponentTypes.REGISTRY.register(bus);
 		ModItems.REGISTRY.register(bus);
 		ModCreativeModeTabs.REGISTRY.register(bus);
@@ -54,8 +51,7 @@ public final class IronJetpacks {
 		bus.register(new RegisterCapabilityHandler());
 		bus.register(new NetworkHandler());
 
-		if (FMLEnvironment.dist == Dist.CLIENT) {
-			bus.register(new ColorHandler());
+		if (FMLEnvironment.getDist() == Dist.CLIENT) {
 			bus.register(new ModelHandler());
 			bus.register(new ModClientExtensions());
 			bus.addListener(KeybindHandler::onRegisterKeyMappings);
@@ -85,7 +81,7 @@ public final class IronJetpacks {
 		}
 	}
 
-	public static ResourceLocation resource(String path) {
-		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	public static Identifier resource(String path) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 }

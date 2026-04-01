@@ -4,10 +4,8 @@ import com.blakebr0.ironjetpacks.client.ModelHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
@@ -17,7 +15,7 @@ public class JetpackClientItemExtensions implements IClientItemExtensions {
     private JetpackModel[] models;
 
     @Override
-    public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> _default) {
+    public Model<?> getHumanoidArmorModel(ItemStack stack, EquipmentClientInfo.LayerType layerType, Model original) {
         if (this.models == null) {
             this.models = new JetpackModel[6];
 
@@ -35,7 +33,7 @@ public class JetpackClientItemExtensions implements IClientItemExtensions {
         }
 
         var energy = JetpackUtils.getEnergyStorage(stack);
-        var stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
+        var stored = (double) energy.getAmountAsInt() / (double) energy.getCapacityAsInt();
 
         int state = 0;
         if (stored > 0.8) {
@@ -54,8 +52,8 @@ public class JetpackClientItemExtensions implements IClientItemExtensions {
     }
 
     @Override
-    public int getArmorLayerTintColor(ItemStack stack, LivingEntity entity, ArmorMaterial.Layer layer, int layerIdx, int fallbackColor) {
+    public int getArmorLayerTintColor(ItemStack stack, EquipmentClientInfo.Layer layer, int layerIdx, int fallbackColor) {
         var jetpack = JetpackUtils.getJetpack(stack);
-        return layer.dyeable() ? jetpack.color : fallbackColor;
+        return layer.dyeable().isPresent() ? jetpack.color : fallbackColor;
     }
 }

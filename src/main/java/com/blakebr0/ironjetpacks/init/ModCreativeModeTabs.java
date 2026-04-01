@@ -24,7 +24,7 @@ public final class ModCreativeModeTabs {
 
                 return jetpack != null ? JetpackUtils.getItemForJetpack(jetpack) : new ItemStack(ModItems.STRAP.get());
             })
-            .displayItems(FeatureFlagDisplayItemGenerator.create((parameters, output) -> {
+            .displayItems(FeatureFlagDisplayItemGenerator.create((_, output) -> {
                 output.accept(ModItems.STRAP.get());
                 output.accept(ModItems.BASIC_COIL.get());
                 output.accept(ModItems.ADVANCED_COIL.get());

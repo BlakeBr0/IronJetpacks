@@ -8,9 +8,9 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,18 +18,19 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class Jetpack {
-	private static final ResourceLocation ATTRIBUTE_ID = IronJetpacks.resource("armor.jetpack");
+	private static final Identifier ATTRIBUTE_ID = IronJetpacks.resource("armor.jetpack");
 
 	public static final Jetpack UNDEFINED = new Jetpack("undefined", 0, 0xFFF, 0, 0, "null", 0F, 0F).setCurios(false);
 
 	public static final StreamCodec<FriendlyByteBuf, Jetpack> STREAM_CODEC = StreamCodec.of(Jetpack::encode, Jetpack::read);
 
-	private final ResourceLocation id;
+	private final Identifier id;
 	public String name;
 	public String displayName;
 	public int tier;
@@ -58,12 +59,14 @@ public class Jetpack {
 	public double sprintSpeedVert;
 	public double sprintFuel;
 
+	private boolean loadedIngredient = false;
+
 	public Jetpack(String name, int tier, int color, int armorPoints, int enchantability, String craftingMaterialString, float toughness, float knockbackResistance) {
 		this.id = IronJetpacks.resource(name);
 		this.name = name;
 		this.displayName = this.makeDisplayName();
 		this.tier = tier;
-		this.color = FastColor.ARGB32.color(255, color);
+		this.color = ARGB.color(255, color);
 		this.armorPoints = armorPoints;
 		this.enchantablilty = enchantability;
 		this.craftingMaterialString = craftingMaterialString;
@@ -85,7 +88,7 @@ public class Jetpack {
 		this.sprintFuel = sprintFuel;
 	}
 
-	public ResourceLocation getId() {
+	public Identifier getId() {
 		return this.id;
 	}
 
@@ -126,27 +129,29 @@ public class Jetpack {
 		return this.tier;
 	}
 
-	public Ingredient getCraftingMaterial() {
-		if (this.craftingMaterial == null) {
-			this.craftingMaterial = Ingredient.EMPTY;
-
+	public @Nullable Ingredient getCraftingMaterial() {
+		if (!this.loadedIngredient) {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				var parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
-					var tag = ItemTags.create(ResourceLocation.fromNamespaceAndPath(parts[1], parts[2]));
-					this.craftingMaterial = Ingredient.of(tag);
+					var tag = ItemTags.create(Identifier.fromNamespaceAndPath(parts[1], parts[2]));
+
+					BuiltInRegistries.ITEM.get(tag)
+							.ifPresent(items -> this.craftingMaterial = Ingredient.of(items));
 				} else if (parts.length >= 2) {
-					BuiltInRegistries.ITEM.getOptional(ResourceLocation.fromNamespaceAndPath(parts[0], parts[1]))
+					BuiltInRegistries.ITEM.getOptional(Identifier.fromNamespaceAndPath(parts[0], parts[1]))
                             .ifPresent(value -> this.craftingMaterial = Ingredient.of(value));
 				}
 			}
+
+			this.loadedIngredient = true;
 		}
 
 		return this.craftingMaterial;
 	}
 
 	public Component getDisplayName() {
-		var key = String.format("jetpack.%s.name", this.name.replaceAll(" ", "_"));
+		var key = String.format("jetpack.%s.name", this.name.replace(" ", "_"));
 		if (Language.getInstance().has(key)) {
 			return Component.translatable(key);
 		}
@@ -168,7 +173,7 @@ public class Jetpack {
 	}
 
 	private String makeDisplayName() {
-		var parts = this.name.replaceAll(" ", "_").split("_");
+		var parts = this.name.replace(" ", "_").split("_");
 		return Arrays.stream(parts).map(StringUtils::capitalize).collect(Collectors.joining(" "));
 	}
 

@@ -20,7 +20,7 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 repositories {
     maven { url 'https://maven.blakesmods.com' }
     maven { url 'https://maven.blamejared.com' }
-    maven { url 'https://maven.octo-studios.com/releases' }
+    maven { url 'https://maven.theillusivec4.top' }
     maven {
         url 'https://cursemaven.com'
         content {
