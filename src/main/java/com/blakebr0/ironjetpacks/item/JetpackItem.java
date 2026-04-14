@@ -221,7 +221,11 @@ public class JetpackItem extends BaseArmorItem implements IColored {
         var hover = ModTooltips.HOVER.color(JetpackUtils.isHovering(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).toComponent();
         var hud = ModTooltips.HUD.color(JetpackUtils.isHUDEnabled(stack) ? ChatFormatting.GREEN : ChatFormatting.RED).toComponent();
 
-        builder.accept(ModTooltips.STATE_TOOLTIP_LAYOUT.args(tier, engine, hover, hud).toComponent());
+        builder.accept(Component.empty()
+                .append(tier).append(" | ").withStyle(ChatFormatting.GRAY)
+                .append(engine).append(" | ").withStyle(ChatFormatting.GRAY)
+                .append(hover).append(" | ").withStyle(ChatFormatting.GRAY)
+                .append(hud));
 
         var throttle = Component.literal((int) (JetpackUtils.getThrottle(stack) * 100) + "%");
 

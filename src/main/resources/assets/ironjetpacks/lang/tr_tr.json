@@ -41,6 +41,5 @@
   "tooltip.ironjetpacks.toggle_engine": "Motor %s",
   "tooltip.ironjetpacks.toggle_hover": "Hover %s",
   "tooltip.ironjetpacks.change_throttle": "Gaz şuna ayarlandı: %s",
-  "tooltip.ironjetpacks.state_tooltip_layout": "%s | %s | %s",
   "tooltip.ironjetpacks.jetpack_id": "Sırt Roketi ID'si: %s"
 }
