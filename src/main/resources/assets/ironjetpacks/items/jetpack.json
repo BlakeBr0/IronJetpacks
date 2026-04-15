@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "ironjetpacks:item/jetpack",
+    "tints": [
+      {
+        "type": "cucumber:item_colors",
+        "index": 0
+      },
+      {
+        "type": "cucumber:item_colors",
+        "index": 1
+      }
+    ]
+  }
+}
