@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
@@ -38,7 +39,7 @@ public class JetpackTierIngredient implements ICustomIngredient {
             this.initMatchingStacks();
         }
 
-        return Arrays.stream(this.stacks).map(ItemStack::typeHolder);
+        return Arrays.stream(this.stacks).map(s -> Holder.direct(s.getItem(), s.getComponents()));
     }
 
     @Override
@@ -78,6 +79,7 @@ public class JetpackTierIngredient implements ICustomIngredient {
                 .stream()
                 .filter(j -> j.getTier() == this.tier)
                 .map(JetpackUtils::getItemForJetpack)
+                .map(ItemStackTemplate::create)
                 .toArray(ItemStack[]::new);
     }
 

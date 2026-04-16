@@ -8,10 +8,13 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.energy.EmptyEnergyHandler;
@@ -111,16 +114,14 @@ public final class JetpackUtils {
 		return !current;
 	}
 
-	public static ItemStack getItemForJetpack(Jetpack jetpack) {
-		var stack = new ItemStack(ModItems.JETPACK.get());
-		stack.set(ModDataComponentTypes.JETPACK_ID, jetpack.getId());
-		return stack;
+	public static ItemStackTemplate getItemForJetpack(Jetpack jetpack) {
+		var components = DataComponentPatch.builder().set(ModDataComponentTypes.JETPACK_ID.get(), jetpack.getId()).build();
+        return new ItemStackTemplate(ModItems.JETPACK.get(), components);
 	}
 
-	public static ItemStack getItemForComponent(Item item, Jetpack jetpack) {
-		var stack = new ItemStack(item);
-		stack.set(ModDataComponentTypes.JETPACK_ID, jetpack.getId());
-		return stack;
+	public static ItemStackTemplate getItemForComponent(Item item, Jetpack jetpack) {
+		var components = DataComponentPatch.builder().set(ModDataComponentTypes.JETPACK_ID.get(), jetpack.getId()).build();
+        return new ItemStackTemplate(item, components);
 	}
 
 	public static Jetpack getJetpack(ItemStack stack) {

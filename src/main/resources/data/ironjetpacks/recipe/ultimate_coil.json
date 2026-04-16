@@ -6,15 +6,9 @@
     "RD "
   ],
   "key": {
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "D": {
-      "tag": "c:gems/emerald"
-    },
-    "S": {
-      "tag": "c:rods/wooden"
-    }
+    "R": "#c:dusts/redstone",
+    "D": "#c:gems/emerald",
+    "S": "#c:rods/wooden"
   },
   "result": {
     "id": "ironjetpacks:ultimate_coil"

@@ -3,6 +3,7 @@ package com.blakebr0.ironjetpacks.registry;
 import com.blakebr0.ironjetpacks.IronJetpacks;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
@@ -129,14 +130,14 @@ public class Jetpack {
 		return this.tier;
 	}
 
-	public @Nullable Ingredient getCraftingMaterial() {
+	public @Nullable Ingredient getCraftingMaterial(HolderLookup.Provider registries) {
 		if (!this.loadedIngredient) {
 			if (!this.craftingMaterialString.equalsIgnoreCase("null")) {
 				var parts = craftingMaterialString.split(":");
 				if (parts.length >= 3 && this.craftingMaterialString.startsWith("tag:")) {
 					var tag = ItemTags.create(Identifier.fromNamespaceAndPath(parts[1], parts[2]));
 
-					BuiltInRegistries.ITEM.get(tag)
+					registries.get(tag)
 							.ifPresent(items -> this.craftingMaterial = Ingredient.of(items));
 				} else if (parts.length >= 2) {
 					BuiltInRegistries.ITEM.getOptional(Identifier.fromNamespaceAndPath(parts[0], parts[1]))

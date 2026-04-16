@@ -22,7 +22,7 @@ public final class ModCreativeModeTabs {
                         .findFirst()
                         .orElse(null);
 
-                return jetpack != null ? JetpackUtils.getItemForJetpack(jetpack) : new ItemStack(ModItems.STRAP.get());
+                return jetpack != null ? JetpackUtils.getItemForJetpack(jetpack).create() : new ItemStack(ModItems.STRAP.get());
             })
             .displayItems(FeatureFlagDisplayItemGenerator.create((_, output) -> {
                 output.accept(ModItems.STRAP.get());
@@ -32,10 +32,10 @@ public final class ModCreativeModeTabs {
                 output.accept(ModItems.ULTIMATE_COIL.get());
 
                 for (var jetpack : JetpackRegistry.getInstance().getJetpacks()) {
-                    output.accept(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
-                    output.accept(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
-                    output.accept(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-                    output.accept(JetpackUtils.getItemForJetpack(jetpack));
+                    output.accept(JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack).create());
+                    output.accept(JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack).create());
+                    output.accept(JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack).create());
+                    output.accept(JetpackUtils.getItemForJetpack(jetpack).create());
                 }
             }))
             .build());
