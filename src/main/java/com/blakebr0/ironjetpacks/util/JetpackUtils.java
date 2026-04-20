@@ -87,7 +87,7 @@ public final class JetpackUtils {
 	public static double incrementThrottle(ItemStack stack) {
 		double throttle = getThrottle(stack);
 		if (throttle < 1.0D) {
-			throttle = Math.min(throttle + 0.2D, 1.0D);
+			throttle = Math.min(throttle + 0.1D, 1.0D);
 			stack.set(ModDataComponentTypes.JETPACK_THROTTLE, throttle);
 		}
 
@@ -96,8 +96,8 @@ public final class JetpackUtils {
 
 	public static double decrementThrottle(ItemStack stack) {
 		double throttle = getThrottle(stack);
-		if (throttle > 0.2D) {
-			throttle = Math.max(throttle - 0.2D, 0.2D);
+		if (throttle > 0.1D) {
+			throttle = Math.max(throttle - 0.1D, 0.1D);
 			stack.set(ModDataComponentTypes.JETPACK_THROTTLE, throttle);
 		}
 
