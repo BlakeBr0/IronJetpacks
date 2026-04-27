@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "ironjetpacks:jetpack",
+        "dyeable": {}
+      },
+      {
+        "texture": "ironjetpacks:jetpack_overlay"
+      }
+    ]
+  }
+}

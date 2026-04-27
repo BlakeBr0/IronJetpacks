@@ -1,7 +1,7 @@
 package com.blakebr0.ironjetpacks;
 
 import com.blakebr0.ironjetpacks.client.ModClientExtensions;
-import com.blakebr0.ironjetpacks.client.ModelHandler;
+import com.blakebr0.ironjetpacks.client.handler.ModelHandler;
 import com.blakebr0.ironjetpacks.client.handler.HudHandler;
 import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.client.handler.JetpackClientHandler;

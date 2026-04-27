@@ -1,20 +1,17 @@
-package com.blakebr0.ironjetpacks.client;
+package com.blakebr0.ironjetpacks.client.handler;
 
-import com.blakebr0.ironjetpacks.client.layer.JetpackRenderLayer;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
-import com.blakebr0.ironjetpacks.config.ModConfigs;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-public class ModelHandler {
+public final class ModelHandler {
     public static final ModelLayerLocation JETPACK_LAYER = new ModelLayerLocation(Identifier.parse("minecraft:player"), "ironjetpacks:jetpack");
 
     @SubscribeEvent
     public void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(JETPACK_LAYER, JetpackModel::createBodyLayer);
+        event.registerLayerDefinition(JETPACK_LAYER, JetpackModel::createArmorLayer);
     }
 
     @SubscribeEvent

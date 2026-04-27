@@ -1,6 +1,6 @@
 package com.blakebr0.ironjetpacks.client.extensions;
 
-import com.blakebr0.ironjetpacks.client.ModelHandler;
+import com.blakebr0.ironjetpacks.client.handler.ModelHandler;
 import com.blakebr0.ironjetpacks.client.model.JetpackModel;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
 import net.minecraft.client.Minecraft;
@@ -54,6 +54,6 @@ public class JetpackClientItemExtensions implements IClientItemExtensions {
     @Override
     public int getArmorLayerTintColor(ItemStack stack, EquipmentClientInfo.Layer layer, int layerIdx, int fallbackColor) {
         var jetpack = JetpackUtils.getJetpack(stack);
-        return layer.dyeable().isPresent() ? jetpack.color : fallbackColor;
+        return layer.dyeable().isPresent() ? jetpack.color : -1;
     }
 }
