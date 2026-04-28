@@ -13,22 +13,4 @@ public final class ModelHandler {
     public void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(JETPACK_LAYER, JetpackModel::createArmorLayer);
     }
-
-    @SubscribeEvent
-    public void onAddLayers(EntityRenderersEvent.AddLayers event) {
-//        TODO curio layer
-//        if (ModConfigs.isCuriosInstalled()) {
-//            addLayerToPlayerSkin(event, PlayerSkin.Model.WIDE);
-//            addLayerToPlayerSkin(event, PlayerSkin.Model.SLIM);
-//        }
-    }
-
-//    @SuppressWarnings("unchecked rawtypes")
-//    private static void addLayerToPlayerSkin(EntityRenderersEvent.AddLayers event, PlayerSkin.Model skin) {
-//        var renderer = event.getSkin(skin);
-//
-//        if (renderer instanceof LivingEntityRenderer<?,?> livingEntityRenderer) {
-//            livingEntityRenderer.addLayer(new JetpackRenderLayer(livingEntityRenderer));
-//        }
-//    }
 }
