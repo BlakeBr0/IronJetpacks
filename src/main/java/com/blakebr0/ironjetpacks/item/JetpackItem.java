@@ -1,6 +1,7 @@
 package com.blakebr0.ironjetpacks.item;
 
 import com.blakebr0.cucumber.iface.IColored;
+import com.blakebr0.cucumber.iface.IComponentInitializer;
 import com.blakebr0.cucumber.item.BaseArmorItem;
 import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Formatting;
@@ -19,12 +20,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -32,7 +37,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class JetpackItem extends BaseArmorItem implements IColored {
+public class JetpackItem extends BaseArmorItem implements IColored, IComponentInitializer {
     public JetpackItem(Identifier id) {
         super(id, ModArmorMaterials.JETPACK, ArmorType.CHESTPLATE, p -> p
                 .stacksTo(1)
@@ -41,36 +46,11 @@ public class JetpackItem extends BaseArmorItem implements IColored {
         );
     }
 
-//    TODO item rarity
-//    @Override
-//    public void verifyComponentsAfterLoad(ItemStack stack) {
-//        var jetpack = JetpackUtils.getJetpack(stack);
-//
-//        if (stack.isEnchanted()) {
-//            var rarity = switch (jetpack.rarity) {
-//                case COMMON, UNCOMMON -> Rarity.RARE;
-//                case RARE -> Rarity.EPIC;
-//                case EPIC -> jetpack.rarity;
-//            };
-//
-//            stack.set(DataComponents.RARITY, rarity);
-//        } else {
-//            stack.set(DataComponents.RARITY, jetpack.rarity);
-//        }
-//    }
-
     @Override
     public Component getName(ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
         return Component.translatable("item.ironjetpacks.jetpack", jetpack.getDisplayName());
     }
-
-//    TODO item enchantability
-//    @Override
-//    public int getEnchantmentValue(ItemStack stack) {
-//        var jetpack = JetpackUtils.getJetpack(stack);
-//        return jetpack.enchantablilty;
-//    }
 
     /*
      * Jetpack logic is very much like Simply Jetpacks, since I used it to learn how to make this work
@@ -163,20 +143,6 @@ public class JetpackItem extends BaseArmorItem implements IColored {
         }
     }
 
-//    TODO is enchantable
-//    @Override
-//    public boolean isEnchantable(ItemStack stack) {
-//        var jetpack = JetpackUtils.getJetpack(stack);
-//        return ModConfigs.ENCHANTABLE_JETPACKS.get() && jetpack.enchantablilty > 0;
-//    }
-
-//    TODO is enchantable
-//    @Override
-//    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-//        var jetpack = JetpackUtils.getJetpack(stack);
-//        return ModConfigs.ENCHANTABLE_JETPACKS.get() && jetpack.enchantablilty > 0;
-//    }
-
     @Override
     public int getBarWidth(ItemStack stack) {
         var energy = JetpackUtils.getEnergyStorage(stack);
@@ -261,6 +227,38 @@ public class JetpackItem extends BaseArmorItem implements IColored {
     public int getColor(int i, ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
         return i == 1 ? jetpack.color : -1;
+    }
+
+    @Override
+    public void initialize(ItemStack stack) {
+        var jetpack = JetpackUtils.getJetpack(stack);
+
+        var modifiers = ItemAttributeModifiers.builder();
+        var id = Identifier.withDefaultNamespace("armor." + ArmorType.CHESTPLATE.getName());
+
+        modifiers.add(Attributes.ARMOR, new AttributeModifier(id, jetpack.armorPoints, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
+        modifiers.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, jetpack.toughness, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
+        if (jetpack.knockbackResistance > 0.0F) {
+            modifiers.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, jetpack.knockbackResistance, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
+        }
+
+        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, modifiers.build());
+
+        if (stack.isEnchanted()) {
+            var rarity = switch (jetpack.rarity) {
+                case COMMON, UNCOMMON -> Rarity.RARE;
+                case RARE -> Rarity.EPIC;
+                case EPIC -> jetpack.rarity;
+            };
+
+            stack.set(DataComponents.RARITY, rarity);
+        } else {
+            stack.set(DataComponents.RARITY, jetpack.rarity);
+        }
+
+        if (ModConfigs.ENCHANTABLE_JETPACKS.get()) {
+            stack.set(DataComponents.ENCHANTABLE, new Enchantable(jetpack.enchantablilty));
+        }
     }
 
     private static void fly(Player player, double y) {
