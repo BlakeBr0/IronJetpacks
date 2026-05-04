@@ -63,9 +63,8 @@ configurations {
 
 dependencies {
     implementation "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
-
-    compileOnly "curse.maven:controllable-317269:${controllable_version}"
-    compileOnly "curse.maven:framework-549225:${framework_version}"
+    implementation "curse.maven:controllable-317269:${controllable_version}"
+    implementation "curse.maven:framework-549225:${framework_version}"
 
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     runtimeOnly "curse.maven:jade-324717:${jade_version}"
