@@ -32,11 +32,11 @@
   "tooltip.ironjetpacks.vertical_acceleration": "Accélération verticale : %s",
   "tooltip.ironjetpacks.horizontal_speed": "Vitesse horizontale : %s",
   "tooltip.ironjetpacks.hover_speed": "Vitesse de survol : %s",
-  "tooltip.ironjetpacks.descend_speed": "Vitesse de descente : %s",
+  "tooltip.ironjetpacks.hover_descend_speed": "Vitesse de descente : %s",
   "tooltip.ironjetpacks.sprint_modifier": "Modificateur de sprint : %s",
   "tooltip.ironjetpacks.sprint_vertical_modifier": "Multiplicateur vertical de sprint : %s",
   "tooltip.ironjetpacks.sprint_fuel_modifier": "Modificateur de carburant de sprint : %s",
   "tooltip.ironjetpacks.toggle_engine": "Moteur basculé %s",
   "tooltip.ironjetpacks.toggle_hover": "Survol basculé %s",
-  "tooltip.ironjetpacks.change_throttle": "Accélérateur réglé sur %s",
+  "tooltip.ironjetpacks.change_throttle": "Accélérateur réglé sur %s"
 }

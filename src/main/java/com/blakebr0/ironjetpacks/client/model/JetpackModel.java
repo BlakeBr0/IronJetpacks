@@ -8,8 +8,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 
-import java.util.Set;
-
 public class JetpackModel extends HumanoidModel<HumanoidRenderState> {
 	private static final String MIDDLE = "middle";
 	private static final String LEFT_CANISTER = "left_canister";

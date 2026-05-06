@@ -42,7 +42,9 @@ public final class KeybindHandler {
     private static boolean sprint = false;
 
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        var category = KeyMapping.Category.register(IronJetpacks.resource("keybindings"));
+        var category = new KeyMapping.Category(IronJetpacks.resource("keybindings"));
+
+        event.registerCategory(category);
 
         keyEngine = new KeyMapping("keybind.ironjetpacks.engine", GLFW.GLFW_KEY_V, category);
         keyHover = new KeyMapping("keybind.ironjetpacks.hover", GLFW.GLFW_KEY_H, category);

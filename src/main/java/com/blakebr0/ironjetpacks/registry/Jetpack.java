@@ -1,7 +1,6 @@
 package com.blakebr0.ironjetpacks.registry;
 
 import com.blakebr0.ironjetpacks.IronJetpacks;
-import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.google.gson.JsonObject;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,7 +39,6 @@ public class Jetpack {
 	public int enchantablilty;
 	public String craftingMaterialString;
 	private Ingredient craftingMaterial;
-	public JetpackItem item;
 	public boolean creative = false;
 	public boolean disabled = false;
 	public Rarity rarity = Rarity.COMMON;

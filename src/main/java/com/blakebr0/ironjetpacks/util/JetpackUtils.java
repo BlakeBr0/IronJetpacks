@@ -8,7 +8,6 @@ import com.blakebr0.ironjetpacks.init.ModItems;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.registry.Jetpack;
 import com.blakebr0.ironjetpacks.registry.JetpackRegistry;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
