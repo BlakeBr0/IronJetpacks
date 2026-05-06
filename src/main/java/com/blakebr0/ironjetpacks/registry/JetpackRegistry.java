@@ -7,9 +7,7 @@ import com.blakebr0.ironjetpacks.network.payloads.SyncJetpacksPayload;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -38,7 +36,6 @@ public class JetpackRegistry {
 	private final Map<Identifier, Jetpack> jetpacks = new LinkedHashMap<>();
 	private final ArrayList<Integer> tiers = new ArrayList<>();
 	private int lowestTier = Integer.MAX_VALUE;
-	private boolean isErrored = false;
 
 	@SubscribeEvent
 	public void onDatapackSync(OnDatapackSyncEvent event) {
@@ -54,7 +51,6 @@ public class JetpackRegistry {
 
 	public void register(Jetpack jetpack) {
 		if (this.jetpacks.containsKey(jetpack.getId())) {
-			this.isErrored = true;
 			throw new RuntimeException(String.format("Tried to register multiple jetpacks with the same name: %s", jetpack.name));
 		}
 
@@ -100,32 +96,6 @@ public class JetpackRegistry {
 			return ModItems.ADVANCED_COIL.get();
 
 		return ModItems.BASIC_COIL.get();
-	}
-
-	public boolean isErrored() {
-		return this.isErrored;
-	}
-
-	public void writeToBuffer(FriendlyByteBuf buffer) {
-		buffer.writeVarInt(this.jetpacks.size());
-
-		this.jetpacks.forEach((id, jetpack) -> {
-			jetpack.write(buffer);
-		});
-	}
-
-	public List<Jetpack> readFromBuffer(FriendlyByteBuf buffer) {
-		List<Jetpack> jetpacks = new ArrayList<>();
-
-		int size = buffer.readVarInt();
-
-		for (int i = 0; i < size; i++) {
-			Jetpack jetpack = Jetpack.read(buffer);
-
-			jetpacks.add(jetpack);
-		}
-
-		return jetpacks;
 	}
 
 	public void loadJetpacks(SyncJetpacksPayload payload) {
@@ -190,13 +160,11 @@ public class JetpackRegistry {
 
 				reader.close();
 
-				if (handleMigrations(json)) {
-					try (var writer = new FileWriter(file)) {
-						GSON.toJson(json, writer);
-					} catch (Exception e) {
-						IronJetpacks.LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
-						continue;
-					}
+				try (var writer = new FileWriter(file)) {
+					GSON.toJson(json, writer);
+				} catch (Exception e) {
+					IronJetpacks.LOGGER.error("An error occurred while migrating jetpack json {}", file.getName(), e);
+					continue;
 				}
 
 				jetpack = Jetpack.fromJson(json);
@@ -220,58 +188,5 @@ public class JetpackRegistry {
 
 	public static JetpackRegistry getInstance() {
 		return INSTANCE;
-	}
-
-	private static boolean handleMigrations(JsonObject json) {
-		boolean changed = false;
-
-		// add creative flag
-		if (!json.has("creative")) {
-			json.addProperty("creative", false);
-			changed = true;
-		}
-
-		// add rarity field
-		if (!json.has("rarity")) {
-			json.addProperty("rarity", 0);
-			changed = true;
-		}
-
-		// add vertical sprint speed field
-		if (!json.has("sprintSpeedMultiVertical")) {
-			json.addProperty("sprintSpeedMultiVertical", 1.0D);
-			changed = true;
-		}
-
-		// add armor toughness field
-		if (!json.has("toughness")) {
-			json.addProperty("toughness", 0F);
-			changed = true;
-		}
-
-		// add knockback resistance field
-		if (!json.has("knockbackResistance")) {
-			json.addProperty("knockbackResistance", 0F);
-			changed = true;
-		}
-
-		// add hover ascend speed field
-		if (!json.has("speedHoverAscend")) {
-			if (json.has("speedHoverDescend")) {
-				json.addProperty("speedHoverAscend", json.get("speedHoverDescend").getAsDouble());
-			} else {
-				json.addProperty("speedHoverAscend", 0.25D);
-			}
-
-			changed = true;
-		}
-
-		// add curios field
-		if (!json.has("curios")) {
-			json.addProperty("curios", true);
-			changed = true;
-		}
-
-		return changed;
 	}
 }

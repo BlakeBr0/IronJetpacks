@@ -185,26 +185,26 @@ public class Jetpack {
 		json.addProperty("disable", this.disabled);
 		json.addProperty("tier", this.tier);
 		json.addProperty("color", Integer.toHexString(this.color & 0x00FFFFFF));
-		json.addProperty("armorPoints", this.armorPoints);
+		json.addProperty("armor_points", this.armorPoints);
 		json.addProperty("enchantability", this.enchantablilty);
-		json.addProperty("craftingMaterial", this.craftingMaterialString);
+		json.addProperty("crafting_material", this.craftingMaterialString);
 		json.addProperty("creative", this.creative);
 		json.addProperty("rarity", this.rarity.ordinal());
 		json.addProperty("toughness", this.toughness);
-		json.addProperty("knockbackResistance", this.knockbackResistance);
+		json.addProperty("knockback_resistance", this.knockbackResistance);
 		json.addProperty("curios", this.curios);
 
 		json.addProperty("capacity", this.capacity);
 		json.addProperty("usage", this.usage);
-		json.addProperty("speedVertical", this.speedVert);
-		json.addProperty("accelVertical", this.accelVert);
-		json.addProperty("speedSideways", this.speedSide);
-		json.addProperty("speedHoverAscend", this.speedHoverAscend);
-		json.addProperty("speedHoverDescend", this.speedHoverDescend);
-		json.addProperty("speedHover", this.speedHoverSlow);
-		json.addProperty("sprintSpeedMulti", this.sprintSpeed);
-		json.addProperty("sprintSpeedMultiVertical", this.sprintSpeedVert);
-		json.addProperty("sprintFuelMulti", this.sprintFuel);
+		json.addProperty("vertical_speed", this.speedVert);
+		json.addProperty("vertical_acceleration", this.accelVert);
+		json.addProperty("horizontal_speed", this.speedSide);
+		json.addProperty("hover_ascend_speed", this.speedHoverAscend);
+		json.addProperty("hover_descend_speed", this.speedHoverDescend);
+		json.addProperty("hover_speed", this.speedHoverSlow);
+		json.addProperty("sprint_horizontal_speed_multiplier", this.sprintSpeed);
+		json.addProperty("sprint_vertical_speed_multiplier", this.sprintSpeedVert);
+		json.addProperty("sprint_fuel_usage_multiplier", this.sprintFuel);
 
 		return json;
 	}
@@ -214,13 +214,13 @@ public class Jetpack {
 		var disable = json.get("disable").getAsBoolean();
 		var tier = json.get("tier").getAsInt();
 		var color = Integer.parseInt(json.get("color").getAsString(), 16);
-		var armorPoints = json.get("armorPoints").getAsInt();
+		var armorPoints = json.get("armor_points").getAsInt();
 		var enchantability = json.get("enchantability").getAsInt();
-		var craftingMaterialString = json.get("craftingMaterial").getAsString();
+		var craftingMaterialString = json.get("crafting_material").getAsString();
 		var creative = json.get("creative").getAsBoolean();
 		var rarity = Rarity.values()[json.get("rarity").getAsInt()];
 		var toughness = json.get("toughness").getAsFloat();
-		var knockbackResistance = json.get("knockbackResistance").getAsFloat();
+		var knockbackResistance = json.get("knockback_resistance").getAsFloat();
 		var curios = json.get("curios").getAsBoolean();
 
 		var jetpack = new Jetpack(name, tier, color, armorPoints, enchantability, craftingMaterialString, toughness, knockbackResistance)
@@ -231,15 +231,15 @@ public class Jetpack {
 
 		var capacity = json.get("capacity").getAsInt();
 		var usage = json.get("usage").getAsInt();
-		var speedVert = json.get("speedVertical").getAsDouble();
-		var accelVert = json.get("accelVertical").getAsDouble();
-		var speedSide = json.get("speedSideways").getAsDouble();
-		var speedHoverAscend = json.get("speedHoverAscend").getAsDouble();
-		var speedHoverDescend = json.get("speedHoverDescend").getAsDouble();
-		var speedHoverSlow = json.get("speedHover").getAsDouble();
-		var sprintSpeed = json.get("sprintSpeedMulti").getAsDouble();
-		var sprintSpeedVert = json.get("sprintSpeedMultiVertical").getAsDouble();
-		var sprintFuel = json.get("sprintFuelMulti").getAsDouble();
+		var speedVert = json.get("vertical_speed").getAsDouble();
+		var accelVert = json.get("vertical_acceleration").getAsDouble();
+		var speedSide = json.get("horizontal_speed").getAsDouble();
+		var speedHoverAscend = json.get("hover_ascend_speed").getAsDouble();
+		var speedHoverDescend = json.get("hover_descend_speed").getAsDouble();
+		var speedHoverSlow = json.get("hover_speed").getAsDouble();
+		var sprintSpeed = json.get("sprint_horizontal_speed_multiplier").getAsDouble();
+		var sprintSpeedVert = json.get("sprint_vertical_speed_multiplier").getAsDouble();
+		var sprintFuel = json.get("sprint_fuel_usage_multiplier").getAsDouble();
 
 		jetpack.setStats(capacity, usage, speedVert, accelVert, speedSide, speedHoverAscend, speedHoverDescend, speedHoverSlow, sprintSpeed, sprintSpeedVert, sprintFuel);
 
