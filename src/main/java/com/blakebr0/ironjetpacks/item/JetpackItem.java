@@ -233,16 +233,7 @@ public class JetpackItem extends BaseArmorItem implements IColored, IComponentIn
     public void initialize(ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
 
-        var modifiers = ItemAttributeModifiers.builder();
-        var id = Identifier.withDefaultNamespace("armor." + ArmorType.CHESTPLATE.getName());
-
-        modifiers.add(Attributes.ARMOR, new AttributeModifier(id, jetpack.armorPoints, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
-        modifiers.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, jetpack.toughness, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
-        if (jetpack.knockbackResistance > 0.0F) {
-            modifiers.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, jetpack.knockbackResistance, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.CHEST);
-        }
-
-        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, modifiers.build());
+        stack.set(DataComponents.ATTRIBUTE_MODIFIERS, jetpack.createAttributeModifiers());
 
         if (stack.isEnchanted()) {
             var rarity = switch (jetpack.rarity) {
