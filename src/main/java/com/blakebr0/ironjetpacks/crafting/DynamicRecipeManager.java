@@ -106,7 +106,7 @@ public class DynamicRecipeManager {
             return null;
 
         var coil = Ingredient.of(JetpackRegistry.getInstance().getCoilForTier(jetpack.tier));
-        var cell = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var cell = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
         var furnace = Ingredient.of(Blocks.FURNACE);
 
         var keys = Map.of(
@@ -143,7 +143,7 @@ public class DynamicRecipeManager {
         if (material == null)
             return null;
 
-        var cell = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
+        var cell = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.CELL.get(), jetpack));
 
         var keys = Map.of(
                 'M', material,
@@ -180,8 +180,8 @@ public class DynamicRecipeManager {
         if (material == null)
             return null;
 
-        var capacitor = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
+        var thruster = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var strap = Ingredient.of(ModItems.STRAP.get());
 
         var keys = Map.of(
@@ -222,8 +222,8 @@ public class DynamicRecipeManager {
         if (material == null)
             return null;
 
-        var capacitor = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
-        var thruster = DataComponentIngredient.of(true, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
+        var capacitor = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.CAPACITOR.get(), jetpack));
+        var thruster = DataComponentIngredient.of(false, JetpackUtils.getItemForComponent(ModItems.THRUSTER.get(), jetpack));
         var jetpackTier = JetpackTierIngredient.of(jetpack.tier - 1);
 
         var keys = Map.of(
