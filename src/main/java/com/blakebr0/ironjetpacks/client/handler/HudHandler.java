@@ -5,9 +5,11 @@ import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.item.JetpackItem;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
 import com.blakebr0.ironjetpacks.util.JetpackUtils;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -58,9 +60,9 @@ public final class HudHandler {
 
                     matrix.pushMatrix();
                     matrix.scale(0.33F, 0.33F);
-                    gfx.blit(HUD_TEXTURE, xPos, yPos, 0, 0, 28, 156, 256, 256);
+                    gfx.blit(RenderPipelines.GUI_TEXTURED, HUD_TEXTURE, xPos, yPos, 0, 0, 28, 156, 256, 256);
                     int i2 = getEnergyBarScaled(chest);
-                    gfx.blit(HUD_TEXTURE, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
+                    gfx.blit(RenderPipelines.GUI_TEXTURED, HUD_TEXTURE, xPos, 166 - i2 + yPos - 10, 28, 156 - i2, 28, i2, 256, 256);
                     matrix.popMatrix();
 
                     var fuel = getFuelComponent(chest);
@@ -69,15 +71,15 @@ public final class HudHandler {
                     var hover = getHoverComponent(chest);
 
                     if (pos.side == 1) {
-                        gfx.text(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, 16383998);
-                        gfx.text(mc.font, throttle, pos.x - 8 - mc.font.width(throttle), pos.y - 6, 16383998);
-                        gfx.text(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, 16383998);
-                        gfx.text(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, 16383998);
+                        gfx.text(mc.font, fuel, pos.x - 8 - mc.font.width(fuel), pos.y - 21, -12566464);
+                        gfx.text(mc.font, throttle, pos.x - 8 - mc.font.width(throttle), pos.y - 6, -12566464);
+                        gfx.text(mc.font, engine, pos.x - 8 - mc.font.width(engine), pos.y + 4, -12566464);
+                        gfx.text(mc.font, hover, pos.x - 8 - mc.font.width(hover), pos.y + 14, -12566464);
                     } else {
-                        gfx.text(mc.font, fuel, pos.x + 6, pos.y - 21, 16383998);
-                        gfx.text(mc.font, throttle, pos.x + 6, pos.y - 6, 16383998);
-                        gfx.text(mc.font, engine, pos.x + 6, pos.y + 4, 16383998);
-                        gfx.text(mc.font, hover, pos.x + 6, pos.y + 14, 16383998);
+                        gfx.text(mc.font, fuel, pos.x + 6, pos.y - 21, -12566464);
+                        gfx.text(mc.font, throttle, pos.x + 6, pos.y - 6, -12566464);
+                        gfx.text(mc.font, engine, pos.x + 6, pos.y + 4, -12566464);
+                        gfx.text(mc.font, hover, pos.x + 6, pos.y + 14, -12566464);
                     }
                 }
             } else {
