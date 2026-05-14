@@ -10,6 +10,7 @@ import com.blakebr0.ironjetpacks.compat.ControllableCompat;
 import com.blakebr0.ironjetpacks.compat.curios.CuriosCompat;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.crafting.DynamicRecipeManager;
+import com.blakebr0.ironjetpacks.handler.PlayerTickHandler;
 import com.blakebr0.ironjetpacks.handler.RegisterCapabilityHandler;
 import com.blakebr0.ironjetpacks.init.ModCreativeModeTabs;
 import com.blakebr0.ironjetpacks.init.ModDataComponentTypes;
@@ -68,6 +69,7 @@ public final class IronJetpacks {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		NeoForge.EVENT_BUS.register(new InputHandler());
+		NeoForge.EVENT_BUS.register(new PlayerTickHandler());
 		NeoForge.EVENT_BUS.register(DynamicRecipeManager.getInstance());
 		NeoForge.EVENT_BUS.register(JetpackRegistry.getInstance());
 

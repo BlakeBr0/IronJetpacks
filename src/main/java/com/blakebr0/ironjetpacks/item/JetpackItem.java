@@ -5,7 +5,6 @@ import com.blakebr0.cucumber.iface.IComponentInitializer;
 import com.blakebr0.cucumber.item.BaseArmorItem;
 import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Formatting;
-import com.blakebr0.ironjetpacks.client.handler.InputHandler;
 import com.blakebr0.ironjetpacks.config.ModConfigs;
 import com.blakebr0.ironjetpacks.lib.ModArmorMaterials;
 import com.blakebr0.ironjetpacks.lib.ModTooltips;
@@ -14,13 +13,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,9 +22,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
-import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -47,97 +38,6 @@ public class JetpackItem extends BaseArmorItem implements IColored, IComponentIn
     public Component getName(ItemStack stack) {
         var jetpack = JetpackUtils.getJetpack(stack);
         return Component.translatable("item.ironjetpacks.jetpack", jetpack.getDisplayName());
-    }
-
-    /*
-     * Jetpack logic is very much like Simply Jetpacks, since I used it to learn how to make this work
-     * Credit to Tonius & Tomson124
-     * https://github.com/Tomson124/SimplyJetpacks-2/blob/1.12/src/main/java/tonius/simplyjetpacks/item/rewrite/ItemJetpack.java
-     */
-    @Override
-    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
-        if (entity instanceof Player player) {
-            var chest = JetpackUtils.getEquippedJetpack(player);
-            if (chest.isEmpty() || chest != stack)
-                return;
-
-            var item = chest.getItem();
-            if (item instanceof JetpackItem && JetpackUtils.isEngineOn(chest)) {
-                var hover = JetpackUtils.isHovering(chest);
-
-                if (InputHandler.isHoldingUp(player) || hover && !player.onGround()) {
-                    var jetpack = JetpackUtils.getJetpack(stack);
-
-                    double motionY = player.getDeltaMovement().y();
-                    double hoverSpeed = InputHandler.isHoldingDown(player) ? jetpack.speedHoverDescend : jetpack.speedHoverSlow;
-                    double currentAccel = jetpack.accelVert * (motionY < 0.3D ? 2.5D : 1.0D);
-                    double currentSpeedVertical = jetpack.speedVert * (player.isInWater() ? 0.4D : 1.0D);
-
-                    double usage = player.isSprinting() || InputHandler.isHoldingSprint(player) ? jetpack.usage * jetpack.sprintFuel : jetpack.usage;
-
-                    var creative = jetpack.creative;
-                    var energy = JetpackUtils.getEnergyStorage(chest);
-
-                    if (!player.isCreative() && !creative) {
-                        try (var tx = Transaction.openRoot()) {
-                            energy.extract((int) usage, tx);
-                        }
-                    }
-
-                    if (hover && player.isFallFlying()) {
-                        player.stopFallFlying();
-                    }
-
-                    if (energy.getAmountAsInt() > 0 || player.isCreative() || creative) {
-                        double throttle = JetpackUtils.getThrottle(stack);
-                        double verticalSprintMulti = motionY >= 0 && InputHandler.isHoldingSprint(player) ? jetpack.sprintSpeedVert : 1.0D;
-
-                        if (InputHandler.isHoldingUp(player)) {
-                            if (!hover) {
-                                fly(player, Math.min(motionY + currentAccel, currentSpeedVertical) * throttle * verticalSprintMulti);
-                            } else {
-                                if (InputHandler.isHoldingDown(player)) {
-                                    fly(player, Math.min(motionY + currentAccel, -jetpack.speedHoverSlow));
-                                } else {
-                                    fly(player, Math.min(motionY + currentAccel, jetpack.speedHoverAscend) * throttle * verticalSprintMulti);
-                                }
-                            }
-                        } else {
-                            fly(player, Math.min(motionY + currentAccel, -hoverSpeed));
-                        }
-
-                        double speedSideways = (player.isCrouching() ? jetpack.speedSide * 0.5F : jetpack.speedSide) * throttle;
-                        double speedForward = (player.isSprinting() ? speedSideways * jetpack.sprintSpeed : speedSideways) * throttle;
-
-                        if (!player.isFallFlying()) {
-                            if (InputHandler.isHoldingForwards(player)) {
-                                player.moveRelative(1, new Vec3(0, 0, speedForward));
-                            }
-
-                            if (InputHandler.isHoldingBackwards(player)) {
-                                player.moveRelative(1, new Vec3(0, 0, -speedSideways * 0.8F));
-                            }
-
-                            if (InputHandler.isHoldingLeft(player)) {
-                                player.moveRelative(1, new Vec3(speedSideways, 0, 0));
-                            }
-
-                            if (InputHandler.isHoldingRight(player)) {
-                                player.moveRelative(1, new Vec3(-speedSideways, 0, 0));
-                            }
-                        }
-
-                        if (!level.isClientSide()) {
-                            player.fallDistance = 0.0F;
-
-                            if (player instanceof ServerPlayer) {
-                                ((ServerPlayer) player).connection.aboveGroundTickCount = 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -247,10 +147,5 @@ public class JetpackItem extends BaseArmorItem implements IColored, IComponentIn
         if (ModConfigs.ENCHANTABLE_JETPACKS.get()) {
             stack.set(DataComponents.ENCHANTABLE, new Enchantable(jetpack.enchantablilty));
         }
-    }
-
-    private static void fly(Player player, double y) {
-        var motion = player.getDeltaMovement();
-        player.setDeltaMovement(motion.x(), y, motion.z());
     }
 }
