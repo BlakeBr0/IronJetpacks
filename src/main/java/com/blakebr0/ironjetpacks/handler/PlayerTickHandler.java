@@ -40,6 +40,7 @@ public final class PlayerTickHandler {
                 if (!player.isCreative() && !creative) {
                     try (var tx = Transaction.openRoot()) {
                         energy.extract((int) usage, tx);
+                        tx.commit();
                     }
                 }
 
